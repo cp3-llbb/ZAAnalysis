@@ -1,8 +1,44 @@
 #include <cp3_llbb/ZAAnalysis/interface/ZAAnalyzer.h>
 
-void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, const ProducersManager& producers) {
+
+void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, const ProducersManager& producers, const CategoryManager&) {
+
+
+    BRANCH(selectedjets,std::vector<LorentzVector>);
+    BRANCH(selectedbjets,std::vector<LorentzVector>);
+    BRANCH(dijets,LorentzVector);
+    BRANCH(dibjets,LorentzVector);
+    BRANCH(njets, int);
+    BRANCH(nbjets, int);
 
     const JetsProducer& jets = producers.get<JetsProducer>("jets");
+
+
+    for( unsigned int ijet = 0 ; ijet < jets.p4.size() ; ijet++ ){
+
+        if (jets.p4[ijet].pt() > 30 && abs(jets.p4[ijet].eta()) < 2.4) {
+            selectedjets.push_back(jets.p4[ijet]);
+            if (jets.getBTagDiscriminant(ijet,"combinedSecondaryVertexBTags") > 0.679 ) {
+                selectedbjets.push_back(jets.p4[ijet]);                
+            }
+        } 
+    }
+
+    njets = selectedjets.size();
+    nbjets = selectedbjets.size();
+
+    // temporary definition only, one should keep each combination of b, and not only the highest pt one, I guess.
+
+    if (selectedjets.size() > 2) {
+        dijets = selectedjets[0]+selectedjets[1];
+        if (selectedbjets.size() > 2) {
+            dibjets = selectedbjets[0]+selectedbjets[1];
+        }
+    }
+
+
+
+/*
     const ElectronsProducer& electrons = producers.get<ElectronsProducer>("electrons");
     const MuonsProducer& muons = producers.get<MuonsProducer>("muons");
 
@@ -49,6 +85,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
         }
 
     }
+*/
 }
 
 #include <FWCore/PluginManager/interface/PluginFactory.h>

@@ -1,5 +1,3 @@
-#pragma once
-
 #include <cp3_llbb/Framework/interface/MuonsProducer.h>
 #include <cp3_llbb/Framework/interface/ElectronsProducer.h>
 #include <cp3_llbb/Framework/interface/JetsProducer.h>
@@ -7,6 +5,7 @@
 #include <cp3_llbb/Framework/interface/DileptonCategories.h>
 #include <cp3_llbb/Framework/interface/DileptonAnalyzer.h>
 #include <cp3_llbb/ZAAnalysis/interface/ZAAnalyzer.h>
+#include <cp3_llbb/ZAAnalysis/interface/Categories.h>
 
 /*
 class MuMuJetJetCategory: public Category {
@@ -30,18 +29,13 @@ class MuMuJetJetCategory: public Category {
 };
 */
 
-class ZAElElCategory: public ElElCategory {
-    virtual void register_cuts(CutManager& manager) const override {
-        ElElCategory::register_cuts(manager); 
-        manager.new_cut("two_jets", "njets >= 2");
-        manager.new_cut("two_bjets", "nbjets >= 2");
-    }
-    
-    virtual void evaluate_cuts_pre_analyzers(CutManager& manager, const ProducersManager& producers) const override {
-        
-    }
+void ZAElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) {
+        ElElCategory::evaluate_cuts_post_analyzers(manager,producers,analyzers);
 
-    virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+        const ZAAnalyzer& za_analyzer = analyzers.get<ZAAnalyzer>("za");
+        if (za_analyzer.njets >= 2 ) {manager.pass_cut("two_jets");}
+        if (za_analyzer.nbjets >= 2 ) {manager.pass_cut("two_bjets");}
 };
+
 
 

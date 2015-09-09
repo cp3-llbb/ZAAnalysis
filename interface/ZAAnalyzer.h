@@ -1,11 +1,12 @@
-#ifndef TTANALYZER_H
-#define TTANALYZER_H
+#ifndef ZAANALYZER_H
+#define ZAANALYZER_H
 
 #include <cp3_llbb/Framework/interface/Analyzer.h>
 #include <cp3_llbb/Framework/interface/MuonsProducer.h>
 #include <cp3_llbb/Framework/interface/ElectronsProducer.h>
 
 #include <cp3_llbb/ZAAnalysis/interface/Categories.h>
+#include <cp3_llbb/Framework/interface/DileptonAnalyzer.h>
 
 class ZAAnalyzer: public Framework::Analyzer {
     public:
@@ -14,11 +15,11 @@ class ZAAnalyzer: public Framework::Analyzer {
 
         }
 
-        virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&) override;
+        virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&, const CategoryManager&) override;
 
         virtual void registerCategories(CategoryManager& manager) {
-            manager.new_category<MuMuCategory>("mumu", "Category with leading leptons as two muons");
-            manager.new_category<ElElCategory>("elel", "Category with leading leptons as two electrons");
+            //manager.new_category<MuMuCategory>("mumujj", "Category with two tight muons and two jets");
+            manager.new_category<ZAElElCategory>("elel", "Category with two electrons");
         }
 
     private:

@@ -31,7 +31,7 @@ class MuMuJetJetCategory: public Category {
 */
 
 class ZAElElCategory: public ElElCategory {
-    virtual void register_cuts(CutManager& manager) const override {
+    virtual void register_cuts(CutManager& manager) override {
         ElElCategory::register_cuts(manager); 
         manager.new_cut("two_jets", "njets >= 2");
         manager.new_cut("two_bjets", "nbjets >= 2");

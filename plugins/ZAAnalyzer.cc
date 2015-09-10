@@ -3,14 +3,16 @@
 
 void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, const ProducersManager& producers, const CategoryManager&) {
 
-
+/*
     BRANCH(selectedjets,std::vector<LorentzVector>);
     BRANCH(selectedbjets,std::vector<LorentzVector>);
     BRANCH(dijets,LorentzVector);
     BRANCH(dibjets,LorentzVector);
     BRANCH(njets, int);
     BRANCH(nbjets, int);
+*/
 
+    std::cout << "analyse " << std::endl;
     const JetsProducer& jets = producers.get<JetsProducer>("jets");
 
 

@@ -17,10 +17,19 @@ class ZAAnalyzer: public Framework::Analyzer {
 
         virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&, const CategoryManager&) override;
 
-        virtual void registerCategories(CategoryManager& manager) {
+        virtual void registerCategories(CategoryManager& manager, const edm::ParameterSet& config) {
             //manager.new_category<MuMuCategory>("mumujj", "Category with two tight muons and two jets");
-            manager.new_category<ZAElElCategory>("elel", "Category with two electrons");
+            manager.new_category<ZAElElCategory>("elel", "Category with two electrons", config);
         }
+
+
+        BRANCH(selectedjets,std::vector<LorentzVector>);
+        BRANCH(selectedbjets,std::vector<LorentzVector>);
+        BRANCH(dijets,LorentzVector);
+        BRANCH(dibjets,LorentzVector);
+        BRANCH(njets, int);
+        BRANCH(nbjets, int);
+
 
     private:
 };

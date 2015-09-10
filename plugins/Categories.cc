@@ -29,7 +29,8 @@ class MuMuJetJetCategory: public Category {
 };
 */
 
-void ZAElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) {
+void ZAElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
+
         ElElCategory::evaluate_cuts_post_analyzers(manager,producers,analyzers);
 
         const ZAAnalyzer& za_analyzer = analyzers.get<ZAAnalyzer>("za");

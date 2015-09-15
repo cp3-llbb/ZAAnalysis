@@ -34,8 +34,21 @@ void ZAElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Pro
         ElElCategory::evaluate_cuts_post_analyzers(manager,producers,analyzers);
 
         const ZAAnalyzer& za_analyzer = analyzers.get<ZAAnalyzer>("za");
-        if (za_analyzer.njets >= 2 ) {manager.pass_cut("two_jets");}
-        if (za_analyzer.nbjets >= 2 ) {manager.pass_cut("two_bjets");}
+        if (za_analyzer.selectedjets.size() >= 2 ) {manager.pass_cut("two_jets");}
+        if (za_analyzer.selectedbjets.size() >= 2 ) {manager.pass_cut("two_bjets");}
+        if (za_analyzer.isolatedElectrons.size() >= 2) {manager.pass_cut("two_isolated_el");}
+        if (za_analyzer.isolatedMuons.size() >= 2) {manager.pass_cut("two_isolated_mu");}
+};
+
+void ZAMuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
+
+        MuMuCategory::evaluate_cuts_post_analyzers(manager,producers,analyzers);
+
+        const ZAAnalyzer& za_analyzer = analyzers.get<ZAAnalyzer>("za");
+        if (za_analyzer.selectedjets.size() >= 2 ) {manager.pass_cut("two_jets");}
+        if (za_analyzer.selectedbjets.size() >= 2 ) {manager.pass_cut("two_bjets");}
+        if (za_analyzer.isolatedElectrons.size() >= 2) {manager.pass_cut("two_isolated_el");}
+        if (za_analyzer.isolatedMuons.size() >= 2) {manager.pass_cut("two_isolated_mu");}
 };
 
 

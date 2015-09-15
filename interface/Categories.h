@@ -33,12 +33,30 @@ class MuMuJetJetCategory: public Category {
 class ZAElElCategory: public ElElCategory {
     virtual void register_cuts(CutManager& manager) override {
         ElElCategory::register_cuts(manager); 
+        manager.new_cut("two_isolated_el", "n_iso_el >= 2");
+        manager.new_cut("two_isolated_mu", "n_iso_mu >= 2");
         manager.new_cut("two_jets", "njets >= 2");
         manager.new_cut("two_bjets", "nbjets >= 2");
     }
     
     virtual void evaluate_cuts_pre_analyzers(CutManager& manager, const ProducersManager& producers) const override {
         
+    }
+
+    virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+};
+
+class ZAMuMuCategory: public MuMuCategory {
+    virtual void register_cuts(CutManager& manager) override {
+        MuMuCategory::register_cuts(manager);
+        manager.new_cut("two_isolated_el", "n_iso_el >= 2");
+        manager.new_cut("two_isolated_mu", "n_iso_mu >= 2");
+        manager.new_cut("two_jets", "njets >= 2");
+        manager.new_cut("two_bjets", "nbjets >= 2");
+    }
+
+    virtual void evaluate_cuts_pre_analyzers(CutManager& manager, const ProducersManager& producers) const override {
+
     }
 
     virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;

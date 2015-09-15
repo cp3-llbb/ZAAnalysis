@@ -12,22 +12,32 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     BRANCH(nbjets, int);
 */
 
-    std::cout << "analyse " << std::endl;
+    const ElectronsProducer& electrons = producers.get<ElectronsProducer>("electrons");
+    const MuonsProducer& muons = producers.get<MuonsProducer>("muons");
     const JetsProducer& jets = producers.get<JetsProducer>("jets");
 
+    for (unsigned int ielectron = 0 ; ielectron < electrons.p4.size() ; ielectron++){
+        if (electrons.relativeIsoR03_withEA[ielectron] < 0.15 && electrons.p4[ielectron].pt() > 20) {
+            isolatedElectrons.push_back(ielectron);
+        }
+    }
+
+    for (unsigned int imuon = 0 ; imuon < muons.p4.size() ; imuon++){
+        if (muons.relativeIsoR04_withEA[imuon] < 0.10 && muons.p4[imuon].pt() > 20) {
+            isolatedMuons.push_back(imuon);
+        }
+    }
 
     for( unsigned int ijet = 0 ; ijet < jets.p4.size() ; ijet++ ){
 
         if (jets.p4[ijet].pt() > 30 && abs(jets.p4[ijet].eta()) < 2.4) {
             selectedjets.push_back(jets.p4[ijet]);
-            if (jets.getBTagDiscriminant(ijet,"combinedSecondaryVertexBTags") > 0.679 ) {
+            if (jets.getBTagDiscriminant(ijet,"pfCombinedInclusiveSecondaryVertexV2BJetTags") > 0.679 ) {
                 selectedbjets.push_back(jets.p4[ijet]);                
             }
         } 
     }
 
-    njets = selectedjets.size();
-    nbjets = selectedbjets.size();
 
     // temporary definition only, one should keep each combination of b, and not only the highest pt one, I guess.
 

@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
 from cp3_llbb.Framework import Framework
 
-process = Framework.create(eras.Run2_50ns, '74X_dataRun2_v2', redoJEC=True)
+process = Framework.create(True, eras.Run2_50ns, '74X_dataRun2_v2', redoJEC=True)
 
 process.framework.analyzers.dilepton = cms.PSet(
         type = cms.string('dilepton_analyzer'),
@@ -11,15 +11,8 @@ process.framework.analyzers.dilepton = cms.PSet(
         enable = cms.bool(True),
         categories_parameters = cms.PSet(
             mll_cut = cms.untracked.double(20)
-            ),
-        parameters = cms.PSet(
-            standalone = cms.untracked.bool(True),
-            muons_wp = cms.untracked.string('loose'),
-            electrons_wp = cms.untracked.string('loose')
             )
-
         )
-
 
 process.framework.analyzers.za = cms.PSet(
         type = cms.string('za_analyzer'),

@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
 from cp3_llbb.Framework import Framework
 
-process = Framework.create(None, 'MCRUN2_74_V9', cms.PSet(
+process = Framework.create(False, eras.Run2_25ns, '74X_mcRun2_asymptotic_v2', cms.PSet(
 
     dilepton = cms.PSet(
         type = cms.string('dilepton_analyzer'),
@@ -23,7 +23,7 @@ process = Framework.create(None, 'MCRUN2_74_V9', cms.PSet(
             mll_cut = cms.untracked.double(20)
             )
         )
-    )
+    ), redoJEC=True
     )
 
 Framework.schedule(process, ['dilepton','za'])

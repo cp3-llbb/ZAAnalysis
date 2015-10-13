@@ -32,7 +32,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
 
         if (jets.p4[ijet].pt() > 30 && abs(jets.p4[ijet].eta()) < 2.4) {
             selectedjets.push_back(jets.p4[ijet]);
-            if (jets.getBTagDiscriminant(ijet,"pfCombinedInclusiveSecondaryVertexV2BJetTags") > 0.679 ) {
+            if (jets.getBTagDiscriminant(ijet,"pfCombinedInclusiveSecondaryVertexV2BJetTags") > 0.89 ) {
                 selectedbjets.push_back(jets.p4[ijet]);                
             }
         } 

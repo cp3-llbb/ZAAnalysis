@@ -1,0 +1,28 @@
+<lcgdict>
+  <class name="ZAAnalysis::BaseObject"/> 
+  <class name="std::vector<ZAAnalysis::BaseObject>"/>
+  <class name="ZAAnalysis::Lepton">
+    <field name="hlt_already_matched" transient="true"/>
+  </class>
+  <class name="std::vector<ZAAnalysis::Lepton>"/>
+  <class name="ZAAnalysis::Jet"/>
+  <class name="std::vector<ZAAnalysis::Jet>"/>
+  <class name="ZAAnalysis::DiLepton"/>
+  <class name="std::vector<ZAAnalysis::DiLepton>"/>
+  <class name="ZAAnalysis::DiJet"/>
+  <class name="std::vector<ZAAnalysis::DiJet>"/>
+  <class name="ZAAnalysis::DiLepDiJet">
+    <field name="diLepton" transient="true"/>
+    <field name="diJet" transient="true"/>
+  </class>
+  <class name="std::vector<ZAAnalysis::DiLepDiJet>"/>
+  <class name="ZAAnalysis::DiLepDiJetMet">
+    <field name="diLepton" transient="true"/>
+    <field name="diJet" transient="true"/>
+  </class>
+  <class name="std::vector<ZAAnalysis::DiLepDiJetMet>"/>
+  <class name="std::vector<uint16_t>"/>
+  <class name="std::vector<float>"/>
+  <class name="std::vector<std::vector<uint16_t>>"/>
+</lcgdict>
+

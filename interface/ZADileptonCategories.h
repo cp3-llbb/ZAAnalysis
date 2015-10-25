@@ -32,7 +32,13 @@ class DileptonCategory: public Category {
       baseStrExtraDiLeptonVeto("ExtraDiLeptonVeto"),
       baseStrDiLeptonTriggerMatch("DiLeptonTriggerMatch"),
       baseStrMllCut("Mll"),
-      baseStrDiLeptonIsOS("DiLeptonIsOS")
+      baseStrDiLeptonIsOS("DiLeptonIsOS")//,
+/*
+      baseStrOneExtraBjet("OneExtraBjet"),
+      baseStrTwoExtraBjets("TwoExtraBjets"),
+      baseStrThreeExtraBjets("ThreeExtraBjets"),
+      baseStrFourExtraBjets("FourExtraBjets")
+*/
       {}
 
   protected:
@@ -47,7 +53,12 @@ class DileptonCategory: public Category {
     std::string baseStrDiLeptonTriggerMatch;
     std::string baseStrMllCut;
     std::string baseStrDiLeptonIsOS;
-
+/*
+    std::string baseStrOneExtraBjet;
+    std::string baseStrTwoExtraBjets;
+    std::string baseStrThreeExtraBjets;
+    std::string baseStrFourExtraBjets;
+*/
     std::vector<boost::regex> m_HLTDoubleMuonRegex;
     std::vector<boost::regex> m_HLTDoubleEGRegex;
     std::vector<boost::regex> m_HLTMuonEGRegex;

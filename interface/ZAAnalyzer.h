@@ -75,6 +75,13 @@ class ZAAnalyzer: public Framework::Analyzer {
         BRANCH(diBJets_DRCut_BWP_PtOrdered, std::vector<std::vector<uint16_t>>);
         BRANCH(diBJets_DRCut_BWP_CSVv2Ordered, std::vector<std::vector<uint16_t>>);
 
+        // For all the following: indices are combinations of LeptonID/LeptonIso/(B-tagging working point)
+
+        BRANCH(diLepDiJets, std::vector<ZAAnalysis::DiLepDiJet>);
+        
+        BRANCH(diLepDiJets_DRCut, std::vector<std::vector<uint16_t>>); // di-leptons of combined ID/Iso with di-jets built out of jets having minDRjl>cut taking into account lepton ID/Iso corresponding to the loosest combination of the two leptons of the object
+        BRANCH(diLepDiBJets_DRCut_BWP_PtOrdered, std::vector<std::vector<uint16_t>>);
+        BRANCH(diLepDiBJets_DRCut_BWP_CSVv2Ordered, std::vector<std::vector<uint16_t>>);
 
     private:
 

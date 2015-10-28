@@ -58,6 +58,9 @@ void ElElCategory::register_cuts(CutManager& manager) {
           manager.new_cut(baseStrDiLeptonTriggerMatch + postFix, baseStrDiLeptonTriggerMatch + postFix);
           manager.new_cut(baseStrMllCut + postFix, baseStrMllCut + postFix);
           manager.new_cut(baseStrDiLeptonIsOS + postFix, baseStrDiLeptonIsOS + postFix);
+          manager.new_cut(baseStrLooseZCandidate + postFix, baseStrLooseZCandidate + postFix);
+          manager.new_cut(baseStrTightZCandidate + postFix, baseStrTightZCandidate + postFix);
+
 
         }
       }
@@ -170,6 +173,8 @@ void MuMuCategory::register_cuts(CutManager& manager) {
           manager.new_cut(baseStrDiLeptonTriggerMatch + postFix, baseStrDiLeptonTriggerMatch + postFix);
           manager.new_cut(baseStrMllCut + postFix, baseStrMllCut + postFix);
           manager.new_cut(baseStrDiLeptonIsOS + postFix, baseStrDiLeptonIsOS + postFix);
+          manager.new_cut(baseStrLooseZCandidate + postFix, baseStrLooseZCandidate + postFix);
+          manager.new_cut(baseStrTightZCandidate + postFix, baseStrTightZCandidate + postFix);
 
         }
       }

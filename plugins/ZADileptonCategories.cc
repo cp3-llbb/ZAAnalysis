@@ -96,7 +96,15 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
                 manager.pass_cut(baseStrMllCut + postFix);
               
               if(m_diLepton.isOS)
+              {
                 manager.pass_cut(baseStrDiLeptonIsOS + postFix);
+                if (m_diLepton.p4.M() > m_lowLooseZcut  && m_diLepton.p4.M() < m_highLooseZcut )
+                {
+                  manager.pass_cut(baseStrLooseZCandidate + postFix);
+                  if (m_diLepton.p4.M() > m_lowTightZcut  && m_diLepton.p4.M() < m_highTightZcut )
+                    manager.pass_cut(baseStrTightZCandidate + postFix);
+                }
+              }
             }
           }
           
@@ -200,7 +208,15 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
                 manager.pass_cut(baseStrMllCut + postFix);
               
               if(m_diLepton.isOS)
+              {
                 manager.pass_cut(baseStrDiLeptonIsOS + postFix);
+                if (m_diLepton.p4.M() > m_lowLooseZcut  && m_diLepton.p4.M() < m_highLooseZcut )
+                {
+                  manager.pass_cut(baseStrLooseZCandidate + postFix);
+                  if (m_diLepton.p4.M() > m_lowTightZcut  && m_diLepton.p4.M() < m_highTightZcut )
+                    manager.pass_cut(baseStrTightZCandidate + postFix);
+                }
+              } 
             }
           }
           

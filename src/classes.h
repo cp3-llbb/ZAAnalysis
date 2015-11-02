@@ -1,4 +1,4 @@
-#include <cp3_llbb/ZAAnalysis/interface/Types.h>
+#include <cp3_llbb/ZAAnalysis/interface/ZATypes.h>
 #include <vector>
 #include <utility>
 
@@ -16,10 +16,5 @@ namespace ZAAnalysis {
     std::vector<ZAAnalysis::DiJet> dummy8;
     ZAAnalysis::DiLepDiJet dummy9;
     std::vector<ZAAnalysis::DiLepDiJet> dummy10;
-    ZAAnalysis::DiLepDiJetMet dummy11;
-    std::vector<ZAAnalysis::DiLepDiJetMet> dummy12;
-    std::vector<uint16_t> dummy13;
-    std::vector<std::vector<uint16_t>> dummy14;
-    std::vector<float> dummy17;
   };
 }

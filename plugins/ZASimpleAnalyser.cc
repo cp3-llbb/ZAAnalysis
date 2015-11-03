@@ -139,10 +139,11 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       m_jet.isBWPM = m_jet.CSVv2 > m_jetCSVv2M;
       m_jet.isBWPT = m_jet.CSVv2 > m_jetCSVv2T;
       
-      // Save minimal DR(l,j) using selected leptons, for each Lepton ID/Iso
-
+      // Save minimal DR(l,j)
       // Looping over all leptons that pass at least the veto criteria and check the distance with the jet.      
-    
+
+      m_jet.minDRjl = std::numeric_limits<float>::max();   
+ 
       for(uint16_t il = 0; il < leptons.size(); il++)
       {
           const Lepton& m_lepton = leptons[il];
@@ -167,9 +168,9 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     }
   }
         
-  //////////////////////////////////////
-  //    Two Leptons, Two Jets Case    //
-  //////////////////////////////////////
+  /////////////////////////////////
+  //    Trigger : Two Leptons    //
+  /////////////////////////////////
 
   #ifdef _ZA_DEBUG_
   std::cout << "Trigger" << std::endl;
@@ -281,9 +282,9 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       dilep_ptOrdered.push_back(l1);
       }
 
-    DiLepton m_diLepton;
+    DiLepton m_diLepton(l1, l2);
 
-    m_diLepton.p4 = l1.p4 + l2.p4;
+    //m_diLepton.p4 = l1.p4 + l2.p4;
     m_diLepton.isElEl = l1.isEl && l2.isEl;
     m_diLepton.isElMu = l1.isEl && l2.isMu;
     m_diLepton.isMuEl = l1.isMu && l2.isEl;
@@ -291,14 +292,16 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     m_diLepton.isOS = l1.charge != l2.charge;
     m_diLepton.isSF = m_diLepton.isElEl || m_diLepton.isMuMu;
 
-    m_diLepton.DR = VectorUtil::DeltaR(l1.p4, l2.p4);
+    /*m_diLepton.DR = VectorUtil::DeltaR(l1.p4, l2.p4);
     m_diLepton.DEta = ZAAnalysis::DeltaEta(l1.p4, l2.p4);
     m_diLepton.DPhi = VectorUtil::DeltaPhi(l1.p4, l2.p4);
+    */
+    diLeptons.push_back(m_diLepton);
 
     // chapter 2: di-jets
 
     const Jet& jet1 = selJets[0];
-    const Jet& jet2 = selJets[0];
+    const Jet& jet2 = selJets[1];
 
     if (jet1.p4.Pt() > jet2.p4.Pt())
       {
@@ -311,13 +314,21 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       dijet_ptOrdered.push_back(jet1);
       }
 
+    if (jet1.CSVv2 > jet2.CSVv2)
+      {
+      dijet_CSVv2Ordered.push_back(jet1);
+      dijet_CSVv2Ordered.push_back(jet2);
+      }
+    else
+      {
+      dijet_CSVv2Ordered.push_back(jet2);
+      dijet_CSVv2Ordered.push_back(jet1);
+      }
 
-    DiJet m_diJet;
-    m_diJet.p4 = jet1.p4 + jet2.p4;
 
-    m_diJet.DR = VectorUtil::DeltaR(jet1.p4, jet2.p4);
-    m_diJet.DEta = DeltaEta(jet1.p4, jet2.p4);
-    m_diJet.DPhi = VectorUtil::DeltaPhi(jet1.p4, jet2.p4);
+
+    DiJet m_diJet(dijet_CSVv2Ordered[0], dijet_CSVv2Ordered[1]);
+    diJets.push_back(m_diJet);
 
     // chapter 3: event variable
 
@@ -359,6 +370,8 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
         (float) VectorUtil::DeltaPhi(l2.p4, jet1.p4),
         (float) VectorUtil::DeltaPhi(l2.p4, jet2.p4)
         } );
+
+    diLepDiJets.push_back(m_diLepDiJet);
   }
 
 }

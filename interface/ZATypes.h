@@ -116,15 +116,17 @@ namespace ZAAnalysis {
       BaseObject(_jet1.p4 + _jet2.p4),
       DR( ROOT::Math::VectorUtil::DeltaR(_jet1.p4, _jet2.p4) ),
       DEta( DeltaEta(_jet1.p4, _jet2.p4) ),
-      DPhi( ROOT::Math::VectorUtil::DeltaPhi(_jet1.p4, _jet2.p4))
+      DPhi( ROOT::Math::VectorUtil::DeltaPhi(_jet1.p4, _jet2.p4)),
+      isML( _jet1.isBWPM && _jet2.isBWPL),
+      isMM( _jet1.isBWPM && _jet2.isBWPM),
+      isTM( _jet1.isBWPT && _jet2.isBWPM)
       {}
-    float minDRjl; // defined for each combination of a lepton ID and isolation
-    bool isML; // b-tagging working points
-    bool isMM; // b-tagging working points
-    bool isTM; // b-tagging working points
     float DR;
     float DEta;
     float DPhi;
+    bool isML; // b-tagging working points
+    bool isMM; // b-tagging working points
+    bool isTM; // b-tagging working points
   };
 
   struct DiLepDiJet: BaseObject {

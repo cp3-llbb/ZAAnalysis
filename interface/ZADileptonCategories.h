@@ -37,8 +37,14 @@ class DileptonCategory: public Category {
       baseStrDiLeptonTriggerMatch("DiLeptonTriggerMatch"),
       baseStrMllCut("Mll"),
       baseStrDiLeptonIsOS("DiLeptonIsOS"),
+      baseStrDileptonIsIDMM("DileptonIsIDMM"),
+      baseStrDileptonIsIDTT("DileptonIsIDTT"),
+      baseStrDileptonIsoLL("DileptonIsoLL"),
       baseStrLooseZCandidate("LooseZCandidate"),
-      baseStrTightZCandidate("ThightZCandidate")//,
+      baseStrTightZCandidate("TightZCandidate"),
+      baseStrDiJetBWP_ML("DiJetBWP_ML"),
+      baseStrDiJetBWP_MM("DiJetBWP_MM"),
+      baseStrDiJetBWP_TM("DiJetBWP_TM")
 /*
       baseStrOneExtraBjet("OneExtraBjet"),
       baseStrTwoExtraBjets("TwoExtraBjets"),
@@ -59,8 +65,14 @@ class DileptonCategory: public Category {
     std::string baseStrDiLeptonTriggerMatch;
     std::string baseStrMllCut;
     std::string baseStrDiLeptonIsOS;
+    std::string baseStrDileptonIsIDMM;
+    std::string baseStrDileptonIsIDTT;
+    std::string baseStrDileptonIsoLL;
     std::string baseStrLooseZCandidate;
     std::string baseStrTightZCandidate;
+    std::string baseStrDiJetBWP_ML;
+    std::string baseStrDiJetBWP_MM;
+    std::string baseStrDiJetBWP_TM;
 /*
     std::string baseStrOneExtraBjet;
     std::string baseStrTwoExtraBjets;

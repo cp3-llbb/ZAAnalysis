@@ -29,12 +29,16 @@ bool ElElCategory::event_in_category_post_analyzers(const ProducersManager& prod
 void ElElCategory::register_cuts(CutManager& manager) {
               
     manager.new_cut(baseStrCategory, baseStrCategory);
-    manager.new_cut(baseStrDiLeptonTriggerMatch, baseStrDiLeptonTriggerMatch);
     manager.new_cut(baseStrMllCut, baseStrMllCut);
     manager.new_cut(baseStrDiLeptonIsOS, baseStrDiLeptonIsOS);
+    manager.new_cut(baseStrDileptonIsIDMM, baseStrDileptonIsIDMM);
+    manager.new_cut(baseStrDileptonIsIDTT, baseStrDileptonIsIDTT);
+    manager.new_cut(baseStrDileptonIsoLL, baseStrDileptonIsoLL);
     manager.new_cut(baseStrLooseZCandidate, baseStrLooseZCandidate);
     manager.new_cut(baseStrTightZCandidate, baseStrTightZCandidate);
-    
+    manager.new_cut(baseStrDiJetBWP_ML, baseStrDiJetBWP_ML);
+    manager.new_cut(baseStrDiJetBWP_MM, baseStrDiJetBWP_MM);
+    manager.new_cut(baseStrDiJetBWP_TM, baseStrDiJetBWP_TM);
 }
 
 void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
@@ -43,15 +47,20 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
   const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
 
     
-  if(za.diLeptons.size() >= 1) {
+  if(za.diLeptons.size() >= 1 && za.diJets.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
-    
+    const DiJet& m_diJet = za.diJets[0];
+
     if(m_diLepton.isElEl) {
       manager.pass_cut(baseStrCategory);
               
       if(m_diLepton.p4.M() > m_MllCutSF)
         manager.pass_cut(baseStrMllCut);
-           
+
+      if(m_diLepton.isMM) manager.pass_cut(baseStrDileptonIsIDMM);
+      if(m_diLepton.isTT) manager.pass_cut(baseStrDileptonIsIDTT);
+      if(m_diLepton.isIsoLL) manager.pass_cut(baseStrDileptonIsoLL);
+
       if(m_diLepton.isOS)
       {
         manager.pass_cut(baseStrDiLeptonIsOS);
@@ -62,6 +71,9 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
             manager.pass_cut(baseStrTightZCandidate);
         }
       }
+      if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
+      if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
+      if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
     }
   }
 }
@@ -87,12 +99,18 @@ bool MuMuCategory::event_in_category_post_analyzers(const ProducersManager& prod
 void MuMuCategory::register_cuts(CutManager& manager) {
   
           
-  manager.new_cut(baseStrCategory, baseStrCategory);
-  manager.new_cut(baseStrMllCut, baseStrMllCut);
-  manager.new_cut(baseStrDiLeptonIsOS, baseStrDiLeptonIsOS);
-  manager.new_cut(baseStrLooseZCandidate, baseStrLooseZCandidate);
-  manager.new_cut(baseStrTightZCandidate, baseStrTightZCandidate);
-  
+    manager.new_cut(baseStrCategory, baseStrCategory);
+    manager.new_cut(baseStrMllCut, baseStrMllCut);
+    manager.new_cut(baseStrDiLeptonIsOS, baseStrDiLeptonIsOS);
+    manager.new_cut(baseStrDileptonIsIDMM, baseStrDileptonIsIDMM);
+    manager.new_cut(baseStrDileptonIsIDTT, baseStrDileptonIsIDTT);
+    manager.new_cut(baseStrDileptonIsoLL, baseStrDileptonIsoLL);
+    manager.new_cut(baseStrLooseZCandidate, baseStrLooseZCandidate);
+    manager.new_cut(baseStrTightZCandidate, baseStrTightZCandidate);
+    manager.new_cut(baseStrDiJetBWP_ML, baseStrDiJetBWP_ML);
+    manager.new_cut(baseStrDiJetBWP_MM, baseStrDiJetBWP_MM);
+    manager.new_cut(baseStrDiJetBWP_TM, baseStrDiJetBWP_TM);
+ 
 
 }
 
@@ -102,14 +120,19 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
   const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
 
 
-  if(za.diLeptons.size() >= 1) {
+  if(za.diLeptons.size() >= 1 && za.diJets.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
+    const DiJet& m_diJet = za.diJets[0];
           
     if(m_diLepton.isMuMu) {
       manager.pass_cut(baseStrCategory );
 
       if(m_diLepton.p4.M() > m_MllCutSF)
         manager.pass_cut(baseStrMllCut);
+
+      if(m_diLepton.isMM) manager.pass_cut(baseStrDileptonIsIDMM);
+      if(m_diLepton.isTT) manager.pass_cut(baseStrDileptonIsIDTT);
+      if(m_diLepton.isIsoLL) manager.pass_cut(baseStrDileptonIsoLL);
               
       if(m_diLepton.isOS)
       {
@@ -121,6 +144,9 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
             manager.pass_cut(baseStrTightZCandidate);
         }
       } 
+      if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
+      if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
+      if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
     }
   }
 }

@@ -83,16 +83,22 @@ namespace ZAAnalysis {
       BaseObject(_l1.p4 + _l2.p4),
       DR( ROOT::Math::VectorUtil::DeltaR(_l1.p4, _l2.p4) ),
       DEta( DeltaEta(_l1.p4, _l2.p4) ),
-      DPhi( ROOT::Math::VectorUtil::DeltaPhi(_l1.p4, _l2.p4))
+      DPhi( ROOT::Math::VectorUtil::DeltaPhi(_l1.p4, _l2.p4)),
+      isLL( _l1.isIDLoose &&  _l2.isIDLoose ),
+      isMM( _l1.isIDMedium &&  _l2.isIDMedium ),
+      isTT( _l1.isIDTight &&  _l2.isIDTight ),
+      isIsoLL( _l1.isIsoLoose && _l2.isIsoLoose),
+      isIsoTT( _l1.isIsoTight && _l2.isIsoTight)
       {}
-    bool isLL, isMM, isTT;
-    bool isIsoLL, isIsoTT;
     bool isElEl, isElMu, isMuEl, isMuMu;
     bool isOS; // opposite sign
     bool isSF; // same flavour
     float DR;
     float DEta;
     float DPhi;
+    bool isLL, isMM, isTT;
+    bool isIsoLL, isIsoTT;
+
   };
  
   struct Jet: BaseObject {

@@ -20,7 +20,7 @@ using namespace ROOT::Math;
 using namespace ZAAnalysis;
 
 float ZAAnalysis::DeltaEta(const myLorentzVector& v1, const myLorentzVector& v2){
-  return abs(v1.Eta() - v2.Eta());
+  return std::abs(v1.Eta() - v2.Eta());
 }
 
 bool ZAAnalysis::sortByBtag(const ZAAnalysis::Jet& _jet1, const ZAAnalysis::Jet& _jet2){

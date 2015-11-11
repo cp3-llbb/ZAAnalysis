@@ -18,6 +18,10 @@ class DileptonCategory: public Category {
       m_HLTDoubleMuon = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleMuon");
       m_HLTDoubleEG = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleEG");
       m_HLTMuonEG = conf.getUntrackedParameter<std::vector<std::string>>("HLTMuonEG");
+      m_lowLooseZcut = conf.getUntrackedParameter<double>("lowLooseZcut", 60);
+      m_highLooseZcut = conf.getUntrackedParameter<double>("highLooseZcut", 120);
+      m_lowTightZcut = conf.getUntrackedParameter<double>("lowTightZcut", 75);
+      m_highTightZcut = conf.getUntrackedParameter<double>("highTightZcut", 105);
 
       for(const auto& hlt: m_HLTDoubleMuon)
         m_HLTDoubleMuonRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
@@ -32,7 +36,15 @@ class DileptonCategory: public Category {
       baseStrExtraDiLeptonVeto("ExtraDiLeptonVeto"),
       baseStrDiLeptonTriggerMatch("DiLeptonTriggerMatch"),
       baseStrMllCut("Mll"),
-      baseStrDiLeptonIsOS("DiLeptonIsOS")//,
+      baseStrDiLeptonIsOS("DiLeptonIsOS"),
+      baseStrDileptonIsIDMM("DileptonIsIDMM"),
+      baseStrDileptonIsIDTT("DileptonIsIDTT"),
+      baseStrDileptonIsoLL("DileptonIsoLL"),
+      baseStrLooseZCandidate("LooseZCandidate"),
+      baseStrTightZCandidate("TightZCandidate"),
+      baseStrDiJetBWP_ML("DiJetBWP_ML"),
+      baseStrDiJetBWP_MM("DiJetBWP_MM"),
+      baseStrDiJetBWP_TM("DiJetBWP_TM")
 /*
       baseStrOneExtraBjet("OneExtraBjet"),
       baseStrTwoExtraBjets("TwoExtraBjets"),
@@ -42,7 +54,7 @@ class DileptonCategory: public Category {
       {}
 
   protected:
-    float m_MllCutSF, m_MllCutDF;
+    float m_MllCutSF, m_MllCutDF, m_lowLooseZcut, m_highLooseZcut, m_lowTightZcut, m_highTightZcut;
 
     std::vector<std::string> m_HLTDoubleMuon;
     std::vector<std::string> m_HLTDoubleEG;
@@ -53,6 +65,14 @@ class DileptonCategory: public Category {
     std::string baseStrDiLeptonTriggerMatch;
     std::string baseStrMllCut;
     std::string baseStrDiLeptonIsOS;
+    std::string baseStrDileptonIsIDMM;
+    std::string baseStrDileptonIsIDTT;
+    std::string baseStrDileptonIsoLL;
+    std::string baseStrLooseZCandidate;
+    std::string baseStrTightZCandidate;
+    std::string baseStrDiJetBWP_ML;
+    std::string baseStrDiJetBWP_MM;
+    std::string baseStrDiJetBWP_TM;
 /*
     std::string baseStrOneExtraBjet;
     std::string baseStrTwoExtraBjets;

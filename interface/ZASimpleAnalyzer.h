@@ -12,7 +12,7 @@
 #include <cp3_llbb/Framework/interface/JetsProducer.h>
 
 
-#include <cp3_llbb/ZAAnalysis/interface/Types.h>
+#include <cp3_llbb/ZAAnalysis/interface/ZATypes.h>
 #include <cp3_llbb/ZAAnalysis/interface/Tools.h>
 
 class ZAAnalyzer: public Framework::Analyzer {
@@ -26,11 +26,14 @@ class ZAAnalyzer: public Framework::Analyzer {
             m_electronLooseIDName( config.getUntrackedParameter<std::string>("electronLooseIDName") ),
             m_electronMediumIDName( config.getUntrackedParameter<std::string>("electronMediumIDName") ),
             m_electronTightIDName( config.getUntrackedParameter<std::string>("electronTightIDName") ),
+//            m_electronSelectionID( config.getUntrackedParameter<std::string>("electronSelectionID") ),
             
             m_muonPtCut( config.getUntrackedParameter<double>("muonPtCut", 20) ),
             m_muonEtaCut( config.getUntrackedParameter<double>("muonEtaCut", 2.4) ),
+//            m_muonSelectionID( config.getUntrackedParameter<std::string>("muonSelectionID","tight") ),
             m_muonLooseIsoCut( config.getUntrackedParameter<double>("muonLooseIsoCut", 0.2) ),
             m_muonTightIsoCut( config.getUntrackedParameter<double>("muonTightIsoCut", 0.12) ),
+//            m_muonSelectionIsoCut( config.getUntrackedParameter<double>("muonSelectionIsoCut", 0.12) ),
             
             m_jetPtCut( config.getUntrackedParameter<double>("jetPtCut", 30) ),
             m_jetEtaCut( config.getUntrackedParameter<double>("jetEtaCut", 2.5) ),
@@ -51,37 +54,20 @@ class ZAAnalyzer: public Framework::Analyzer {
         virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&, const AnalyzersManager&, const CategoryManager&) override;
         virtual void registerCategories(CategoryManager& manager, const edm::ParameterSet&) override;
 
-        BRANCH(electrons_IDIso, std::vector<std::vector<uint16_t>>);
-        BRANCH(muons_IDIso, std::vector<std::vector<uint16_t>>);
 
         BRANCH(leptons, std::vector<ZAAnalysis::Lepton>);
-        BRANCH(leptons_IDIso, std::vector<std::vector<uint16_t>>);
+        BRANCH(isolatedElectrons, std::vector<ZAAnalysis::Lepton>);
+        BRANCH(isolatedMuons, std::vector<ZAAnalysis::Lepton>);
+        BRANCH(vetoLeptons, std::vector<ZAAnalysis::Lepton>);
+        BRANCH(selJets, std::vector<ZAAnalysis::Jet>);
+
+        BRANCH(dilep_ptOrdered, std::vector<ZAAnalysis::Lepton>);  //FIXME remove the vectors and define "clearing mechanism", or use pair?
+        BRANCH(dijet_ptOrdered, std::vector<ZAAnalysis::Jet>);
+        BRANCH(dijet_CSVv2Ordered, std::vector<ZAAnalysis::Jet>);
 
         BRANCH(diLeptons, std::vector<ZAAnalysis::DiLepton>);
-        BRANCH(diLeptons_IDIso, std::vector<std::vector<uint16_t>>);
-
-        BRANCH(selJets, std::vector<ZAAnalysis::Jet>);
-        BRANCH(selJets_selID, std::vector<uint16_t>);
-        // ex.: selectedJets_..._DRCut[X][0] is the highest Pt selected jet with minDRjl>0.3 taking into account ID/Iso-X Leptons
-        BRANCH(selJets_selID_DRCut, std::vector<std::vector<uint16_t>>);
-        // ex.: selectedBJets_..._PtOrdered[X][0] is the highest Pt selected jet with minDRjl>0.3 taking into account ID/Iso/Btag-X combination
-        BRANCH(selBJets_DRCut_BWP_PtOrdered, std::vector<std::vector<uint16_t>>);
-        BRANCH(selBJets_DRCut_BWP_CSVv2Ordered, std::vector<std::vector<uint16_t>>);
-
         BRANCH(diJets, std::vector<ZAAnalysis::DiJet>);
-        // ex.: diJets_DRCut[X][0] is first diJet with minDRjl>0.3 taking into account ID/Iso-X Leptons
-        BRANCH(diJets_DRCut, std::vector<std::vector<uint16_t>>); 
-        // ex.: diBJets_..._CSVv2Ordered[X][0] is the b-jet pair with highest CSVv2 values and with minDRjl>0.3 taking into account the leptonID/Iso/Btag-X combination
-        BRANCH(diBJets_DRCut_BWP_PtOrdered, std::vector<std::vector<uint16_t>>);
-        BRANCH(diBJets_DRCut_BWP_CSVv2Ordered, std::vector<std::vector<uint16_t>>);
-
-        // For all the following: indices are combinations of LeptonID/LeptonIso/(B-tagging working point)
-
         BRANCH(diLepDiJets, std::vector<ZAAnalysis::DiLepDiJet>);
-        
-        BRANCH(diLepDiJets_DRCut, std::vector<std::vector<uint16_t>>); // di-leptons of combined ID/Iso with di-jets built out of jets having minDRjl>cut taking into account lepton ID/Iso corresponding to the loosest combination of the two leptons of the object
-        BRANCH(diLepDiBJets_DRCut_BWP_PtOrdered, std::vector<std::vector<uint16_t>>);
-        BRANCH(diLepDiBJets_DRCut_BWP_CSVv2Ordered, std::vector<std::vector<uint16_t>>);
 
     private:
 
@@ -90,7 +76,9 @@ class ZAAnalyzer: public Framework::Analyzer {
         const std::string m_electronLooseIDName;
         const std::string m_electronMediumIDName;
         const std::string m_electronTightIDName;
+        const std::string m_electronSelectionID;
 
+//        const std::string m_muonSelectionID;
         const float m_muonPtCut, m_muonEtaCut, m_muonLooseIsoCut, m_muonTightIsoCut;
 
         const float m_jetPtCut, m_jetEtaCut, m_jetPUID, m_jetDRleptonCut;

@@ -3,10 +3,9 @@
 #include <cp3_llbb/Framework/interface/HLTProducer.h>
 
 #include <cp3_llbb/ZAAnalysis/interface/ZADileptonCategories.h>
-#include <cp3_llbb/ZAAnalysis/interface/ZAAnalyzer.h>
+#include <cp3_llbb/ZAAnalysis/interface/ZASimpleAnalyzer.h>
 
-#include <cp3_llbb/ZAAnalysis/interface/Types.h>
-#include <cp3_llbb/ZAAnalysis/interface/Indices.h>
+#include <cp3_llbb/ZAAnalysis/interface/ZATypes.h>
 
 using namespace ZAAnalysis;
 
@@ -24,46 +23,22 @@ bool ElElCategory::event_in_category_post_analyzers(const ProducersManager& prod
 
   // If at least one DiLepton of highest Pt and of type ElEl among all ID pairs is found, keep event in this category
 
-  for(const LepID::LepID& id1: LepID::it) {
-    for(const LepID::LepID& id2: LepID::it) {
-      for(const LepIso::LepIso& iso1: LepIso::it) {
-        for(const LepIso::LepIso& iso2: LepIso::it) {
-          
-          uint16_t comb = LepLepIDIso(id1, iso1, id2, iso2);
-          if(za.diLeptons_IDIso[comb].size() >= 1) {
-            if( za.diLeptons[ za.diLeptons_IDIso[comb][0] ].isElEl )
-              return true;
-          }
-        
-        }
-      }
-    }
-  }
-
-  return false;
+  return true;
 }
 
 void ElElCategory::register_cuts(CutManager& manager) {
-  
-  for(const LepID::LepID& id1: LepID::it) {
-    for(const LepID::LepID& id2: LepID::it) {
-      for(const LepIso::LepIso& iso1: LepIso::it) {
-        for(const LepIso::LepIso& iso2: LepIso::it) {
-          
-          std::string postFix("_");
-          postFix += LepLepIDIsoStr(id1, iso1, id2, iso2);
-          
-          manager.new_cut(baseStrCategory + postFix, baseStrCategory + postFix);
-          manager.new_cut(baseStrExtraDiLeptonVeto + postFix, baseStrExtraDiLeptonVeto + postFix);
-          manager.new_cut(baseStrDiLeptonTriggerMatch + postFix, baseStrDiLeptonTriggerMatch + postFix);
-          manager.new_cut(baseStrMllCut + postFix, baseStrMllCut + postFix);
-          manager.new_cut(baseStrDiLeptonIsOS + postFix, baseStrDiLeptonIsOS + postFix);
-
-        }
-      }
-    }
-  }
-
+              
+    manager.new_cut(baseStrCategory, baseStrCategory);
+    manager.new_cut(baseStrMllCut, baseStrMllCut);
+    manager.new_cut(baseStrDiLeptonIsOS, baseStrDiLeptonIsOS);
+    manager.new_cut(baseStrDileptonIsIDMM, baseStrDileptonIsIDMM);
+    manager.new_cut(baseStrDileptonIsIDTT, baseStrDileptonIsIDTT);
+    manager.new_cut(baseStrDileptonIsoLL, baseStrDileptonIsoLL);
+    manager.new_cut(baseStrLooseZCandidate, baseStrLooseZCandidate);
+    manager.new_cut(baseStrTightZCandidate, baseStrTightZCandidate);
+    manager.new_cut(baseStrDiJetBWP_ML, baseStrDiJetBWP_ML);
+    manager.new_cut(baseStrDiJetBWP_MM, baseStrDiJetBWP_MM);
+    manager.new_cut(baseStrDiJetBWP_TM, baseStrDiJetBWP_TM);
 }
 
 void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
@@ -71,46 +46,36 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
   const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>("za");
   const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
 
-  for(const LepID::LepID& id1: LepID::it) {
-    for(const LepID::LepID& id2: LepID::it) {
-      for(const LepIso::LepIso& iso1: LepIso::it) {
-        for(const LepIso::LepIso& iso2: LepIso::it) {
-          
-          std::string postFix("_");
-          postFix += LepLepIDIsoStr(id1, iso1, id2, iso2);
-          uint16_t comb = LepLepIDIso(id1, iso1, id2, iso2);
     
-          if(za.diLeptons_IDIso[comb].size() >= 1) {
-            const DiLepton& m_diLepton = za.diLeptons[ za.diLeptons_IDIso[comb][0] ];
-            
-            if(m_diLepton.isElEl) {
-              manager.pass_cut(baseStrCategory + postFix);
+  if(za.diLeptons.size() >= 1 && za.diJets.size() >= 1) {
+    const DiLepton& m_diLepton = za.diLeptons[0];
+    const DiJet& m_diJet = za.diJets[0];
 
-              if(m_diLepton.hlt_idxs.first >= 0 && m_diLepton.hlt_idxs.second >= 0){
-                // We have fired a trigger. Now, check that it is actually a DoubleEG trigger
-                if( checkHLT(hlt, m_diLepton.hlt_idxs.first, m_diLepton.hlt_idxs.second, HLT::DoubleEG) )
-                  manager.pass_cut(baseStrDiLeptonTriggerMatch + postFix);
-              }
+    if(m_diLepton.isElEl) {
+      manager.pass_cut(baseStrCategory);
               
-              if(m_diLepton.p4.M() > m_MllCutSF)
-                manager.pass_cut(baseStrMllCut + postFix);
-              
-              if(m_diLepton.isOS)
-                manager.pass_cut(baseStrDiLeptonIsOS + postFix);
-            }
-          }
-          
-          // For electrons, in principe only veto using VetoID.
-          // But since the user can access any cut he wants, he can take the IDVV_IsoWhatever cut.
-          if(za.diLeptons_IDIso[comb].size() >= 2) { 
-            manager.pass_cut(baseStrExtraDiLeptonVeto + postFix);
-          }
+      if(m_diLepton.p4.M() > m_MllCutSF)
+        manager.pass_cut(baseStrMllCut);
 
+      if(m_diLepton.isMM) manager.pass_cut(baseStrDileptonIsIDMM);
+      if(m_diLepton.isTT) manager.pass_cut(baseStrDileptonIsIDTT);
+      if(m_diLepton.isIsoLL) manager.pass_cut(baseStrDileptonIsoLL);
+
+      if(m_diLepton.isOS)
+      {
+        manager.pass_cut(baseStrDiLeptonIsOS);
+        if (m_diLepton.p4.M() > m_lowLooseZcut  && m_diLepton.p4.M() < m_highLooseZcut )
+        {
+          manager.pass_cut(baseStrLooseZCandidate);
+          if (m_diLepton.p4.M() > m_lowTightZcut  && m_diLepton.p4.M() < m_highTightZcut )
+            manager.pass_cut(baseStrTightZCandidate);
         }
       }
+      if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
+      if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
+      if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
     }
   }
-
 }
 
 
@@ -128,45 +93,24 @@ bool MuMuCategory::event_in_category_post_analyzers(const ProducersManager& prod
 
   // It at least one DiLepton of highest Pt and of type MuMu among all ID pairs is found, keep event in this category
 
-  for(const LepID::LepID& id1: LepID::it) {
-    for(const LepID::LepID& id2: LepID::it) {
-      for(const LepIso::LepIso& iso1: LepIso::it) {
-        for(const LepIso::LepIso& iso2: LepIso::it) {
-          
-          uint16_t comb = LepLepIDIso(id1, iso1, id2, iso2);
-          if(za.diLeptons_IDIso[comb].size() >= 1) {
-            if( za.diLeptons[ za.diLeptons_IDIso[comb][0] ].isMuMu )
-              return true;
-          }
-        
-        }
-      }
-    }
-  }
-
-  return false;
+  return true;
 }
 
 void MuMuCategory::register_cuts(CutManager& manager) {
   
-  for(const LepID::LepID& id1: LepID::it) {
-    for(const LepID::LepID& id2: LepID::it) {
-      for(const LepIso::LepIso& iso1: LepIso::it) {
-        for(const LepIso::LepIso& iso2: LepIso::it) {
           
-          std::string postFix("_");
-          postFix += LepLepIDIsoStr(id1, iso1, id2, iso2);
-          
-          manager.new_cut(baseStrCategory + postFix, baseStrCategory + postFix);
-          manager.new_cut(baseStrExtraDiLeptonVeto + postFix, baseStrExtraDiLeptonVeto + postFix);
-          manager.new_cut(baseStrDiLeptonTriggerMatch + postFix, baseStrDiLeptonTriggerMatch + postFix);
-          manager.new_cut(baseStrMllCut + postFix, baseStrMllCut + postFix);
-          manager.new_cut(baseStrDiLeptonIsOS + postFix, baseStrDiLeptonIsOS + postFix);
-
-        }
-      }
-    }
-  }
+    manager.new_cut(baseStrCategory, baseStrCategory);
+    manager.new_cut(baseStrMllCut, baseStrMllCut);
+    manager.new_cut(baseStrDiLeptonIsOS, baseStrDiLeptonIsOS);
+    manager.new_cut(baseStrDileptonIsIDMM, baseStrDileptonIsIDMM);
+    manager.new_cut(baseStrDileptonIsIDTT, baseStrDileptonIsIDTT);
+    manager.new_cut(baseStrDileptonIsoLL, baseStrDileptonIsoLL);
+    manager.new_cut(baseStrLooseZCandidate, baseStrLooseZCandidate);
+    manager.new_cut(baseStrTightZCandidate, baseStrTightZCandidate);
+    manager.new_cut(baseStrDiJetBWP_ML, baseStrDiJetBWP_ML);
+    manager.new_cut(baseStrDiJetBWP_MM, baseStrDiJetBWP_MM);
+    manager.new_cut(baseStrDiJetBWP_TM, baseStrDiJetBWP_TM);
+ 
 
 }
 
@@ -175,42 +119,34 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
   const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>("za");
   const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
 
-  for(const LepID::LepID& id1: LepID::it) {
-    for(const LepID::LepID& id2: LepID::it) {
-      for(const LepIso::LepIso& iso1: LepIso::it) {
-        for(const LepIso::LepIso& iso2: LepIso::it) {
-          
-          std::string postFix("_");
-          postFix += LepLepIDIsoStr(id1, iso1, id2, iso2);
-          uint16_t comb = LepLepIDIso(id1, iso1, id2, iso2);
-    
-          if(za.diLeptons_IDIso[comb].size() >= 1) {
-            const DiLepton& m_diLepton = za.diLeptons[ za.diLeptons_IDIso[comb][0] ];
-            
-            if(m_diLepton.isMuMu) {
-              manager.pass_cut(baseStrCategory + postFix);
 
-              if(m_diLepton.hlt_idxs.first >= 0 && m_diLepton.hlt_idxs.second >= 0){
-                // We have fired a trigger. Now, check that it is actually a DoubleMuon trigger
-                if( checkHLT(hlt, m_diLepton.hlt_idxs.first, m_diLepton.hlt_idxs.second, HLT::DoubleMuon) )
-                  manager.pass_cut(baseStrDiLeptonTriggerMatch + postFix);
-              }
-              
-              if(m_diLepton.p4.M() > m_MllCutSF)
-                manager.pass_cut(baseStrMllCut + postFix);
-              
-              if(m_diLepton.isOS)
-                manager.pass_cut(baseStrDiLeptonIsOS + postFix);
-            }
-          }
+  if(za.diLeptons.size() >= 1 && za.diJets.size() >= 1) {
+    const DiLepton& m_diLepton = za.diLeptons[0];
+    const DiJet& m_diJet = za.diJets[0];
           
-          if(za.diLeptons_IDIso[comb].size() >= 2) { 
-            manager.pass_cut(baseStrExtraDiLeptonVeto + postFix);
-          }
+    if(m_diLepton.isMuMu) {
+      manager.pass_cut(baseStrCategory );
 
+      if(m_diLepton.p4.M() > m_MllCutSF)
+        manager.pass_cut(baseStrMllCut);
+
+      if(m_diLepton.isMM) manager.pass_cut(baseStrDileptonIsIDMM);
+      if(m_diLepton.isTT) manager.pass_cut(baseStrDileptonIsIDTT);
+      if(m_diLepton.isIsoLL) manager.pass_cut(baseStrDileptonIsoLL);
+              
+      if(m_diLepton.isOS)
+      {
+        manager.pass_cut(baseStrDiLeptonIsOS);
+        if (m_diLepton.p4.M() > m_lowLooseZcut  && m_diLepton.p4.M() < m_highLooseZcut )
+        {
+          manager.pass_cut(baseStrLooseZCandidate);
+          if (m_diLepton.p4.M() > m_lowTightZcut  && m_diLepton.p4.M() < m_highTightZcut )
+            manager.pass_cut(baseStrTightZCandidate);
         }
-      }
+      } 
+      if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
+      if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
+      if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
     }
   }
-
 }

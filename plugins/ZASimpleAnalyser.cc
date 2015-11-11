@@ -23,6 +23,13 @@ float ZAAnalysis::DeltaEta(const myLorentzVector& v1, const myLorentzVector& v2)
   return abs(v1.Eta() - v2.Eta());
 }
 
+bool ZAAnalysis::sortByBtag(const ZAAnalysis::Jet& _jet1, const ZAAnalysis::Jet& _jet2){
+      return _jet1.CSVv2 > _jet2.CSVv2;
+}
+
+bool ZAAnalysis::sortByPt(const ZAAnalysis::Jet& _jet1, const ZAAnalysis::Jet& _jet2){
+      return _jet1.p4.Pt() > _jet2.p4.Pt();
+}
 
 void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, const ProducersManager& producers, const AnalyzersManager& analyzers, const CategoryManager&) {
 
@@ -263,7 +270,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
   #endif
 
   // Basic selection: Two selected leptons that matches the trigger and two jets
-  if (leptons.size() == 2 && selJets.size() == 2 && leptons[0].hlt_idx > -1 && leptons[1].hlt_idx > -1){
+  if (leptons.size() == 2 && selJets.size() >= 2 && leptons[0].hlt_idx > -1 && leptons[1].hlt_idx > -1){
 
     // Chapter 1: di-leptons
 
@@ -300,8 +307,16 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
 
     // chapter 2: di-jets
 
+    sort(selJets.begin(), selJets.end(), sortByBtag);
+
     const Jet& jet1 = selJets[0];
     const Jet& jet2 = selJets[1];
+
+    
+
+    //sort(selJets.begin(), selJets.end(), sortByPt);
+
+    
 
     if (jet1.p4.Pt() > jet2.p4.Pt())
       {
@@ -313,7 +328,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       dijet_ptOrdered.push_back(jet2);
       dijet_ptOrdered.push_back(jet1);
       }
-
+    /*
     if (jet1.CSVv2 > jet2.CSVv2)
       {
       dijet_CSVv2Ordered.push_back(jet1);
@@ -321,13 +336,14 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       }
     else
       {
+      std::cout << "badly Btag ordered";
+      std::cout << jet1.CSVv2 << " " << jet2.CSVv2 << std::endl;
       dijet_CSVv2Ordered.push_back(jet2);
       dijet_CSVv2Ordered.push_back(jet1);
       }
+    */
 
-
-
-    DiJet m_diJet(dijet_CSVv2Ordered[0], dijet_CSVv2Ordered[1]);
+    DiJet m_diJet(jet1, jet2);
     diJets.push_back(m_diJet);
 
     // chapter 3: event variable

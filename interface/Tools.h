@@ -6,6 +6,8 @@
 namespace ZAAnalysis {
   
   float DeltaEta(const myLorentzVector &v1, const myLorentzVector &v2);
-  
+
+  bool sortByBtag(const ZAAnalysis::Jet& _jet1, const ZAAnalysis::Jet& _jet2);
+  bool sortByPt(const ZAAnalysis::Jet& _jet1, const ZAAnalysis::Jet& _jet2); 
 }
 

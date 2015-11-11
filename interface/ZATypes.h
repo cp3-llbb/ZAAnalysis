@@ -114,7 +114,7 @@ namespace ZAAnalysis {
     bool isBWPM;
     bool isBWPT;
   };
-  
+
   struct DiJet: BaseObject {
     DiJet()
       {}

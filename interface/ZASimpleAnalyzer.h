@@ -54,6 +54,7 @@ class ZAAnalyzer: public Framework::Analyzer {
         virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&, const AnalyzersManager&, const CategoryManager&) override;
         virtual void registerCategories(CategoryManager& manager, const edm::ParameterSet&) override;
 
+
         BRANCH(leptons, std::vector<ZAAnalysis::Lepton>);
         BRANCH(isolatedElectrons, std::vector<ZAAnalysis::Lepton>);
         BRANCH(isolatedMuons, std::vector<ZAAnalysis::Lepton>);

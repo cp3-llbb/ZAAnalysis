@@ -174,6 +174,70 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       }
     }
   }
+
+  //////////////////////////////
+  //       FATJETS            //
+  //////////////////////////////
+
+  #ifdef _ZA_DEBUG_
+    std::cout << "fatJets" << std::endl;
+  #endif
+
+  const FatJetsProducer& fatjets = producers.get<FatJetsProducer>("fat_jets");
+
+  // First find the fat jets passing kinematic cuts and save them as Jet objects
+
+  uint16_t fatjetCounter(0);
+  for(uint16_t ifatjet = 0; ifatjet < fatjets.p4.size(); ifatjet++){
+    // Save the fat jets that pass the kinematic cuts 
+    // FIXME : currently same cuts as for the jets
+    if( abs(fatjets.p4[ifatjet].Eta()) < m_jetEtaCut && fatjets.p4[ifatjet].Pt() > m_jetPtCut){
+      FatJet m_fatjet;
+
+      m_fatjet.p4 = fatjets.p4[ijet];
+      m_fatjet.isIDLoose = fatjets.passLooseID[ijet];
+      m_fatjet.isIDTight = fatjets.passTightID[ijet];
+      m_fatjet.isTLV = fatjets.passTightLeptonVetoID[ijet];
+      m_fatjet.CSVv2 = fatjets.getBTagDiscriminant(ijet, m_jetCSVv2Name);
+      m_fatjet.isBWPL = m_fatjet.CSVv2 > m_jetCSVv2L;
+      m_fatjet.isBWPM = m_fatjet.CSVv2 > m_jetCSVv2M;
+      m_fatjet.isBWPT = m_fatjet.CSVv2 > m_jetCSVv2T;
+
+
+      
+
+      m_fatjet.nSDSubjets =
+      m_fatjet.nBtaggedSDSubjets = 
+
+      // Save minimal DR(l,j)
+      // Looping over all leptons that pass at least the veto criteria and check the distance with the jet.      
+
+      m_fatjet.minDRjl = std::numeric_limits<float>::max();
+
+      for(uint16_t il = 0; il < leptons.size(); il++)
+      {
+          const Lepton& m_lepton = leptons[il];
+          float DR = (float) VectorUtil::DeltaR(fatjets.p4[ijet], m_lepton.p4);
+          if( DR < m_fatjet.minDRjl)
+              m_fatjet.minDRjl = DR;
+      }
+
+      for(uint16_t il = 0; il < vetoLeptons.size(); il++)
+      {
+          const Lepton& m_lepton = vetoLeptons[il];
+          float DR = (float) VectorUtil::DeltaR(jets.p4[ijet], m_lepton.p4);
+          if( DR < m_fatjet.minDRjl)
+              m_fatjet.minDRjl = DR;
+      }
+
+      if (m_fatjet.minDRjl > m_jetDRleptonCut)
+      {
+          selFatJets.push_back(m_fatjet);
+          fatjetCounter++;
+      }
+    }
+  }
+
         
   /////////////////////////////////
   //    Trigger : Two Leptons    //

@@ -58,7 +58,6 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
     
   if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
-    const DiJet& m_diJet = za.diJets[0];
 
     if(m_diLepton.isElEl) {
       manager.pass_cut(baseStrCategory);
@@ -92,7 +91,7 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
       if (za.selBjetsM.size() >= 3) manager.pass_cut(baseStrThreeBjets);
 
       if (za.diJets.size() >= 1){
-
+        const DiJet& m_diJet = za.diJets[0];
         if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
         if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
         if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
@@ -153,7 +152,6 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
 
   if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
-    const DiJet& m_diJet = za.diJets[0];
           
     if(m_diLepton.isMuMu) {
       manager.pass_cut(baseStrCategory );
@@ -186,6 +184,7 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
       if (za.selBjetsM.size() >= 3) manager.pass_cut(baseStrThreeBjets);
 
       if (za.diJets.size() >= 1) {
+        const DiJet& m_diJet = za.diJets[0];
         if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
         if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
         if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);

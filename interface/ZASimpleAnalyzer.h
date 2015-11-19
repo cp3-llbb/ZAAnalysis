@@ -60,6 +60,7 @@ class ZAAnalyzer: public Framework::Analyzer {
         BRANCH(isolatedMuons, std::vector<ZAAnalysis::Lepton>);
         BRANCH(vetoLeptons, std::vector<ZAAnalysis::Lepton>);
         BRANCH(selJets, std::vector<ZAAnalysis::Jet>);
+        BRANCH(selBjetsM, std::vector<ZAAnalysis::Jet>);
 
         BRANCH(dilep_ptOrdered, std::vector<ZAAnalysis::Lepton>);  //FIXME remove the vectors and define "clearing mechanism", or use pair?
         BRANCH(dijet_ptOrdered, std::vector<ZAAnalysis::Jet>);

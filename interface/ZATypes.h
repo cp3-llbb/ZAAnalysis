@@ -88,7 +88,9 @@ namespace ZAAnalysis {
       isMM( _l1.isIDMedium &&  _l2.isIDMedium ),
       isTT( _l1.isIDTight &&  _l2.isIDTight ),
       isIsoLL( _l1.isIsoLoose && _l2.isIsoLoose),
-      isIsoTT( _l1.isIsoTight && _l2.isIsoTight)
+      isIsoTT( _l1.isIsoTight && _l2.isIsoTight),
+      idxLep1(_l1.idx),
+      idxLep2(_l2.idx)
       {}
     bool isElEl, isElMu, isMuEl, isMuMu;
     bool isOS; // opposite sign
@@ -98,6 +100,7 @@ namespace ZAAnalysis {
     float DPhi;
     bool isLL, isMM, isTT;
     bool isIsoLL, isIsoTT;
+    uint16_t idxLep1, idxLep2;
 
   };
  
@@ -125,7 +128,9 @@ namespace ZAAnalysis {
       DPhi( ROOT::Math::VectorUtil::DeltaPhi(_jet1.p4, _jet2.p4)),
       isML( _jet1.isBWPM && _jet2.isBWPL),
       isMM( _jet1.isBWPM && _jet2.isBWPM),
-      isTM( _jet1.isBWPT && _jet2.isBWPM)
+      isTM( _jet1.isBWPT && _jet2.isBWPM),
+      idxJet1(_jet1.idx),
+      idxJet2(_jet2.idx)
       {}
     float DR;
     float DEta;
@@ -133,6 +138,7 @@ namespace ZAAnalysis {
     bool isML; // b-tagging working points
     bool isMM; // b-tagging working points
     bool isTM; // b-tagging working points
+    uint16_t idxJet1, idxJet2;
   };
 
   struct DiLepDiJet: BaseObject {

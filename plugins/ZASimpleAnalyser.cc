@@ -138,6 +138,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       Jet m_jet;
       
       m_jet.p4 = jets.p4[ijet];
+      m_jet.idx = ijet;
       m_jet.isIDLoose = jets.passLooseID[ijet]; 
       m_jet.isIDTight = jets.passTightID[ijet]; 
       m_jet.isTLV = jets.passTightLeptonVetoID[ijet];

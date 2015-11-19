@@ -204,7 +204,11 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       m_fatjet.isBWPT = m_fatjet.CSVv2 > m_jetCSVv2T;
 
 
-      
+      for(uint16_t isubjet = 0; isubjet < fatjets.softdrop_subjets_p4[ifatjet].size(); isubjet++){
+          Jet m_subjet;
+          m_subjet.CSVv2 = subjets.getBTagDiscriminant(ijet, m_jetCSVv2Name);   //FIXME
+      }
+                  
 
       m_fatjet.nSDSubjets =
       m_fatjet.nBtaggedSDSubjets = 

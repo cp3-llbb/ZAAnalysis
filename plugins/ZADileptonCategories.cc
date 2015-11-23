@@ -39,6 +39,15 @@ void ElElCategory::register_cuts(CutManager& manager) {
     manager.new_cut(baseStrDiJetBWP_ML, baseStrDiJetBWP_ML);
     manager.new_cut(baseStrDiJetBWP_MM, baseStrDiJetBWP_MM);
     manager.new_cut(baseStrDiJetBWP_TM, baseStrDiJetBWP_TM);
+    manager.new_cut(baseStrOneJet,baseStrOneJet);
+    manager.new_cut(baseStrTwoJets,baseStrTwoJets);
+    manager.new_cut(baseStrTwoJetsExcl,baseStrTwoJetsExcl);
+    manager.new_cut(baseStrOneBjet,baseStrOneBjet);
+    manager.new_cut(baseStrTwoBjets,baseStrTwoBjets);
+    manager.new_cut(baseStrTwoBjetsExcl,baseStrTwoBjetsExcl);
+    manager.new_cut(baseStrThreeJets,baseStrThreeJets);
+    manager.new_cut(baseStrThreeBjets,baseStrThreeBjets);
+
 }
 
 void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
@@ -47,9 +56,8 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
   const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
 
     
-  if(za.diLeptons.size() >= 1 && za.diJets.size() >= 1) {
+  if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
-    const DiJet& m_diJet = za.diJets[0];
 
     if(m_diLepton.isElEl) {
       manager.pass_cut(baseStrCategory);
@@ -71,9 +79,23 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
             manager.pass_cut(baseStrTightZCandidate);
         }
       }
-      if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
-      if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
-      if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
+
+      if (za.selJets.size() >= 1) manager.pass_cut(baseStrOneJet);
+      if (za.selJets.size() >= 2) manager.pass_cut(baseStrTwoJets);
+      if (za.selJets.size() == 2) manager.pass_cut(baseStrTwoJetsExcl);
+      if (za.selJets.size() >= 3) manager.pass_cut(baseStrThreeJets);
+
+      if (za.selBjetsM.size() >= 1) manager.pass_cut(baseStrOneBjet);
+      if (za.selBjetsM.size() >= 2) manager.pass_cut(baseStrTwoBjets);
+      if (za.selBjetsM.size() == 2) manager.pass_cut(baseStrTwoBjetsExcl);
+      if (za.selBjetsM.size() >= 3) manager.pass_cut(baseStrThreeBjets);
+
+      if (za.diJets.size() >= 1){
+        const DiJet& m_diJet = za.diJets[0];
+        if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
+        if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
+        if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
+      }
     }
   }
 }
@@ -110,6 +132,14 @@ void MuMuCategory::register_cuts(CutManager& manager) {
     manager.new_cut(baseStrDiJetBWP_ML, baseStrDiJetBWP_ML);
     manager.new_cut(baseStrDiJetBWP_MM, baseStrDiJetBWP_MM);
     manager.new_cut(baseStrDiJetBWP_TM, baseStrDiJetBWP_TM);
+    manager.new_cut(baseStrOneJet,baseStrOneJet);
+    manager.new_cut(baseStrTwoJets,baseStrTwoJets);
+    manager.new_cut(baseStrTwoJetsExcl,baseStrTwoJetsExcl);
+    manager.new_cut(baseStrOneBjet,baseStrOneBjet);
+    manager.new_cut(baseStrTwoBjets,baseStrTwoBjets);
+    manager.new_cut(baseStrTwoBjetsExcl,baseStrTwoBjetsExcl);
+    manager.new_cut(baseStrThreeJets,baseStrThreeJets);
+    manager.new_cut(baseStrThreeBjets,baseStrThreeBjets);
  
 
 }
@@ -120,9 +150,8 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
   const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
 
 
-  if(za.diLeptons.size() >= 1 && za.diJets.size() >= 1) {
+  if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
-    const DiJet& m_diJet = za.diJets[0];
           
     if(m_diLepton.isMuMu) {
       manager.pass_cut(baseStrCategory );
@@ -144,9 +173,22 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
             manager.pass_cut(baseStrTightZCandidate);
         }
       } 
-      if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
-      if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
-      if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
+      if (za.selJets.size() >= 1) manager.pass_cut(baseStrOneJet);
+      if (za.selJets.size() >= 2) manager.pass_cut(baseStrTwoJets);
+      if (za.selJets.size() == 2) manager.pass_cut(baseStrTwoJetsExcl);
+      if (za.selJets.size() >= 3) manager.pass_cut(baseStrThreeJets);
+
+      if (za.selBjetsM.size() >= 1) manager.pass_cut(baseStrOneBjet);
+      if (za.selBjetsM.size() >= 2) manager.pass_cut(baseStrTwoBjets);
+      if (za.selBjetsM.size() == 2) manager.pass_cut(baseStrTwoBjetsExcl);
+      if (za.selBjetsM.size() >= 3) manager.pass_cut(baseStrThreeBjets);
+
+      if (za.diJets.size() >= 1) {
+        const DiJet& m_diJet = za.diJets[0];
+        if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
+        if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
+        if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
+      }
     }
   }
 }

@@ -20,7 +20,7 @@ using namespace ROOT::Math;
 using namespace ZAAnalysis;
 
 float ZAAnalysis::DeltaEta(const myLorentzVector& v1, const myLorentzVector& v2){
-  return abs(v1.Eta() - v2.Eta());
+  return std::abs(v1.Eta() - v2.Eta());
 }
 
 bool ZAAnalysis::sortByBtag(const ZAAnalysis::Jet& _jet1, const ZAAnalysis::Jet& _jet2){
@@ -138,6 +138,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       Jet m_jet;
       
       m_jet.p4 = jets.p4[ijet];
+      m_jet.idx = ijet;
       m_jet.isIDLoose = jets.passLooseID[ijet]; 
       m_jet.isIDTight = jets.passTightID[ijet]; 
       m_jet.isTLV = jets.passTightLeptonVetoID[ijet];
@@ -171,6 +172,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       {
           selJets.push_back(m_jet); 
           jetCounter++;
+          if (m_jet.isBWPM) selBjetsM.push_back(m_jet);
       }
     }
   }
@@ -337,10 +339,10 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     std::cout << "Dileptons-dijets" << std::endl;
   #endif
 
+  // Reconstruction of the Z candidate
   // Basic selection: Two selected leptons that matches the trigger and two jets
-  if (leptons.size() == 2 && selJets.size() >= 2 && leptons[0].hlt_idx > -1 && leptons[1].hlt_idx > -1){
-
-    // Chapter 1: di-leptons
+  
+  if (leptons.size() == 2 && leptons[0].hlt_idx > -1 && leptons[1].hlt_idx > -1){
 
     const Lepton& l1 = leptons[0];
     const Lepton& l2 = leptons[1];
@@ -349,7 +351,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     if (l1.p4.Pt() > l2.p4.Pt())
       {
       dilep_ptOrdered.push_back(l1);
-      dilep_ptOrdered.push_back(l2); 
+      dilep_ptOrdered.push_back(l2);
       }
     else
       {
@@ -367,95 +369,77 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     m_diLepton.isOS = l1.charge != l2.charge;
     m_diLepton.isSF = m_diLepton.isElEl || m_diLepton.isMuMu;
 
-    /*m_diLepton.DR = VectorUtil::DeltaR(l1.p4, l2.p4);
-    m_diLepton.DEta = ZAAnalysis::DeltaEta(l1.p4, l2.p4);
-    m_diLepton.DPhi = VectorUtil::DeltaPhi(l1.p4, l2.p4);
-    */
     diLeptons.push_back(m_diLepton);
 
-    // chapter 2: di-jets
+  
 
-    sort(selJets.begin(), selJets.end(), sortByBtag);
+    // Selection: Two selected leptons that matches the trigger and two jets
 
-    const Jet& jet1 = selJets[0];
-    const Jet& jet2 = selJets[1];
+    if (diLeptons.size() >= 1 && selJets.size() >=2) {
+         
+      sort(selJets.begin(), selJets.end(), sortByBtag);
 
-    
+      const Jet& jet1 = selJets[0];
+      const Jet& jet2 = selJets[1];
 
-    //sort(selJets.begin(), selJets.end(), sortByPt);
+      if (jet1.p4.Pt() > jet2.p4.Pt())
+        {
+        dijet_ptOrdered.push_back(jet1);
+        dijet_ptOrdered.push_back(jet2);
+        }
+      else
+        {
+        dijet_ptOrdered.push_back(jet2);
+        dijet_ptOrdered.push_back(jet1);
+        }
 
-    
+      DiJet m_diJet(jet1, jet2);
+      diJets.push_back(m_diJet);
 
-    if (jet1.p4.Pt() > jet2.p4.Pt())
-      {
-      dijet_ptOrdered.push_back(jet1);
-      dijet_ptOrdered.push_back(jet2);
-      }
-    else
-      {
-      dijet_ptOrdered.push_back(jet2);
-      dijet_ptOrdered.push_back(jet1);
-      }
-    /*
-    if (jet1.CSVv2 > jet2.CSVv2)
-      {
-      dijet_CSVv2Ordered.push_back(jet1);
-      dijet_CSVv2Ordered.push_back(jet2);
-      }
-    else
-      {
-      std::cout << "badly Btag ordered";
-      std::cout << jet1.CSVv2 << " " << jet2.CSVv2 << std::endl;
-      dijet_CSVv2Ordered.push_back(jet2);
-      dijet_CSVv2Ordered.push_back(jet1);
-      }
-    */
 
-    DiJet m_diJet(jet1, jet2);
-    diJets.push_back(m_diJet);
+      // chapter 3: event variable
 
-    // chapter 3: event variable
+      DiLepDiJet m_diLepDiJet(m_diLepton, m_diJet);
 
-    DiLepDiJet m_diLepDiJet(m_diLepton, m_diJet);
-
-    m_diLepDiJet.minDRjl = std::min( {
+      m_diLepDiJet.minDRjl = std::min( {
         (float) VectorUtil::DeltaR(l1.p4, jet1.p4),
         (float) VectorUtil::DeltaR(l1.p4, jet2.p4),
         (float) VectorUtil::DeltaR(l2.p4, jet1.p4),
         (float) VectorUtil::DeltaR(l2.p4, jet2.p4)
         } );
-    m_diLepDiJet.maxDRjl = std::max( {
+      m_diLepDiJet.maxDRjl = std::max( {
         (float) VectorUtil::DeltaR(l1.p4, jet1.p4),
         (float) VectorUtil::DeltaR(l1.p4, jet2.p4),
         (float) VectorUtil::DeltaR(l2.p4, jet1.p4),
         (float) VectorUtil::DeltaR(l2.p4, jet2.p4)
         } );
-    m_diLepDiJet.minDEtajl = std::min( {
+      m_diLepDiJet.minDEtajl = std::min( {
         DeltaEta(l1.p4, jet1.p4),
         DeltaEta(l1.p4, jet2.p4),
         DeltaEta(l2.p4, jet1.p4),
         DeltaEta(l2.p4, jet2.p4)
         } );
-    m_diLepDiJet.maxDEtajl = std::max( {
+      m_diLepDiJet.maxDEtajl = std::max( {
         DeltaEta(l1.p4, jet1.p4),
         DeltaEta(l1.p4, jet2.p4),
         DeltaEta(l2.p4, jet1.p4),
         DeltaEta(l2.p4, jet2.p4)
         } );
-    m_diLepDiJet.minDPhijl = std::min( {
+      m_diLepDiJet.minDPhijl = std::min( {
         (float) VectorUtil::DeltaPhi(l1.p4, jet1.p4),
         (float) VectorUtil::DeltaPhi(l1.p4, jet2.p4),
         (float) VectorUtil::DeltaPhi(l2.p4, jet1.p4),
         (float) VectorUtil::DeltaPhi(l2.p4, jet2.p4)
         } );
-    m_diLepDiJet.maxDPhijl = std::max( {
+      m_diLepDiJet.maxDPhijl = std::max( {
         (float) VectorUtil::DeltaPhi(l1.p4, jet1.p4),
         (float) VectorUtil::DeltaPhi(l1.p4, jet2.p4),
         (float) VectorUtil::DeltaPhi(l2.p4, jet1.p4),
         (float) VectorUtil::DeltaPhi(l2.p4, jet2.p4)
         } );
 
-    diLepDiJets.push_back(m_diLepDiJet);
+      diLepDiJets.push_back(m_diLepDiJet);
+    }
   }
 
 }

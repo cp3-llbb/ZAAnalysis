@@ -44,13 +44,16 @@ class DileptonCategory: public Category {
       baseStrTightZCandidate("TightZCandidate"),
       baseStrDiJetBWP_ML("DiJetBWP_ML"),
       baseStrDiJetBWP_MM("DiJetBWP_MM"),
-      baseStrDiJetBWP_TM("DiJetBWP_TM")
-/*
-      baseStrOneExtraBjet("OneExtraBjet"),
-      baseStrTwoExtraBjets("TwoExtraBjets"),
-      baseStrThreeExtraBjets("ThreeExtraBjets"),
-      baseStrFourExtraBjets("FourExtraBjets")
-*/
+      baseStrDiJetBWP_TM("DiJetBWP_TM"),
+      
+      baseStrOneJet("OneJet"),
+      baseStrTwoJets("TwoJets"),
+      baseStrTwoJetsExcl("TwoJetsExcl"),
+      baseStrOneBjet("OneBjet"),
+      baseStrTwoBjets("TwoBjets"),
+      baseStrTwoBjetsExcl("TwoBjetsExcl"),
+      baseStrThreeJets("ThreeJets"),
+      baseStrThreeBjets("ThreeBjets")
       {}
 
   protected:
@@ -73,12 +76,16 @@ class DileptonCategory: public Category {
     std::string baseStrDiJetBWP_ML;
     std::string baseStrDiJetBWP_MM;
     std::string baseStrDiJetBWP_TM;
-/*
-    std::string baseStrOneExtraBjet;
-    std::string baseStrTwoExtraBjets;
-    std::string baseStrThreeExtraBjets;
-    std::string baseStrFourExtraBjets;
-*/
+
+    std::string baseStrOneJet;
+    std::string baseStrTwoJets;
+    std::string baseStrTwoJetsExcl;
+    std::string baseStrOneBjet;
+    std::string baseStrTwoBjets;
+    std::string baseStrTwoBjetsExcl;
+    std::string baseStrThreeJets;
+    std::string baseStrThreeBjets;
+
     std::vector<boost::regex> m_HLTDoubleMuonRegex;
     std::vector<boost::regex> m_HLTDoubleEGRegex;
     std::vector<boost::regex> m_HLTMuonEGRegex;

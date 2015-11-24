@@ -193,7 +193,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     // Save the fat jets that pass the kinematic cuts 
     // FIXME : currently same cuts as for the jets
     if( abs(fatjets.p4[ifatjet].Eta()) < m_jetEtaCut && fatjets.p4[ifatjet].Pt() > m_jetPtCut){
-      Jet m_fatjet;
+      FatJet m_fatjet;
 
       m_fatjet.p4 = fatjets.p4[ifatjet];
       m_fatjet.isIDLoose = fatjets.passLooseID[ifatjet];
@@ -204,21 +204,41 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       m_fatjet.isBWPM = m_fatjet.CSVv2 > m_jetCSVv2M;
       m_fatjet.isBWPT = m_fatjet.CSVv2 > m_jetCSVv2T;
 
-      std::cout << "looping over "; 
-      std::cout <<  fatjets.softdrop_subjets_p4[ifatjet].size()  << std::endl;
-      
-      for(uint16_t isubjet = 0; isubjet < fatjets.softdrop_subjets_p4[ifatjet].size(); isubjet++){
-          Jet m_subjet;
-          float sj_csvv2 = fatjets.getSoftDropBTagDiscriminant(ifatjet, isubjet, m_jetCSVv2Name);
-          //m_subjet.CSVv2 = fatjets.softdrop_subjets[ifatjet][isubjet].getBTagDiscriminant(ifatjet, "softdrop_"+m_jetCSVv2Name);   //FIXME
-          std::cout << sj_csvv2 << std::endl;
-      }
-                  
+      m_fatjet.softdrop_mass = fatjets.softdrop_mass[ifatjet];
+      m_fatjet.trimmed_mass = fatjets.trimmed_mass[ifatjet];
+      m_fatjet.pruned_mass = fatjets.pruned_mass[ifatjet];
+      m_fatjet.filtered_mass = fatjets.filtered_mass[ifatjet];
 
-      //m_fatjet.nSDSubjets = fatjets.softdrop_subjets_p4[ifatjet].size();
+      m_fatjet.tau1 = fatjets.tau1[ifatjet];
+      m_fatjet.tau2 = fatjets.tau2[ifatjet];
+      m_fatjet.tau3 = fatjets.tau3[ifatjet];
+
+      m_fatjet.nSDSubjets = fatjets.softdrop_subjets_p4[ifatjet].size();
+
+      //std::cout << "looping over "; 
       //std::cout <<  fatjets.softdrop_subjets_p4[ifatjet].size()  << std::endl;
-      //m_fatjet.nBtaggedSDSubjets = 
 
+      std::vector<SubJet> m_subjets; 
+
+      for(uint16_t isubjet = 0; isubjet < fatjets.softdrop_subjets_p4[ifatjet].size(); isubjet++){
+          SubJet m_subjet;
+          m_subjet.p4 = fatjets.softdrop_subjets_p4[ifatjet].at(isubjet);
+          m_subjet.CSVv2 = fatjets.getSoftDropBTagDiscriminant(ifatjet, isubjet, m_jetCSVv2Name);
+          m_subjet.isBWPL = m_subjet.CSVv2 > m_jetCSVv2L;
+          m_subjet.isBWPM = m_subjet.CSVv2 > m_jetCSVv2M;
+          m_subjet.isBWPT = m_subjet.CSVv2 > m_jetCSVv2T;
+          m_subjet.EFrac = m_subjet.p4.E() / m_fatjet.p4.E();
+          m_subjets.push_back(m_subjet);
+      }
+     
+      m_fatjet.subjets = m_subjets;    
+ 
+      if (m_subjets.size() >= 2){
+          m_fatjet.subjetDR = ROOT::Math::VectorUtil::DeltaR(m_subjets[0].p4, m_subjets[1].p4);
+      }
+      else {m_fatjet.subjetDR = 10;}     
+
+            
       // Save minimal DR(l,j)
       // Looping over all leptons that pass at least the veto criteria and check the distance with the jet.      
 
@@ -442,6 +462,13 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
         } );
 
       diLepDiJets.push_back(m_diLepDiJet);
+    }
+    // Selection: Two selected leptons that matches the trigger and a fatjet
+    if (diLeptons.size() >= 1 && selFatJets.size() >=1) {
+
+      const FatJet& m_fatjet = selFatJets[0];
+      DiLepFatJet m_diLepFatJet(m_diLepton, m_fatjet);
+      diLepFatJets.push_back(m_diLepFatJet);
     }
   }
 

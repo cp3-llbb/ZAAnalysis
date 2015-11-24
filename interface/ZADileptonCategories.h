@@ -150,7 +150,7 @@ class ElElCategory: public DileptonCategory {
     virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
 };
 
-/*
+
 
 class ElMuCategory: public DileptonCategory {
   public:
@@ -167,7 +167,7 @@ class ElMuCategory: public DileptonCategory {
     virtual void register_cuts(CutManager& manager) override;
     virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
 };
-*/
+
 
 class MuMuCategory: public DileptonCategory {
   public:

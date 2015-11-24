@@ -10,6 +10,7 @@
 #include <cp3_llbb/Framework/interface/MuonsProducer.h>
 #include <cp3_llbb/Framework/interface/ElectronsProducer.h>
 #include <cp3_llbb/Framework/interface/JetsProducer.h>
+#include <cp3_llbb/Framework/interface/FatJetsProducer.h>
 
 
 #include <cp3_llbb/ZAAnalysis/interface/ZATypes.h>
@@ -70,7 +71,7 @@ class ZAAnalyzer: public Framework::Analyzer {
         BRANCH(diLeptons, std::vector<ZAAnalysis::DiLepton>);
         BRANCH(diJets, std::vector<ZAAnalysis::DiJet>);
         BRANCH(diLepDiJets, std::vector<ZAAnalysis::DiLepDiJet>);
-        Branch(diLeptonFatJet, std::vector<ZAAnalysis::DiLepFatJet>);
+        //Branch(diLepFatJets, std::vector<ZAAnalysis::DiLepFatJet>);
 
     private:
 

@@ -186,23 +186,24 @@ namespace ZAAnalysis {
   };
 
   struct DiLepFatJet: BaseObject {
-    DiLepDiJet()
+    DiLepFatJet()
       {}
-    DiLepDiJet(const DiLepton& _diLepton, const Jet& _fatJet):
+    DiLepFatJet(const DiLepton& _diLepton, const Jet& _fatJet):
       BaseObject(_diLepton.p4 + _fatJet.p4),
       diLepton(&_diLepton),
-      diJet(&_fatJet),
-      DR_ll_jj( ROOT::Math::VectorUtil::DeltaR(_diLepton.p4, _fatJet.p4) ),
-      DEta_ll_jj( DeltaEta(_diLepton.p4, _fatJet.p4) ),
-      DPhi_ll_jj( ROOT::Math::VectorUtil::DeltaPhi(_diLepton.p4, _fatJet.p4) )
+      fatJet(&_fatJet),
+      JetIdx(_fatJet.idx),
+      DR_ll_j( ROOT::Math::VectorUtil::DeltaR(_diLepton.p4, _fatJet.p4) ),
+      DEta_ll_j( DeltaEta(_diLepton.p4, _fatJet.p4) ),
+      DPhi_ll_j( ROOT::Math::VectorUtil::DeltaPhi(_diLepton.p4, _fatJet.p4) )
       {}
 
     const DiLepton* diLepton;
     uint16_t diLepIdx;
-    const DiJet* diJet;
-    uint16_t diJetIdx;
+    const Jet* fatJet;
+    uint16_t JetIdx;
 
-    float DR_ll_jj, DEta_ll_jj, DPhi_ll_jj;
+    float DR_ll_j, DEta_ll_j, DPhi_ll_j;
 
     float minDRjl, maxDRjl;
     float minDEtajl, maxDEtajl;

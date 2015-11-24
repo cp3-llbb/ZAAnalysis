@@ -32,8 +32,8 @@ class ZAAnalyzer: public Framework::Analyzer {
             m_muonPtCut( config.getUntrackedParameter<double>("muonPtCut", 20) ),
             m_muonEtaCut( config.getUntrackedParameter<double>("muonEtaCut", 2.4) ),
 //            m_muonSelectionID( config.getUntrackedParameter<std::string>("muonSelectionID","tight") ),
-            m_muonLooseIsoCut( config.getUntrackedParameter<double>("muonLooseIsoCut", 0.2) ),
-            m_muonTightIsoCut( config.getUntrackedParameter<double>("muonTightIsoCut", 0.12) ),
+            m_muonLooseIsoCut( config.getUntrackedParameter<double>("muonLooseIsoCut", 0.25) ),
+            m_muonTightIsoCut( config.getUntrackedParameter<double>("muonTightIsoCut", 0.15) ),
 //            m_muonSelectionIsoCut( config.getUntrackedParameter<double>("muonSelectionIsoCut", 0.12) ),
             
             m_jetPtCut( config.getUntrackedParameter<double>("jetPtCut", 30) ),

@@ -243,7 +243,7 @@ void MuElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
 
   if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
-
+    
     if(m_diLepton.isMuEl) {
       manager.pass_cut(baseStrCategory );
 

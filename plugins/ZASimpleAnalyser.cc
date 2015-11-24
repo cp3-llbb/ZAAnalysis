@@ -108,7 +108,6 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       {
           isolatedMuons.push_back(m_lepton);
           leptons.push_back(m_lepton);
-
       }
       // if muon good enough for veto, adding to the collection vetoLepton
       else if (muons.isLoose[imuon])
@@ -279,7 +278,6 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     const Lepton& l1 = leptons[0];
     const Lepton& l2 = leptons[1];
 
-
     if (l1.p4.Pt() > l2.p4.Pt())
       {
       dilep_ptOrdered.push_back(l1);
@@ -294,10 +292,10 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     DiLepton m_diLepton(l1, l2);
 
     //m_diLepton.p4 = l1.p4 + l2.p4;
-    m_diLepton.isElEl = l1.isEl && l2.isEl;
-    m_diLepton.isElMu = l1.isEl && l2.isMu;
-    m_diLepton.isMuEl = l1.isMu && l2.isEl;
-    m_diLepton.isMuMu = l1.isMu && l2.isMu;
+    m_diLepton.isElEl = dilep_ptOrdered[0].isEl && dilep_ptOrdered[1].isEl;
+    m_diLepton.isElMu = dilep_ptOrdered[0].isEl && dilep_ptOrdered[1].isMu;
+    m_diLepton.isMuEl = dilep_ptOrdered[0].isMu && dilep_ptOrdered[1].isEl;
+    m_diLepton.isMuMu = dilep_ptOrdered[0].isMu && dilep_ptOrdered[1].isMu;
     m_diLepton.isOS = l1.charge != l2.charge;
     m_diLepton.isSF = m_diLepton.isElEl || m_diLepton.isMuMu;
 

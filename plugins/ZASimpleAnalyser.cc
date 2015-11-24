@@ -379,8 +379,8 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
 
 void ZAAnalyzer::registerCategories(CategoryManager& manager, const edm::ParameterSet& config) {
   manager.new_category<ZAAnalysis::ElElCategory>("elel", "Category with leading leptons as two electrons", config);
-  // manager.new_category<TTAnalysis::ElMuCategory>("elmu", "Category with leading leptons as electron, muon", config);
-  //manager.new_category<TTAnalysis::MuElCategory>("muel", "Category with leading leptons as muon, electron", config);
+  manager.new_category<ZAAnalysis::ElMuCategory>("elmu", "Category with leading leptons as electron, muon", config);
+  manager.new_category<ZAAnalysis::MuElCategory>("muel", "Category with leading leptons as muon, electron", config);
   manager.new_category<ZAAnalysis::MuMuCategory>("mumu", "Category with leading leptons as two muons", config);
 }
 

@@ -175,6 +175,99 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       }
     }
   }
+
+  //////////////////////////////
+  //       FATJETS            //
+  //////////////////////////////
+
+  #ifdef _ZA_DEBUG_
+    std::cout << "fatJets" << std::endl;
+  #endif
+
+  const FatJetsProducer& fatjets = producers.get<FatJetsProducer>("fat_jets");
+
+  // First find the fat jets passing kinematic cuts and save them as Jet objects
+
+  uint16_t fatjetCounter(0);
+  for(uint16_t ifatjet = 0; ifatjet < fatjets.p4.size(); ifatjet++){
+    // Save the fat jets that pass the kinematic cuts 
+    // FIXME : currently same cuts as for the jets
+    if( abs(fatjets.p4[ifatjet].Eta()) < m_jetEtaCut && fatjets.p4[ifatjet].Pt() > m_jetPtCut){
+      FatJet m_fatjet;
+
+      m_fatjet.p4 = fatjets.p4[ifatjet];
+      m_fatjet.isIDLoose = fatjets.passLooseID[ifatjet];
+      m_fatjet.isIDTight = fatjets.passTightID[ifatjet];
+      m_fatjet.isTLV = fatjets.passTightLeptonVetoID[ifatjet];
+      m_fatjet.CSVv2 = fatjets.getBTagDiscriminant(ifatjet, m_jetCSVv2Name);
+      m_fatjet.isBWPL = m_fatjet.CSVv2 > m_jetCSVv2L;
+      m_fatjet.isBWPM = m_fatjet.CSVv2 > m_jetCSVv2M;
+      m_fatjet.isBWPT = m_fatjet.CSVv2 > m_jetCSVv2T;
+
+      m_fatjet.softdrop_mass = fatjets.softdrop_mass[ifatjet];
+      m_fatjet.trimmed_mass = fatjets.trimmed_mass[ifatjet];
+      m_fatjet.pruned_mass = fatjets.pruned_mass[ifatjet];
+      m_fatjet.filtered_mass = fatjets.filtered_mass[ifatjet];
+
+      m_fatjet.tau1 = fatjets.tau1[ifatjet];
+      m_fatjet.tau2 = fatjets.tau2[ifatjet];
+      m_fatjet.tau3 = fatjets.tau3[ifatjet];
+
+      m_fatjet.nSDSubjets = fatjets.softdrop_subjets_p4[ifatjet].size();
+
+      //std::cout << "looping over "; 
+      //std::cout <<  fatjets.softdrop_subjets_p4[ifatjet].size()  << std::endl;
+
+      std::vector<SubJet> m_subjets; 
+
+      for(uint16_t isubjet = 0; isubjet < fatjets.softdrop_subjets_p4[ifatjet].size(); isubjet++){
+          SubJet m_subjet;
+          m_subjet.p4 = fatjets.softdrop_subjets_p4[ifatjet].at(isubjet);
+          m_subjet.CSVv2 = fatjets.getSoftDropBTagDiscriminant(ifatjet, isubjet, m_jetCSVv2Name);
+          m_subjet.isBWPL = m_subjet.CSVv2 > m_jetCSVv2L;
+          m_subjet.isBWPM = m_subjet.CSVv2 > m_jetCSVv2M;
+          m_subjet.isBWPT = m_subjet.CSVv2 > m_jetCSVv2T;
+          m_subjet.EFrac = m_subjet.p4.E() / m_fatjet.p4.E();
+          m_subjets.push_back(m_subjet);
+      }
+     
+      m_fatjet.subjets = m_subjets;    
+ 
+      if (m_subjets.size() >= 2){
+          m_fatjet.subjetDR = ROOT::Math::VectorUtil::DeltaR(m_subjets[0].p4, m_subjets[1].p4);
+      }
+      else {m_fatjet.subjetDR = 10;}     
+
+            
+      // Save minimal DR(l,j)
+      // Looping over all leptons that pass at least the veto criteria and check the distance with the jet.      
+
+      m_fatjet.minDRjl = std::numeric_limits<float>::max();
+
+      for(uint16_t il = 0; il < leptons.size(); il++)
+      {
+          const Lepton& m_lepton = leptons[il];
+          float DR = (float) VectorUtil::DeltaR(fatjets.p4[ifatjet], m_lepton.p4);
+          if( DR < m_fatjet.minDRjl)
+              m_fatjet.minDRjl = DR;
+      }
+
+      for(uint16_t il = 0; il < vetoLeptons.size(); il++)
+      {
+          const Lepton& m_lepton = vetoLeptons[il];
+          float DR = (float) VectorUtil::DeltaR(jets.p4[ifatjet], m_lepton.p4);
+          if( DR < m_fatjet.minDRjl)
+              m_fatjet.minDRjl = DR;
+      }
+
+      if (m_fatjet.minDRjl > m_jetDRleptonCut)
+      {
+          selFatJets.push_back(m_fatjet);
+          fatjetCounter++;
+      }
+    }
+  }
+
         
   /////////////////////////////////
   //    Trigger : Two Leptons    //
@@ -369,6 +462,13 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
         } );
 
       diLepDiJets.push_back(m_diLepDiJet);
+    }
+    // Selection: Two selected leptons that matches the trigger and a fatjet
+    if (diLeptons.size() >= 1 && selFatJets.size() >=1) {
+
+      const FatJet& m_fatjet = selFatJets[0];
+      DiLepFatJet m_diLepFatJet(m_diLepton, m_fatjet);
+      diLepFatJets.push_back(m_diLepFatJet);
     }
   }
 

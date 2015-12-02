@@ -118,6 +118,44 @@ namespace ZAAnalysis {
     bool isBWPT;
   };
 
+  struct SubJet: BaseObject {
+    SubJet()
+      {}
+    uint16_t idx; // index to jet array
+    float CSVv2;
+    bool isBWPL;
+    bool isBWPM;
+    bool isBWPT;
+    float EFrac;
+  };
+
+  struct FatJet: BaseObject {
+    FatJet()
+      {}
+    uint16_t idx; // index to jet array
+    bool isIDLoose;
+    bool isIDTight;
+    bool isTLV;
+    float minDRjl;
+    float CSVv2;
+    bool isBWPL;
+    bool isBWPM;
+    bool isBWPT;
+    float softdrop_mass;
+    float trimmed_mass;
+    float pruned_mass;
+    float filtered_mass;
+    float tau1;
+    float tau2;
+    float tau3;
+    int nSDSubjets;
+    int nBtaggedSDSubjetsLL;
+    int nBtaggedSDSubjetsMM;
+    int nBtaggedSDSubjetsTT;
+    std::vector<SubJet> subjets;
+    float subjetDR;
+  };
+
   struct DiJet: BaseObject {
     DiJet()
       {}
@@ -165,6 +203,26 @@ namespace ZAAnalysis {
     float minDPhijl, maxDPhijl;
   };
 
+  struct DiLepFatJet: BaseObject {
+    DiLepFatJet()
+      {}
+    DiLepFatJet(const DiLepton& _diLepton, const FatJet& _fatJet):
+      BaseObject(_diLepton.p4 + _fatJet.p4),
+      diLepton(&_diLepton),
+      fatJet(&_fatJet),
+      fatJetIdx(_fatJet.idx),
+      DR_ll_j( ROOT::Math::VectorUtil::DeltaR(_diLepton.p4, _fatJet.p4) ),
+      DEta_ll_j( DeltaEta(_diLepton.p4, _fatJet.p4) ),
+      DPhi_ll_j( ROOT::Math::VectorUtil::DeltaPhi(_diLepton.p4, _fatJet.p4) )
+      {}
+
+    const DiLepton* diLepton;
+    uint16_t diLepIdx;
+    const FatJet* fatJet;
+    uint16_t fatJetIdx;
+
+    float DR_ll_j, DEta_ll_j, DPhi_ll_j;
+  };
 
 }
 

@@ -47,6 +47,12 @@ void ElElCategory::register_cuts(CutManager& manager) {
     manager.new_cut(baseStrTwoBjetsExcl,baseStrTwoBjetsExcl);
     manager.new_cut(baseStrThreeJets,baseStrThreeJets);
     manager.new_cut(baseStrThreeBjets,baseStrThreeBjets);
+    manager.new_cut(baseStrOneFatJet,baseStrOneFatJet);
+    manager.new_cut(baseStrTwoSubJets,baseStrTwoSubJets);
+    manager.new_cut(baseStrOneBFatJetM,baseStrOneBFatJetM);
+    manager.new_cut(baseStrOneBFatJetT,baseStrOneBFatJetT);
+    manager.new_cut(baseStrTwoBSubJetsLL,baseStrTwoBSubJetsLL);
+    manager.new_cut(baseStrTwoBSubJetsMM,baseStrTwoBSubJetsMM);
 
 }
 
@@ -96,6 +102,18 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
         if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
         if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
       }
+      
+      if (za.selFatJets.size() >= 1){
+        manager.pass_cut(baseStrOneFatJet);
+        const FatJet& m_fatJet = za.selFatJets[0];
+        if (m_fatJet.nSDSubjets >= 2){
+          manager.pass_cut(baseStrTwoSubJets);
+          if (m_fatJet.isBWPM) manager.pass_cut(baseStrOneBFatJetM);
+          if (m_fatJet.isBWPT) manager.pass_cut(baseStrOneBFatJetT);
+          if (m_fatJet.nBtaggedSDSubjetsLL) manager.pass_cut(baseStrTwoBSubJetsLL);
+          if (m_fatJet.nBtaggedSDSubjetsMM) manager.pass_cut(baseStrTwoBSubJetsMM);
+        }
+      }
     }
   }
 }
@@ -140,7 +158,13 @@ void MuMuCategory::register_cuts(CutManager& manager) {
     manager.new_cut(baseStrTwoBjetsExcl,baseStrTwoBjetsExcl);
     manager.new_cut(baseStrThreeJets,baseStrThreeJets);
     manager.new_cut(baseStrThreeBjets,baseStrThreeBjets);
- 
+    manager.new_cut(baseStrOneFatJet,baseStrOneFatJet);
+    manager.new_cut(baseStrTwoSubJets,baseStrTwoSubJets);
+    manager.new_cut(baseStrOneBFatJetM,baseStrOneBFatJetM);
+    manager.new_cut(baseStrOneBFatJetT,baseStrOneBFatJetT);
+    manager.new_cut(baseStrTwoBSubJetsLL,baseStrTwoBSubJetsLL);
+    manager.new_cut(baseStrTwoBSubJetsMM,baseStrTwoBSubJetsMM);
+
 
 }
 
@@ -189,6 +213,17 @@ void MuMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
         if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
         if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
       }
+      if (za.selFatJets.size() >= 1){
+        manager.pass_cut(baseStrOneFatJet);
+        const FatJet& m_fatJet = za.selFatJets[0];
+        if (m_fatJet.nSDSubjets >= 2){
+          manager.pass_cut(baseStrTwoSubJets);
+          if (m_fatJet.isBWPM) manager.pass_cut(baseStrOneBFatJetM);
+          if (m_fatJet.isBWPT) manager.pass_cut(baseStrOneBFatJetT);
+          if (m_fatJet.nBtaggedSDSubjetsLL) manager.pass_cut(baseStrTwoBSubJetsLL);
+          if (m_fatJet.nBtaggedSDSubjetsMM) manager.pass_cut(baseStrTwoBSubJetsMM);
+        }
+      }
     }
   }
 }
@@ -231,6 +266,12 @@ void MuElCategory::register_cuts(CutManager& manager) {
     manager.new_cut(baseStrTwoBjetsExcl,baseStrTwoBjetsExcl);
     manager.new_cut(baseStrThreeJets,baseStrThreeJets);
     manager.new_cut(baseStrThreeBjets,baseStrThreeBjets);
+    manager.new_cut(baseStrOneFatJet,baseStrOneFatJet);
+    manager.new_cut(baseStrTwoSubJets,baseStrTwoSubJets);
+    manager.new_cut(baseStrOneBFatJetM,baseStrOneBFatJetM);
+    manager.new_cut(baseStrOneBFatJetT,baseStrOneBFatJetT);
+    manager.new_cut(baseStrTwoBSubJetsLL,baseStrTwoBSubJetsLL);
+    manager.new_cut(baseStrTwoBSubJetsMM,baseStrTwoBSubJetsMM);
 
 
 }
@@ -280,6 +321,17 @@ void MuElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
         if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
         if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
       }
+      if (za.selFatJets.size() >= 1){
+        manager.pass_cut(baseStrOneFatJet);
+        const FatJet& m_fatJet = za.selFatJets[0];
+        if (m_fatJet.nSDSubjets >= 2){
+          manager.pass_cut(baseStrTwoSubJets);
+          if (m_fatJet.isBWPM) manager.pass_cut(baseStrOneBFatJetM);
+          if (m_fatJet.isBWPT) manager.pass_cut(baseStrOneBFatJetT);
+          if (m_fatJet.nBtaggedSDSubjetsLL) manager.pass_cut(baseStrTwoBSubJetsLL);
+          if (m_fatJet.nBtaggedSDSubjetsMM) manager.pass_cut(baseStrTwoBSubJetsMM);
+        }
+      }
     }
   }
 }
@@ -323,6 +375,12 @@ void ElMuCategory::register_cuts(CutManager& manager) {
     manager.new_cut(baseStrTwoBjetsExcl,baseStrTwoBjetsExcl);
     manager.new_cut(baseStrThreeJets,baseStrThreeJets);
     manager.new_cut(baseStrThreeBjets,baseStrThreeBjets);
+    manager.new_cut(baseStrOneFatJet,baseStrOneFatJet);
+    manager.new_cut(baseStrTwoSubJets,baseStrTwoSubJets);
+    manager.new_cut(baseStrOneBFatJetM,baseStrOneBFatJetM);
+    manager.new_cut(baseStrOneBFatJetT,baseStrOneBFatJetT);
+    manager.new_cut(baseStrTwoBSubJetsLL,baseStrTwoBSubJetsLL);
+    manager.new_cut(baseStrTwoBSubJetsMM,baseStrTwoBSubJetsMM);
 
 
 }
@@ -371,6 +429,17 @@ void ElMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
         if (m_diJet.isML) manager.pass_cut(baseStrDiJetBWP_ML);
         if (m_diJet.isMM) manager.pass_cut(baseStrDiJetBWP_MM);
         if (m_diJet.isTM) manager.pass_cut(baseStrDiJetBWP_TM);
+      }
+      if (za.selFatJets.size() >= 1){
+        manager.pass_cut(baseStrOneFatJet);
+        const FatJet& m_fatJet = za.selFatJets[0];
+        if (m_fatJet.nSDSubjets >= 2){
+          manager.pass_cut(baseStrTwoSubJets);
+          if (m_fatJet.isBWPM) manager.pass_cut(baseStrOneBFatJetM);
+          if (m_fatJet.isBWPT) manager.pass_cut(baseStrOneBFatJetT);
+          if (m_fatJet.nBtaggedSDSubjetsLL) manager.pass_cut(baseStrTwoBSubJetsLL);
+          if (m_fatJet.nBtaggedSDSubjetsMM) manager.pass_cut(baseStrTwoBSubJetsMM);
+        }
       }
     }
   }

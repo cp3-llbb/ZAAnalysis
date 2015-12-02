@@ -7,6 +7,12 @@
   <class name="std::vector<ZAAnalysis::Lepton>"/>
   <class name="ZAAnalysis::Jet"/>
   <class name="std::vector<ZAAnalysis::Jet>"/>
+  <class name="ZAAnalysis::SubJet"/>
+  <class name="std::vector<ZAAnalysis::SubJet>"/>
+  <class name="ZAAnalysis::FatJet">
+     <field name="subJets" transient="true"/>
+  </class>
+  <class name="std::vector<ZAAnalysis::FatJet>"/>
   <class name="ZAAnalysis::DiLepton"/>
   <class name="std::vector<ZAAnalysis::DiLepton>"/>
   <class name="ZAAnalysis::DiJet"/>
@@ -15,12 +21,15 @@
     <field name="diLepton" transient="true"/>
     <field name="diJet" transient="true"/>
   </class>
-  <class name="std::vector<ZAAnalysis::DiLepDiJet>"/>
-  <class name="ZAAnalysis::DiLepDiJetMet">
+  <class name="std::vector<ZAAnalysis::DiLepDiJet>">
+    <field name="diLepton" transient="true"/>
+    <field name="fatJet" transient="true"/>
+  </class>
+  <class name="ZAAnalysis::DiLepFatJet">
     <field name="diLepton" transient="true"/>
     <field name="diJet" transient="true"/>
   </class>
-  <class name="std::vector<ZAAnalysis::DiLepDiJetMet>"/>
+  <class name="std::vector<ZAAnalysis::DiLepFatJet>"/>
   <class name="std::vector<uint16_t>"/>
   <class name="std::vector<float>"/>
   <class name="std::vector<std::vector<uint16_t>>"/>

@@ -53,7 +53,14 @@ class DileptonCategory: public Category {
       baseStrTwoBjets("TwoBjets"),
       baseStrTwoBjetsExcl("TwoBjetsExcl"),
       baseStrThreeJets("ThreeJets"),
-      baseStrThreeBjets("ThreeBjets")
+      baseStrThreeBjets("ThreeBjets"),
+
+      baseStrOneFatJet("OneFatJet"),
+      baseStrTwoSubJets("TwoSubJets"),
+      baseStrOneBFatJetM("OneBFatJetM"),
+      baseStrOneBFatJetT("OneBFatJetT"),
+      baseStrTwoBSubJetsLL("TwoBSubJetsLL"),
+      baseStrTwoBSubJetsMM("TwoBSubJetsMM")
       {}
 
   protected:
@@ -85,6 +92,13 @@ class DileptonCategory: public Category {
     std::string baseStrTwoBjetsExcl;
     std::string baseStrThreeJets;
     std::string baseStrThreeBjets;
+
+    std::string baseStrOneFatJet;
+    std::string baseStrTwoSubJets;
+    std::string baseStrOneBFatJetM;
+    std::string baseStrOneBFatJetT;
+    std::string baseStrTwoBSubJetsLL;
+    std::string baseStrTwoBSubJetsMM;
 
     std::vector<boost::regex> m_HLTDoubleMuonRegex;
     std::vector<boost::regex> m_HLTDoubleEGRegex;

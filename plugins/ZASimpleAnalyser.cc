@@ -10,6 +10,7 @@
 #include <cp3_llbb/Framework/interface/METProducer.h>
 #include <cp3_llbb/Framework/interface/HLTProducer.h>
 #include <cp3_llbb/Framework/interface/GenParticlesProducer.h>
+#include <cp3_llbb/Framework/interface/ScaleFactorParser.h>
 
 #include <Math/PtEtaPhiE4D.h>
 #include <Math/LorentzVector.h>
@@ -392,9 +393,16 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     m_diLepton.isOS = l1.charge != l2.charge;
     m_diLepton.isSF = m_diLepton.isElEl || m_diLepton.isMuMu;
 
-    diLeptons.push_back(m_diLepton);
 
-  
+    if (m_diLepton.isMuMu) {
+        //std::cout << "eta :"  << TMath::Abs(dilep_ptOrdered[0].p4.Eta()) << " " << TMath::Abs(dilep_ptOrdered[1].p4.Eta()) << std::endl;
+        //std::cout << m_hlt_scale_factors["HLTDoubleMuonSFs"].get({TMath::Abs(dilep_ptOrdered[0].p4.Eta()), TMath::Abs(dilep_ptOrdered[1].p4.Eta())})[0] << std::endl;
+        m_diLepton.triggerSF = m_hlt_scale_factors["HLTDoubleMuonSFs"].get({TMath::Abs(dilep_ptOrdered[0].p4.Eta()), TMath::Abs(dilep_ptOrdered[1].p4.Eta())})[0];
+        }
+    else  {m_diLepton.triggerSF = 1;}
+
+
+    diLeptons.push_back(m_diLepton);
 
     // Selection: Two selected leptons that matches the trigger and two jets
 

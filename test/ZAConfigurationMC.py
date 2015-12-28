@@ -33,6 +33,9 @@ process = Framework.create(False, eras.Run2_25ns, '74X_mcRun2_asymptotic_v2', cm
 
             hltDRCut = cms.untracked.double(0.3), # DeltaR cut for trigger matching
             hltDPtCut = cms.untracked.double(0.5), #Delta(Pt)/Pt cut for trigger matching
+            hlt_scale_factors = cms.untracked.PSet(
+                HLTDoubleMuonSFs = cms.untracked.FileInPath('cp3_llbb/Framework/data/ScaleFactors/Mu17Mu8_SF.json'),
+                ),
             ),
         categories_parameters = cms.PSet(
             MllCutSF = cms.untracked.double(20),

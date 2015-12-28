@@ -11,7 +11,7 @@
 #include <cp3_llbb/Framework/interface/ElectronsProducer.h>
 #include <cp3_llbb/Framework/interface/JetsProducer.h>
 #include <cp3_llbb/Framework/interface/FatJetsProducer.h>
-
+#include <cp3_llbb/Framework/interface/ScaleFactorParser.h>
 
 #include <cp3_llbb/ZAAnalysis/interface/ZATypes.h>
 #include <cp3_llbb/ZAAnalysis/interface/Tools.h>
@@ -48,7 +48,20 @@ class ZAAnalyzer: public Framework::Analyzer {
             
             m_hltDRCut( config.getUntrackedParameter<double>("hltDRCut", std::numeric_limits<float>::max()) ),
             m_hltDPtCut( config.getUntrackedParameter<double>("hltDPtCut", std::numeric_limits<float>::max()) )
+
         {
+            //if (config.existsAs<edm::ParameterSet>("hlt_scale_factors")) {
+            if (config.exists("hlt_scale_factors")){
+                std::cout << "getting SF .... " << std::endl;
+                const edm::ParameterSet& hlt_scale_factors = config.getUntrackedParameter<edm::ParameterSet>("hlt_scale_factors");
+                std::vector<std::string> hlt_scale_factors_name = hlt_scale_factors.getParameterNames();
+                for (const std::string& hlt_scale_factor: hlt_scale_factors_name) {
+                    std::cout << "adding hlt SF : " << hlt_scale_factor << std::endl; 
+                    ScaleFactorParser parser(hlt_scale_factors.getUntrackedParameter<edm::FileInPath>(hlt_scale_factor).fullPath());
+                    m_hlt_scale_factors.emplace(hlt_scale_factor, std::move(parser.get_scale_factor()));
+                }
+            }
+
         }
         
 
@@ -123,4 +136,7 @@ class ZAAnalyzer: public Framework::Analyzer {
             throw edm::Exception(edm::errors::NotFound, "Unknown jetID passed to analyzer");
         }
 
+        std::map<std::string, ScaleFactor> m_hlt_scale_factors;
+
+       
 };

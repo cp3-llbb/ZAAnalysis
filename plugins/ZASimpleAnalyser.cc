@@ -105,7 +105,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
           muons.relativeIsoR04_deltaBeta[imuon] < m_muonTightIsoCut
       );
 
-      if( muons.isLoose[imuon] && muons.relativeIsoR04_withEA[imuon] < m_muonLooseIsoCut)
+      if( muons.isLoose[imuon] && muons.relativeIsoR04_deltaBeta[imuon] < m_muonLooseIsoCut)
       {
           isolatedMuons.push_back(m_lepton);
           leptons.push_back(m_lepton);

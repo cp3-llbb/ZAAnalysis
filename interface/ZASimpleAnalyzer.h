@@ -45,6 +45,7 @@ class ZAAnalyzer: public Framework::Analyzer {
             m_jetCSVv2L( config.getUntrackedParameter<double>("jetCSVv2L", 0.605) ),
             m_jetCSVv2M( config.getUntrackedParameter<double>("jetCSVv2M", 0.89) ),
             m_jetCSVv2T( config.getUntrackedParameter<double>("jetCSVv2T", 0.97) ),
+            m_fatjetDRleptonCut( config.getUntrackedParameter<double>("fatjetDRleptonCut", 0.8) ),
             
             m_hltDRCut( config.getUntrackedParameter<double>("hltDRCut", std::numeric_limits<float>::max()) ),
             m_hltDPtCut( config.getUntrackedParameter<double>("hltDPtCut", std::numeric_limits<float>::max()) )
@@ -101,6 +102,7 @@ class ZAAnalyzer: public Framework::Analyzer {
         const float m_jetPtCut, m_jetEtaCut, m_jetPUID, m_jetDRleptonCut;
         const std::string m_jetID, m_jetCSVv2Name;
         const float m_jetCSVv2L, m_jetCSVv2M, m_jetCSVv2T;
+        const float m_fatjetDRleptonCut;
 
         const float m_hltDRCut, m_hltDPtCut;
 

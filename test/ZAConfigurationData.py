@@ -30,6 +30,7 @@ process = Framework.create(True, eras.Run2_25ns, '74X_dataRun2_v2', cms.PSet(
             jetCSVv2L = cms.untracked.double(0.605),
             jetCSVv2M = cms.untracked.double(0.89),
             jetCSVv2T = cms.untracked.double(0.97),
+            fatjetDRleptonCut = cms.untracked.double(0.8),
 
             hltDRCut = cms.untracked.double(0.3), # DeltaR cut for trigger matching
             hltDPtCut = cms.untracked.double(0.5), #Delta(Pt)/Pt cut for trigger matching

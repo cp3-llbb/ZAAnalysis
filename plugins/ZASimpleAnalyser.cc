@@ -261,7 +261,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
               m_fatjet.minDRjl = DR;
       }
 
-      if (m_fatjet.minDRjl > m_jetDRleptonCut)
+      if (m_fatjet.minDRjl > m_fatjetDRleptonCut)
       {
           selFatJets.push_back(m_fatjet);
           fatjetCounter++;

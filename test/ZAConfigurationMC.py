@@ -75,4 +75,4 @@ process.source.fileNames = cms.untracked.vstring(
         'file:/nfs/scratch/fynu/swertz/CMSSW_7_4_15/src/cp3_llbb/TTAnalysis/test/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_miniAODv2_oneFile.root'
         )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10000))

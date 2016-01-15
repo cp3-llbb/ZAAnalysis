@@ -30,6 +30,7 @@ process = Framework.create(True, eras.Run2_25ns, '74X_dataRun2_v2', cms.PSet(
             jetCSVv2L = cms.untracked.double(0.605),
             jetCSVv2M = cms.untracked.double(0.89),
             jetCSVv2T = cms.untracked.double(0.97),
+            fatjetDRleptonCut = cms.untracked.double(0.8),
 
             hltDRCut = cms.untracked.double(0.3), # DeltaR cut for trigger matching
             hltDPtCut = cms.untracked.double(0.5), #Delta(Pt)/Pt cut for trigger matching
@@ -52,4 +53,4 @@ process.source.fileNames = cms.untracked.vstring(
         '/store/data/Run2015B/DoubleMuon/MINIAOD/05Oct2015-v1/40000/F6B9EFF5-BE6E-E511-A5DD-002618943964.root'
         )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5000))

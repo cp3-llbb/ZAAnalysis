@@ -30,9 +30,13 @@ process = Framework.create(False, eras.Run2_25ns, '74X_mcRun2_asymptotic_v2', cm
             jetCSVv2L = cms.untracked.double(0.605),
             jetCSVv2M = cms.untracked.double(0.89),
             jetCSVv2T = cms.untracked.double(0.97),
+            fatjetDRleptonCut = cms.untracked.double(0.8),
 
             hltDRCut = cms.untracked.double(0.3), # DeltaR cut for trigger matching
             hltDPtCut = cms.untracked.double(0.5), #Delta(Pt)/Pt cut for trigger matching
+            hlt_scale_factors = cms.untracked.PSet(
+                HLTDoubleMuonSFs = cms.untracked.FileInPath('cp3_llbb/Framework/data/ScaleFactors/Mu17Mu8_SF.json'),
+                ),
             ),
         categories_parameters = cms.PSet(
             MllCutSF = cms.untracked.double(20),
@@ -71,4 +75,4 @@ process.source.fileNames = cms.untracked.vstring(
         'file:/nfs/scratch/fynu/swertz/CMSSW_7_4_15/src/cp3_llbb/TTAnalysis/test/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_miniAODv2_oneFile.root'
         )
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10000))

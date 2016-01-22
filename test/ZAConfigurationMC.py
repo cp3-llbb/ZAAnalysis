@@ -4,7 +4,7 @@ from Configuration.StandardSequences.Eras import eras
 from cp3_llbb.Framework import Framework
 
 framework = Framework.Framework(False, eras.Run2_25ns, globalTag='74X_mcRun2_asymptotic_v2', processName= 'PAT')
-framework.addAnalyzer('za_analyzer', cms.PSet(
+framework.addAnalyzer('za', cms.PSet(
         type = cms.string('za_analyzer'),
         prefix = cms.string('za_'),
         enable = cms.bool(True),

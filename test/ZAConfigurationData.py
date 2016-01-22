@@ -3,8 +3,8 @@ import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
 from cp3_llbb.Framework import Framework
 
-process = Framework.create(True, eras.Run2_25ns, '74X_dataRun2_v2', cms.PSet(
-    za = cms.PSet(
+framework = Framework.Framework(True, eras.Run2_25ns, globalTag='74X_dataRun2_v2', processName= 'RECO')
+framework.addAnalyzer('za',cms.PSet(
         type = cms.string('za_analyzer'),
         prefix = cms.string('za_'),
         enable = cms.bool(True),
@@ -50,9 +50,8 @@ process = Framework.create(True, eras.Run2_25ns, '74X_dataRun2_v2', cms.PSet(
             HLTMuonEG = cms.untracked.vstring('HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v.*', 'HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v.*'),
             ),
         )
-    ),
-    process_name='RECO'
     )
+
 #framework.redoJEC()
 framework.doSystematics(['jec', 'jer'])
 process = framework.create()

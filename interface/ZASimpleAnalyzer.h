@@ -20,13 +20,12 @@ class ZAAnalyzer: public Framework::Analyzer {
     public:
         ZAAnalyzer(const std::string& name, const ROOT::TreeGroup& tree_, const edm::ParameterSet& config):
             Analyzer(name, tree_, config),
-
             // Not untracked as these parameters are mandatory
-            m_electrons_producer = config.getParameter<std::string>("electronsProducer");
-            m_muons_producer = config.getParameter<std::string>("muonsProducer");
-            m_jets_producer = config.getParameter<std::string>("jetsProducer");
-            m_met_producer = config.getParameter<std::string>("metProducer");
-            m_nohf_met_producer = config.getParameter<std::string>("nohfMETProducer");
+            m_electrons_producer( config.getParameter<std::string>("electronsProducer") ),
+            m_muons_producer( config.getParameter<std::string>("muonsProducer") ),
+            m_jets_producer( config.getParameter<std::string>("jetsProducer") ),
+            m_met_producer( config.getParameter<std::string>("metProducer") ),
+            m_nohf_met_producer( config.getParameter<std::string>("nohfMETProducer") ),
             // other parameters
             m_electronPtCut( config.getUntrackedParameter<double>("electronPtCut", 20) ),
             m_electronEtaCut( config.getUntrackedParameter<double>("electronEtaCut", 2.5) ),

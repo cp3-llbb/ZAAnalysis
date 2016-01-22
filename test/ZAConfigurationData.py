@@ -9,6 +9,13 @@ process = Framework.create(True, eras.Run2_25ns, '74X_dataRun2_v2', cms.PSet(
         prefix = cms.string('za_'),
         enable = cms.bool(True),
         parameters = cms.PSet(
+            # Producers
+            electronsProducer = cms.string('electrons'),
+            muonsProducer = cms.string('muons'),
+            jetsProducer = cms.string('jets'),
+            metProducer = cms.string('met'),
+            nohfMETProducer = cms.string('nohf_met'),
+            # Here are the default value (just to show what is configurable) 
             electronPtCut = cms.untracked.double(20),
             electronEtaCut = cms.untracked.double(2.5),
             electronVetoIDName = cms.untracked.string('cutBasedElectronID-Spring15-25ns-V1-standalone-veto'),
@@ -43,11 +50,14 @@ process = Framework.create(True, eras.Run2_25ns, '74X_dataRun2_v2', cms.PSet(
             HLTMuonEG = cms.untracked.vstring('HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v.*', 'HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v.*'),
             ),
         )
-    ), redoJEC=False,
+    ),
     process_name='RECO'
     )
+#framework.redoJEC()
+framework.doSystematics(['jec', 'jer'])
+process = framework.create()
 
-Framework.schedule(process, ['za']) 
+#Framework.schedule(process, ['za']) 
 
 process.source.fileNames = cms.untracked.vstring(
         '/store/data/Run2015B/DoubleMuon/MINIAOD/05Oct2015-v1/40000/F6B9EFF5-BE6E-E511-A5DD-002618943964.root'

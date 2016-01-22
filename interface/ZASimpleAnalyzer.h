@@ -20,7 +20,13 @@ class ZAAnalyzer: public Framework::Analyzer {
     public:
         ZAAnalyzer(const std::string& name, const ROOT::TreeGroup& tree_, const edm::ParameterSet& config):
             Analyzer(name, tree_, config),
-
+            // Not untracked as these parameters are mandatory
+            m_electrons_producer( config.getParameter<std::string>("electronsProducer") ),
+            m_muons_producer( config.getParameter<std::string>("muonsProducer") ),
+            m_jets_producer( config.getParameter<std::string>("jetsProducer") ),
+            m_met_producer( config.getParameter<std::string>("metProducer") ),
+            m_nohf_met_producer( config.getParameter<std::string>("nohfMETProducer") ),
+            // other parameters
             m_electronPtCut( config.getUntrackedParameter<double>("electronPtCut", 20) ),
             m_electronEtaCut( config.getUntrackedParameter<double>("electronEtaCut", 2.5) ),
             m_electronVetoIDName( config.getUntrackedParameter<std::string>("electronVetoIDName") ),
@@ -88,6 +94,12 @@ class ZAAnalyzer: public Framework::Analyzer {
         BRANCH(diLepFatJets, std::vector<ZAAnalysis::DiLepFatJet>);
 
     private:
+        // Producers name
+        std::string m_electrons_producer;
+        std::string m_muons_producer;
+        std::string m_jets_producer;
+        std::string m_met_producer;
+        std::string m_nohf_met_producer;
 
         const float m_electronPtCut, m_electronEtaCut;
         const std::string m_electronVetoIDName;

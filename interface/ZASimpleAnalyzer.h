@@ -29,6 +29,7 @@ class ZAAnalyzer: public Framework::Analyzer {
             // other parameters
             m_electronPtCut( config.getUntrackedParameter<double>("electronPtCut", 20) ),
             m_electronEtaCut( config.getUntrackedParameter<double>("electronEtaCut", 2.5) ),
+            m_electronDcaCut( config.getUntrackedParameter<double>("electronDcaCut", 5) ),
             m_electronVetoIDName( config.getUntrackedParameter<std::string>("electronVetoIDName") ),
             m_electronLooseIDName( config.getUntrackedParameter<std::string>("electronLooseIDName") ),
             m_electronMediumIDName( config.getUntrackedParameter<std::string>("electronMediumIDName") ),
@@ -37,6 +38,7 @@ class ZAAnalyzer: public Framework::Analyzer {
             
             m_muonPtCut( config.getUntrackedParameter<double>("muonPtCut", 20) ),
             m_muonEtaCut( config.getUntrackedParameter<double>("muonEtaCut", 2.4) ),
+            m_muonDcaCut( config.getUntrackedParameter<double>("muonDcaCut", 5.0) ),
 //            m_muonSelectionID( config.getUntrackedParameter<std::string>("muonSelectionID","tight") ),
             m_muonLooseIsoCut( config.getUntrackedParameter<double>("muonLooseIsoCut", 0.25) ),
             m_muonTightIsoCut( config.getUntrackedParameter<double>("muonTightIsoCut", 0.15) ),
@@ -101,7 +103,7 @@ class ZAAnalyzer: public Framework::Analyzer {
         std::string m_met_producer;
         std::string m_nohf_met_producer;
 
-        const float m_electronPtCut, m_electronEtaCut;
+        const float m_electronPtCut, m_electronEtaCut,m_electronDcaCut;
         const std::string m_electronVetoIDName;
         const std::string m_electronLooseIDName;
         const std::string m_electronMediumIDName;
@@ -109,7 +111,7 @@ class ZAAnalyzer: public Framework::Analyzer {
         const std::string m_electronSelectionID;
 
 //        const std::string m_muonSelectionID;
-        const float m_muonPtCut, m_muonEtaCut, m_muonLooseIsoCut, m_muonTightIsoCut;
+        const float m_muonPtCut, m_muonEtaCut, m_muonDcaCut, m_muonLooseIsoCut, m_muonTightIsoCut;
 
         const float m_jetPtCut, m_jetEtaCut, m_jetPUID, m_jetDRleptonCut;
         const std::string m_jetID, m_jetCSVv2Name;

@@ -49,7 +49,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
   const ElectronsProducer& electrons = producers.get<ElectronsProducer>(m_electrons_producer);
 
   for(uint16_t ielectron = 0; ielectron < electrons.p4.size(); ielectron++){
-    if( electrons.p4[ielectron].Pt() > m_electronPtCut && abs(electrons.p4[ielectron].Eta()) < m_electronEtaCut ){
+    if( electrons.p4[ielectron].Pt() > m_electronPtCut && abs(electrons.p4[ielectron].Eta()) < m_electronEtaCut && fabs(electrons.dca[ielectron])<m_electronDcaCut ){
       
       Lepton m_lepton(
           electrons.p4[ielectron], 
@@ -89,7 +89,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
   const MuonsProducer& muons = producers.get<MuonsProducer>(m_muons_producer);
 
   for(uint16_t imuon = 0; imuon < muons.p4.size(); imuon++){
-    if(muons.p4[imuon].Pt() > m_muonPtCut && abs(muons.p4[imuon].Eta()) < m_muonEtaCut ){
+    if(muons.p4[imuon].Pt() > m_muonPtCut && abs(muons.p4[imuon].Eta()) < m_muonEtaCut && fabs(muons.dca[imuon])<m_muonDcaCut){
       
       Lepton m_lepton(
           muons.p4[imuon], 

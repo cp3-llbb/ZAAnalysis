@@ -18,6 +18,7 @@ framework.addAnalyzer('za', cms.PSet(
             # Here are the default value (just to show what is configurable)
             electronPtCut = cms.untracked.double(20),
             electronEtaCut = cms.untracked.double(2.5),
+            electronDcaCut = cms.untracked.double(5.0),
             electronVetoIDName = cms.untracked.string('cutBasedElectronID-Spring15-25ns-V1-standalone-veto'),
             electronLooseIDName = cms.untracked.string('cutBasedElectronID-Spring15-25ns-V1-standalone-loose'),
             electronMediumIDName = cms.untracked.string('cutBasedElectronID-Spring15-25ns-V1-standalone-medium'),
@@ -25,6 +26,7 @@ framework.addAnalyzer('za', cms.PSet(
             
             muonPtCut = cms.untracked.double(20),
             muonEtaCut = cms.untracked.double(2.4),
+            muonDcaCut = cms.untracked.double(5.0),
             muonLooseIsoCut = cms.untracked.double(.25), # Loose cut recommended for dilepton analysis
             muonTightIsoCut = cms.untracked.double(.15),
 

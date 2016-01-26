@@ -54,7 +54,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       Lepton m_lepton(
           electrons.p4[ielectron], 
           ielectron, 
-          electrons.charge[ielectron], 
+          electrons.charge[ielectron],electrons.dca[ielectron], 
           true, false,
           electrons.ids[ielectron][m_electronVetoIDName],
           electrons.ids[ielectron][m_electronLooseIDName],
@@ -94,7 +94,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
       Lepton m_lepton(
           muons.p4[imuon], 
           imuon,
-          muons.charge[imuon], 
+          muons.charge[imuon],muons.dca[imuon],
           false, true,
           muons.isLoose[imuon], // isVeto => for muons, re-use isLoose
           muons.isLoose[imuon],

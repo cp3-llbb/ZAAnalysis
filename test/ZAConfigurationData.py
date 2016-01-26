@@ -56,6 +56,8 @@ framework.addAnalyzer('za',cms.PSet(
 framework.doSystematics(['jec', 'jer'])
 process = framework.create()
 
+process.framework.producers.muons.parameters.applyRochester = cms.untracked.bool(True)
+
 #Framework.schedule(process, ['za']) 
 
 process.source.fileNames = cms.untracked.vstring(

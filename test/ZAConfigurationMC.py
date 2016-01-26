@@ -62,6 +62,8 @@ framework.addAnalyzer('za', cms.PSet(
 framework.doSystematics(['jec', 'jer'])
 process = framework.create()
 
+process.framework.producers.muons.parameters.applyRochester = cms.untracked.bool(True)
+
 process.source.fileNames = cms.untracked.vstring(
         'file:/nfs/scratch/fynu/swertz/CMSSW_7_4_15/src/cp3_llbb/TTAnalysis/test/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_miniAODv2_oneFile.root'
         )

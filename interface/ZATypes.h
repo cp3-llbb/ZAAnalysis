@@ -104,7 +104,7 @@ namespace ZAAnalysis {
     bool isIsoLL, isIsoTT;
     uint16_t idxLep1, idxLep2;
     float triggerSF;
-
+    float triggerMatched;
   };
  
   struct Jet: BaseObject {

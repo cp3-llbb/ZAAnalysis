@@ -367,7 +367,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
   // Reconstruction of the Z candidate
   // Basic selection: Two selected leptons that matches the trigger and two jets
   
-  if (leptons.size() == 2 && leptons[0].hlt_idx > -1 && leptons[1].hlt_idx > -1){
+  if (leptons.size() == 2){
 
     const Lepton& l1 = leptons[0];
     const Lepton& l2 = leptons[1];
@@ -392,7 +392,7 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
     m_diLepton.isMuMu = dilep_ptOrdered[0].isMu && dilep_ptOrdered[1].isMu;
     m_diLepton.isOS = l1.charge != l2.charge;
     m_diLepton.isSF = m_diLepton.isElEl || m_diLepton.isMuMu;
-
+    m_diLepton.triggerMatched = (leptons[0].hlt_idx > -1 && leptons[1].hlt_idx > -1);
 
     if (m_diLepton.isMuMu) {
         //std::cout << "eta :"  << TMath::Abs(dilep_ptOrdered[0].p4.Eta()) << " " << TMath::Abs(dilep_ptOrdered[1].p4.Eta()) << std::endl;

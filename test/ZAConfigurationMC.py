@@ -59,6 +59,8 @@ framework.addAnalyzer('za', cms.PSet(
     
 
 #framework.redoJEC()
+framework.smearJets()
+
 framework.doSystematics(['jec', 'jer'])
 process = framework.create()
 

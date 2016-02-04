@@ -11,184 +11,189 @@
 namespace ZAAnalysis{
 
 class DileptonCategory: public Category {
-  public:
-    virtual void configure(const edm::ParameterSet& conf) override {
-      m_MllCutSF = conf.getUntrackedParameter<double>("MllCutSF", 20);
-      m_MllCutDF = conf.getUntrackedParameter<double>("MllCutDF", 20);
-      m_HLTDoubleMuon = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleMuon");
-      m_HLTDoubleEG = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleEG");
-      m_HLTMuonEG = conf.getUntrackedParameter<std::vector<std::string>>("HLTMuonEG");
-      m_lowLooseZcut = conf.getUntrackedParameter<double>("lowLooseZcut", 60);
-      m_highLooseZcut = conf.getUntrackedParameter<double>("highLooseZcut", 120);
-      m_lowTightZcut = conf.getUntrackedParameter<double>("lowTightZcut", 75);
-      m_highTightZcut = conf.getUntrackedParameter<double>("highTightZcut", 105);
+    public:
+        virtual void configure(const edm::ParameterSet& conf) override {
+            m_analyzer_name = conf.getUntrackedParameter<std::string>("m_analyzer_name", "za_analyzer");
+            m_MllCutSF = conf.getUntrackedParameter<double>("MllCutSF", 20);
+            m_MllCutDF = conf.getUntrackedParameter<double>("MllCutDF", 20);
+            m_HLTDoubleMuon = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleMuon");
+            m_HLTDoubleEG = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleEG");
+            m_HLTMuonEG = conf.getUntrackedParameter<std::vector<std::string>>("HLTMuonEG");
+            m_lowLooseZcut = conf.getUntrackedParameter<double>("lowLooseZcut", 60);
+            m_highLooseZcut = conf.getUntrackedParameter<double>("highLooseZcut", 120);
+            m_lowTightZcut = conf.getUntrackedParameter<double>("lowTightZcut", 75);
+            m_highTightZcut = conf.getUntrackedParameter<double>("highTightZcut", 105);
 
-      for(const auto& hlt: m_HLTDoubleMuon)
-        m_HLTDoubleMuonRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
-      for(const auto& hlt: m_HLTDoubleEG)
-        m_HLTDoubleEGRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
-      for(const auto& hlt: m_HLTMuonEG)
-        m_HLTMuonEGRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
-    }
+    
 
-    DileptonCategory():
-      baseStrCategory("Category"),
-      baseStrExtraDiLeptonVeto("ExtraDiLeptonVeto"),
-      baseStrDiLeptonTriggerMatch("DiLeptonTriggerMatch"),
-      baseStrMllCut("Mll"),
-      baseStrDiLeptonIsOS("DiLeptonIsOS"),
-      baseStrDileptonIsIDMM("DileptonIsIDMM"),
-      baseStrDileptonIsIDTT("DileptonIsIDTT"),
-      baseStrDileptonIsoLL("DileptonIsoLL"),
-      baseStrLooseZCandidate("LooseZCandidate"),
-      baseStrTightZCandidate("TightZCandidate"),
-      baseStrDiJetBWP_ML("DiJetBWP_ML"),
-      baseStrDiJetBWP_MM("DiJetBWP_MM"),
-      baseStrDiJetBWP_TM("DiJetBWP_TM"),
-      
-      baseStrOneJet("OneJet"),
-      baseStrTwoJets("TwoJets"),
-      baseStrTwoJetsExcl("TwoJetsExcl"),
-      baseStrOneBjet("OneBjet"),
-      baseStrTwoBjets("TwoBjets"),
-      baseStrTwoBjetsExcl("TwoBjetsExcl"),
-      baseStrThreeJets("ThreeJets"),
-      baseStrThreeBjets("ThreeBjets"),
-
-      baseStrOneFatJet("OneFatJet"),
-      baseStrTwoSubJets("TwoSubJets"),
-      baseStrOneBFatJetM("OneBFatJetM"),
-      baseStrOneBFatJetT("OneBFatJetT"),
-      baseStrTwoBSubJetsLL("TwoBSubJetsLL"),
-      baseStrTwoBSubJetsMM("TwoBSubJetsMM")
-      {}
-
-  protected:
-    float m_MllCutSF, m_MllCutDF, m_lowLooseZcut, m_highLooseZcut, m_lowTightZcut, m_highTightZcut;
-
-    std::vector<std::string> m_HLTDoubleMuon;
-    std::vector<std::string> m_HLTDoubleEG;
-    std::vector<std::string> m_HLTMuonEG;
-
-    std::string baseStrCategory;
-    std::string baseStrExtraDiLeptonVeto;
-    std::string baseStrDiLeptonTriggerMatch;
-    std::string baseStrMllCut;
-    std::string baseStrDiLeptonIsOS;
-    std::string baseStrDileptonIsIDMM;
-    std::string baseStrDileptonIsIDTT;
-    std::string baseStrDileptonIsoLL;
-    std::string baseStrLooseZCandidate;
-    std::string baseStrTightZCandidate;
-    std::string baseStrDiJetBWP_ML;
-    std::string baseStrDiJetBWP_MM;
-    std::string baseStrDiJetBWP_TM;
-
-    std::string baseStrOneJet;
-    std::string baseStrTwoJets;
-    std::string baseStrTwoJetsExcl;
-    std::string baseStrOneBjet;
-    std::string baseStrTwoBjets;
-    std::string baseStrTwoBjetsExcl;
-    std::string baseStrThreeJets;
-    std::string baseStrThreeBjets;
-
-    std::string baseStrOneFatJet;
-    std::string baseStrTwoSubJets;
-    std::string baseStrOneBFatJetM;
-    std::string baseStrOneBFatJetT;
-    std::string baseStrTwoBSubJetsLL;
-    std::string baseStrTwoBSubJetsMM;
-
-    std::vector<boost::regex> m_HLTDoubleMuonRegex;
-    std::vector<boost::regex> m_HLTDoubleEGRegex;
-    std::vector<boost::regex> m_HLTMuonEGRegex;
-
-    enum class HLT { DoubleMuon, DoubleEG, MuonEG };
-
-    // Check that the hlt objects at indices hltIdx1, hltIdx2 have fired at least one and the same 
-    // of the trigger paths in the group specified by pathGroup.
-    bool checkHLT(const HLTProducer& hlt, uint16_t hltIdx1, uint16_t hltIdx2, HLT pathGroup) const {
-      const std::vector<boost::regex>* chosenPathGroup(nullptr);
-
-      switch(pathGroup){
-        
-        case HLT::DoubleMuon:
-          chosenPathGroup = &m_HLTDoubleMuonRegex;
-          break;
-
-        case HLT::DoubleEG:
-          chosenPathGroup = &m_HLTDoubleEGRegex;
-          break;
-
-        case HLT::MuonEG:
-          chosenPathGroup = &m_HLTMuonEGRegex;
-          break;
-
-        default:
-          break;
-      
-      }
-
-      if( !chosenPathGroup || hltIdx1 >= hlt.object_paths.size() || hltIdx2 >= hlt.object_paths.size() )
-        return false;
-
-      std::vector<std::string> matchedTriggersObj1, matchedTriggersObj2, commonMatchedTriggers;
-
-      for(const auto& paths: *chosenPathGroup){
-        
-        for(const auto& objHlt: hlt.object_paths[hltIdx1]){
-          if( boost::regex_match(objHlt, paths) )
-            matchedTriggersObj1.push_back(objHlt);
+            for(const auto& hlt: m_HLTDoubleMuon)
+                m_HLTDoubleMuonRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
+            for(const auto& hlt: m_HLTDoubleEG)
+                m_HLTDoubleEGRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
+            for(const auto& hlt: m_HLTMuonEG)
+                m_HLTMuonEGRegex.push_back( boost::regex(hlt, boost::regex_constants::icase) );
         }
+
+        DileptonCategory():
+            baseStrCategory("Category"),
+            baseStrExtraDiLeptonVeto("ExtraDiLeptonVeto"),
+            baseStrDiLeptonTriggerMatch("DiLeptonTriggerMatch"),
+            baseStrMllCut("Mll"),
+            baseStrDiLeptonsOS("DiLeptonIsOS"),
+            baseStrDileptonIsIDMM("DileptonIsIDMM"),
+            baseStrDileptonIsIDTT("DileptonIsIDTT"),
+            baseStrDileptonIsoLL("DileptonIsoLL"),
+            baseStrLooseZCandidate("LooseZCandidate"),
+            baseStrTightZCandidate("TightZCandidate"),
+            baseStrDiJetBWP_ML("DiJetBWP_ML"),
+            baseStrDiJetBWP_MM("DiJetBWP_MM"),
+            baseStrDiJetBWP_TM("DiJetBWP_TM"),
+            
+            baseStrOneJet("OneJet"),
+            baseStrTwoJets("TwoJets"),
+            baseStrTwoJetsExcl("TwoJetsExcl"),
+            baseStrOneBjet("OneBjet"),
+            baseStrTwoBjets("TwoBjets"),
+            baseStrTwoBjetsExcl("TwoBjetsExcl"),
+            baseStrThreeJets("ThreeJets"),
+            baseStrThreeBjets("ThreeBjets"),
+      
+            baseStrOneFatJet("OneFatJet"),
+            baseStrTwoSubJets("TwoSubJets"),
+            baseStrOneBFatJetM("OneBFatJetM"),
+            baseStrOneBFatJetT("OneBFatJetT"),
+            baseStrTwoBSubJetsLL("TwoBSubJetsLL"),
+            baseStrTwoBSubJetsMM("TwoBSubJetsMM")
+            {}
+
+    
+
+    protected:
+        std::string m_analyzer_name;
+        float m_MllCutSF, m_MllCutDF, m_lowLooseZcut, m_highLooseZcut, m_lowTightZcut, m_highTightZcut;
+    
+        std::vector<std::string> m_HLTDoubleMuon;
+        std::vector<std::string> m_HLTDoubleEG;
+        std::vector<std::string> m_HLTMuonEG;
+    
+        std::string baseStrCategory;
+        std::string baseStrExtraDiLeptonVeto;
+        std::string baseStrDiLeptonTriggerMatch;
+        std::string baseStrMllCut;
+        std::string baseStrDiLeptonIsOS;
+        std::string baseStrDileptonIsIDMM;
+        std::string baseStrDileptonIsIDTT;
+        std::string baseStrDileptonIsoLL;
+        std::string baseStrLooseZCandidate;
+        std::string baseStrTightZCandidate;
+        std::string baseStrDiJetBWP_ML;
+        std::string baseStrDiJetBWP_MM;
+        std::string baseStrDiJetBWP_TM;
+    
+        std::string baseStrOneJet;
+        std::string baseStrTwoJets;
+        std::string baseStrTwoJetsExcl;
+        std::string baseStrOneBjet;
+        std::string baseStrTwoBjets;
+        std::string baseStrTwoBjetsExcl;
+        std::string baseStrThreeJets;
+        std::string baseStrThreeBjets;
+    
+        std::string baseStrOneFatJet;
+        std::string baseStrTwoSubJets;
+        std::string baseStrOneBFatJetM;
+        std::string baseStrOneBFatJetT;
+        std::string baseStrTwoBSubJetsLL;
+        std::string baseStrTwoBSubJetsMM;
+    
+        std::vector<boost::regex> m_HLTDoubleMuonRegex;
+        std::vector<boost::regex> m_HLTDoubleEGRegex;
+        std::vector<boost::regex> m_HLTMuonEGRegex;
+    
+        enum class HLT { DoubleMuon, DoubleEG, MuonEG };
+    
+        // Check that the hlt objects at indices hltIdx1, hltIdx2 have fired at least one and the same 
+        // of the trigger paths in the group specified by pathGroup.
+        bool checkHLT(const HLTProducer& hlt, uint16_t hltIdx1, uint16_t hltIdx2, HLT pathGroup) const {
+            const std::vector<boost::regex>* chosenPathGroup(nullptr);
+      
+            switch(pathGroup){
+                
+                case HLT::DoubleMuon:
+                    chosenPathGroup = &m_HLTDoubleMuonRegex;
+                    break;
         
-        for(const auto& objHlt: hlt.object_paths[hltIdx2]){
-          if( boost::regex_match(objHlt, paths) )
-            matchedTriggersObj2.push_back(objHlt);
-        }
+                case HLT::DoubleEG:
+                    chosenPathGroup = &m_HLTDoubleEGRegex;
+                    break;
+        
+                case HLT::MuonEG:
+                    chosenPathGroup = &m_HLTMuonEGRegex;
+                    break;
+        
+                default:
+                    break;
+              
+            }
       
-      }
-
-      std::set_intersection( matchedTriggersObj1.begin(), matchedTriggersObj1.end(), matchedTriggersObj2.begin(), matchedTriggersObj2.end(), std::back_inserter(commonMatchedTriggers));
-
-      return commonMatchedTriggers.size() > 0;
-    }
+            if( !chosenPathGroup || hltIdx1 >= hlt.object_paths.size() || hltIdx2 >= hlt.object_paths.size() )
+                return false;
       
-};
-
-class ElElCategory: public DileptonCategory {
-  public:
-    virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
-    virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-    virtual void register_cuts(CutManager& manager) override;
-    virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-};
-
-
-
-class ElMuCategory: public DileptonCategory {
-  public:
-    virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
-    virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-    virtual void register_cuts(CutManager& manager) override;
-    virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-};
-
- class MuElCategory: public DileptonCategory {
-  public:
-    virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
-    virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-    virtual void register_cuts(CutManager& manager) override;
-    virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-};
-
-
-class MuMuCategory: public DileptonCategory {
-  public:
-    virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
-    virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-    virtual void register_cuts(CutManager& manager) override;
-    virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
-};
+            std::vector<std::string> matchedTriggersObj1, matchedTriggersObj2, commonMatchedTriggers;
+      
+            for(const auto& paths: *chosenPathGroup){
+              
+                for(const auto& objHlt: hlt.object_paths[hltIdx1]){
+                    if( boost::regex_match(objHlt, paths) )
+                        matchedTriggersObj1.push_back(objHlt);
+                }
+              
+                for(const auto& objHlt: hlt.object_paths[hltIdx2]){
+                    if( boost::regex_match(objHlt, paths) )
+                        matchedTriggersObj2.push_back(objHlt);
+                }
+            }
+      
+            std::set_intersection( matchedTriggersObj1.begin(), matchedTriggersObj1.end(), matchedTriggersObj2.begin(), matchedTriggersObj2.end(), std::back_inserter(commonMatchedTriggers));
+      
+            return commonMatchedTriggers.size() > 0;
+          }
+      
+    };
+    
+    class ElElCategory: public DileptonCategory {
+        public:
+            virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
+            virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+            virtual void register_cuts(CutManager& manager) override;
+            virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+    };
+    
+    
+    
+    class ElMuCategory: public DileptonCategory {
+        public:
+            virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
+            virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+            virtual void register_cuts(CutManager& manager) override;
+            virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+    };
+    
+     class MuElCategory: public DileptonCategory {
+        public:
+            virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
+            virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+            virtual void register_cuts(CutManager& manager) override;
+            virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+    };
+    
+    
+    class MuMuCategory: public DileptonCategory {
+        public:
+            virtual bool event_in_category_pre_analyzers(const ProducersManager& producers) const override;
+            virtual bool event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+            virtual void register_cuts(CutManager& manager) override;
+            virtual void evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const override;
+    };
 
 }

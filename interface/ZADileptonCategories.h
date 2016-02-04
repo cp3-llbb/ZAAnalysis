@@ -13,7 +13,7 @@ namespace ZAAnalysis{
 class DileptonCategory: public Category {
     public:
         virtual void configure(const edm::ParameterSet& conf) override {
-            m_analyzer_name = conf.getUntrackedParameter<std::string>("m_analyzer_name", "za_analyzer");
+            m_analyzer_name = conf.getUntrackedParameter<std::string>("m_analyzer_name");
             m_MllCutSF = conf.getUntrackedParameter<double>("MllCutSF", 20);
             m_MllCutDF = conf.getUntrackedParameter<double>("MllCutDF", 20);
             m_HLTDoubleMuon = conf.getUntrackedParameter<std::vector<std::string>>("HLTDoubleMuon");

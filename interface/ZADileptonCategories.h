@@ -39,7 +39,7 @@ class DileptonCategory: public Category {
             baseStrExtraDiLeptonVeto("ExtraDiLeptonVeto"),
             baseStrDiLeptonTriggerMatch("DiLeptonTriggerMatch"),
             baseStrMllCut("Mll"),
-            baseStrDiLeptonsOS("DiLeptonIsOS"),
+            baseStrDiLeptonIsOS("DiLeptonIsOS"),
             baseStrDileptonIsIDMM("DileptonIsIDMM"),
             baseStrDileptonIsIDTT("DileptonIsIDTT"),
             baseStrDileptonIsoLL("DileptonIsoLL"),
@@ -69,7 +69,6 @@ class DileptonCategory: public Category {
     
 
     protected:
-        std::string m_analyzer_name;
         float m_MllCutSF, m_MllCutDF, m_lowLooseZcut, m_highLooseZcut, m_lowTightZcut, m_highTightZcut;
     
         std::vector<std::string> m_HLTDoubleMuon;
@@ -109,6 +108,8 @@ class DileptonCategory: public Category {
         std::vector<boost::regex> m_HLTDoubleMuonRegex;
         std::vector<boost::regex> m_HLTDoubleEGRegex;
         std::vector<boost::regex> m_HLTMuonEGRegex;
+  
+        std::string m_analyzer_name;
     
         enum class HLT { DoubleMuon, DoubleEG, MuonEG };
     

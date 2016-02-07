@@ -10,7 +10,7 @@
 #include <cp3_llbb/Framework/interface/METProducer.h>
 #include <cp3_llbb/Framework/interface/HLTProducer.h>
 #include <cp3_llbb/Framework/interface/GenParticlesProducer.h>
-#include <cp3_llbb/Framework/interface/ScaleFactorParser.h>
+#include <cp3_llbb/Framework/interface/BinnedValuesJSONParser.h>
 
 #include <Math/PtEtaPhiE4D.h>
 #include <Math/LorentzVector.h>

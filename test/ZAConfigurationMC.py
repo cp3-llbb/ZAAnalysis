@@ -58,7 +58,8 @@ framework.addAnalyzer('za', cms.PSet(
     )
     
 
-#framework.redoJEC()
+framework.useJECDatabase("Fall15_25nsV2_MC.db")
+framework.redoJEC()
 framework.smearJets()
 
 framework.doSystematics(['jec', 'jer'])
@@ -67,7 +68,9 @@ process = framework.create()
 process.framework.producers.muons.parameters.applyRochester = cms.untracked.bool(True)
 
 process.source.fileNames = cms.untracked.vstring(
-        'file:/nfs/scratch/fynu/swertz/CMSSW_7_4_15/src/cp3_llbb/TTAnalysis/test/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_miniAODv2_oneFile.root'
+       '/store/mc/RunIIFall15MiniAODv1/HToZATo2L2B_MH-500_MA-50_13TeV-madgraph-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/10000/740B1137-EFB1-E511-855B-0002C92A1020.root',
+       '/store/mc/RunIIFall15MiniAODv1/HToZATo2L2B_MH-500_MA-50_13TeV-madgraph-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/10000/8CC14A67-F3B1-E511-9904-A0000420FE80.root',
+       '/store/mc/RunIIFall15MiniAODv1/HToZATo2L2B_MH-500_MA-50_13TeV-madgraph-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/10000/F2A1013C-EFB1-E511-9C1F-0CC47A4D764A.root'
         )
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10000))

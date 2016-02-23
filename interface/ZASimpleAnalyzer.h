@@ -50,9 +50,9 @@ class ZAAnalyzer: public Framework::Analyzer {
             m_jetDRleptonCut( config.getUntrackedParameter<double>("jetDRleptonCut", 0.3) ),
             m_jetID( config.getUntrackedParameter<std::string>("jetID", "tight") ),
             m_jetCSVv2Name( config.getUntrackedParameter<std::string>("jetCSVv2Name", "pfCombinedInclusiveSecondaryVertexV2BJetTags") ),
-            m_jetCSVv2L( config.getUntrackedParameter<double>("jetCSVv2L", 0.605) ),
-            m_jetCSVv2M( config.getUntrackedParameter<double>("jetCSVv2M", 0.89) ),
-            m_jetCSVv2T( config.getUntrackedParameter<double>("jetCSVv2T", 0.97) ),
+            m_jetCSVv2L( config.getUntrackedParameter<double>("jetCSVv2L", 0.460) ),
+            m_jetCSVv2M( config.getUntrackedParameter<double>("jetCSVv2M", 0.800) ),
+            m_jetCSVv2T( config.getUntrackedParameter<double>("jetCSVv2T", 0.935) ),
             m_fatjetDRleptonCut( config.getUntrackedParameter<double>("fatjetDRleptonCut", 0.8) ),
             
             m_hltDRCut( config.getUntrackedParameter<double>("hltDRCut", std::numeric_limits<float>::max()) ),

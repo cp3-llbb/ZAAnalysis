@@ -19,8 +19,6 @@ bool ElElCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 
 bool ElElCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
   
-  const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>(m_analyzer_name);
-
   // If at least one DiLepton of highest Pt and of type ElEl among all ID pairs is found, keep event in this category
 
   return true;
@@ -133,8 +131,6 @@ bool MuMuCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 
 bool MuMuCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
   
-  const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>(m_analyzer_name);
-
   // It at least one DiLepton of highest Pt and of type MuMu among all ID pairs is found, keep event in this category
 
   return true;
@@ -253,9 +249,7 @@ bool MuElCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 }
 
 bool MuElCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
-
-  const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>(m_analyzer_name);
-return true;
+  return true;
 }
 
 void MuElCategory::register_cuts(CutManager& manager) {
@@ -293,8 +287,6 @@ void MuElCategory::register_cuts(CutManager& manager) {
 void MuElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
 
   const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>(m_analyzer_name);
-  const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
-
 
   if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];
@@ -362,9 +354,7 @@ bool ElMuCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 }
 
 bool ElMuCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
-
-  const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>(m_analyzer_name);
-return true;
+  return true;
 }
 
 void ElMuCategory::register_cuts(CutManager& manager) {
@@ -402,8 +392,6 @@ void ElMuCategory::register_cuts(CutManager& manager) {
 void ElMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
 
   const ZAAnalyzer& za = analyzers.get<ZAAnalyzer>(m_analyzer_name);
-  const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
-
 
   if(za.diLeptons.size() >= 1) {
     const DiLepton& m_diLepton = za.diLeptons[0];

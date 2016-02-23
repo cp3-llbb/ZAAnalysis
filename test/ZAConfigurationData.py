@@ -51,8 +51,8 @@ framework.addAnalyzer('za',cms.PSet(
             ),
         )
     )
-
-#framework.redoJEC()
+framework.useJECDatabase("Fall15_V2_DATA.db")
+framework.redoJEC()
 framework.doSystematics(['jec', 'jer'])
 process = framework.create()
 

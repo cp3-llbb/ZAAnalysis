@@ -45,6 +45,7 @@ framework.addAnalyzer('za', cms.PSet(
             hltDPtCut = cms.untracked.double(0.5), #Delta(Pt)/Pt cut for trigger matching
             hlt_scale_factors = cms.untracked.PSet(
                 HLTDoubleMuonSFs = cms.untracked.FileInPath('cp3_llbb/Framework/data/ScaleFactors/Mu17Mu8_SF.json'),
+                HLTDoubleElectronSFs = cms.untracked.FileInPath('cp3_llbb/Framework/data/ScaleFactors/El17El12_SF.json'),
                 ),
             ),
         categories_parameters = cms.PSet(

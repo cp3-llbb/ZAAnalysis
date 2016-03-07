@@ -399,6 +399,9 @@ void ZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setup, 
         //std::cout << m_hlt_scale_factors["HLTDoubleMuonSFs"].get({TMath::Abs(dilep_ptOrdered[0].p4.Eta()), TMath::Abs(dilep_ptOrdered[1].p4.Eta())})[0] << std::endl;
         m_diLepton.triggerSF = m_hlt_scale_factors["HLTDoubleMuonSFs"].get({TMath::Abs(dilep_ptOrdered[0].p4.Eta()), TMath::Abs(dilep_ptOrdered[1].p4.Eta())})[0];
         }
+    else if(m_diLepton.isElEl){
+        m_diLepton.triggerSF = m_hlt_scale_factors["HLTDoubleElectronSFs"].get({TMath::Abs(dilep_ptOrdered[0].p4.Eta()), TMath::Abs(dilep_ptOrdered[1].p4.Eta())})[0];
+    }
     else  {m_diLepton.triggerSF = 1;}
 
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<triggers>
+    <!-- MC + Run 2016 -->
+    <!-- Paths from https://twiki.cern.ch/twiki/bin/view/CMS/TopTrigger#Summary_for_2016_Run2016B_H_25_n -->
+    <runs from="0" to="999999">
+        <!-- Double mu -->
+        <path>HLT_Mu17_TrkIsoVVL_(Tk)?Mu8_TrkIsoVVL(_DZ)?_v.*</path>
+        <!-- Double ele -->
+        <path>HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v.*</path>
+    </runs>
+</triggers>

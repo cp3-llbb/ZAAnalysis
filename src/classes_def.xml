@@ -1,34 +1,48 @@
 <lcgdict>
-  <class name="ZAAnalysis::BaseObject"/> 
-  <class name="std::vector<ZAAnalysis::BaseObject>"/>
-  <class name="ZAAnalysis::Lepton">
-    <field name="hlt_already_matched" transient="true"/>
-  </class>
-  <class name="std::vector<ZAAnalysis::Lepton>"/>
-  <class name="ZAAnalysis::Jet"/>
-  <class name="std::vector<ZAAnalysis::Jet>"/>
-  <class name="ZAAnalysis::SubJet"/>
-  <class name="std::vector<ZAAnalysis::SubJet>"/>
-  <class name="ZAAnalysis::FatJet">
-     <field name="subJets" transient="true"/>
-  </class>
-  <class name="std::vector<ZAAnalysis::FatJet>"/>
-  <class name="ZAAnalysis::DiLepton"/>
-  <class name="std::vector<ZAAnalysis::DiLepton>"/>
-  <class name="ZAAnalysis::DiJet"/>
-  <class name="std::vector<ZAAnalysis::DiJet>"/>
-  <class name="ZAAnalysis::DiLepDiJet">
-    <field name="diLepton" transient="true"/>
-    <field name="diJet" transient="true"/>
-  </class>
-  <class name="std::vector<ZAAnalysis::DiLepDiJet>"/>
-  <class name="ZAAnalysis::DiLepFatJet">
-    <field name="diLepton" transient="true"/>
-    <field name="fatJet" transient="true"/>
-  </class>
-  <class name="std::vector<ZAAnalysis::DiLepFatJet>"/>
-  <class name="std::vector<uint16_t>"/>
-  <class name="std::vector<float>"/>
-  <class name="std::vector<std::vector<uint16_t>>"/>
+    <class name="HtoZA::Lepton" ClassVersion="13">
+     <version ClassVersion="13" checksum="3094952797"/>
+     <version ClassVersion="12" checksum="1045553155"/>
+     <version ClassVersion="11" checksum="3678847574"/>
+     <version ClassVersion="10" checksum="1833596599"/>
+     <field name="hlt_already_tried_matching" transient="true"/>
+     <field name="sc_eta" transient="true"/>
+    </class>
+    <class name="std::vector<HtoZA::Lepton>"/>
+    <class name="HtoZA::Dilepton" ClassVersion="13">
+     <version ClassVersion="13" checksum="2451819920"/>
+     <version ClassVersion="12" checksum="1015244358"/>
+     <version ClassVersion="11" checksum="3795415179"/>
+     <version ClassVersion="10" checksum="2433355583"/>
+    </class>
+    <class name="std::vector<HtoZA::Dilepton>"/>
+    <class name="std::vector< std::vector<int> >"/>
+    <class name="HtoZA::Jet" ClassVersion="13">
+     <version ClassVersion="13" checksum="1329421484"/>
+     <version ClassVersion="12" checksum="700635934"/>
+     <version ClassVersion="11" checksum="1040758844"/>
+     <version ClassVersion="10" checksum="194867656"/>
+    </class>
+    <class name="std::vector<HtoZA::Jet>"/>
+    <class name="HtoZA::Dijet" ClassVersion="12">
+     <version ClassVersion="12" checksum="1627821830"/>
+     <version ClassVersion="11" checksum="667858264"/>
+     <version ClassVersion="10" checksum="2119876344"/>
+    </class>
+    <class name="std::vector<HtoZA::Dijet>"/>
+    <class name="std::pair<int8_t, int8_t>"/>
+    <class name="HtoZA::MELAAngles" ClassVersion="11">
+     <version ClassVersion="11" checksum="1424325551"/>
+     <version ClassVersion="10" checksum="2939888277"/>
+    </class>
+    <class name="HtoZA::DileptonDijet" ClassVersion="10">
+     <version ClassVersion="10" checksum="1447913207"/>
+     <version ClassVersion="12" checksum="2284378963"/>
+     <field name="ill" transient="true"/>
+     <field name="lep1_p4" transient="true"/>
+     <field name="lep2_p4" transient="true"/>
+     <field name="jet1_p4" transient="true"/>
+     <field name="jet2_p4" transient="true"/>
+    </class>
+    <class name="std::vector<HtoZA::DileptonDijet>"/>
+     
 </lcgdict>
-

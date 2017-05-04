@@ -12,7 +12,8 @@
 
 static std::regex s_mumu_hlt_regex("^HLT_Mu.*_(Tk)?Mu");
 static std::regex s_elel_hlt_regex("^HLT_Ele.*_Ele");
-static std::regex s_muel_elmu_hlt_regex("^HLT_Mu.*_Ele");
+//static std::regex s_muel_elmu_hlt_regex("^HLT_Mu.*_Ele");
+static std::regex s_muel_elmu_hlt_regex("");
 
 const std::vector<HtoZA::Lepton>& DileptonCategory::getLeptons(const AnalyzersManager& analyzers) const {
     const HtoZAAnalyzer& hZA_analyzer = analyzers.get<HtoZAAnalyzer>(m_analyzer_name);
@@ -124,7 +125,6 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
 }
 
 
-/*
 // ***** ***** *****
 // Dilepton El-Mu category
 // ***** ***** *****
@@ -145,12 +145,12 @@ bool ElMuCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool ElMuCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonMetDijet>& llmetjj = getDileptonMetDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (llmetjj.empty())
+    if (lljj.empty())
         return false;
 
     // Only look at the first dilepton pair
@@ -160,14 +160,15 @@ bool ElMuCategory::event_in_category_post_analyzers(const ProducersManager& prod
 };
 
 void ElMuCategory::register_cuts(CutManager& manager) {
-    manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
+    //manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
+	manager.new_cut("no_trigger", "no_cut");
 };
 
 void ElMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
     for (const std::string& path: hlt.paths) {
         if (std::regex_search(path, s_muel_elmu_hlt_regex)) {
-            manager.pass_cut("fire_trigger");
+            manager.pass_cut("no_trigger");
             break;
         }
     }
@@ -193,12 +194,12 @@ bool MuElCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool MuElCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonMetDijet>& llmetjj = getDileptonMetDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (llmetjj.empty())
+    if (lljj.empty())
         return false;
 
     // Only look at the first dilepton pair
@@ -208,16 +209,16 @@ bool MuElCategory::event_in_category_post_analyzers(const ProducersManager& prod
 };
 
 void MuElCategory::register_cuts(CutManager& manager) {
-    manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
+    //manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
+    manager.new_cut("no_trigger", "no_cut");
 };
 
 void MuElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
     for (const std::string& path: hlt.paths) {
         if (std::regex_search(path, s_muel_elmu_hlt_regex)) {
-            manager.pass_cut("fire_trigger");
+            manager.pass_cut("no_trigger");
             break;
         }
     }
 }
-*/

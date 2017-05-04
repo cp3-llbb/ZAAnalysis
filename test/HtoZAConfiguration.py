@@ -50,7 +50,7 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
             muonLooseIsoCut = cms.untracked.double(.25), # https://twiki.cern.ch/twiki/bin/view/CMS/TopMUO 
             muonTightIsoCut = cms.untracked.double(.15), # https://twiki.cern.ch/twiki/bin/view/CMS/TopMUO 
             muonEtaCut = cms.untracked.double(2.4),
-            electrons_loose_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-loose"),
+            electrons_loose_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-loose"), # https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#HLT_safe_selection_for_2016_data
             electrons_medium_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-medium"),
             electrons_tight_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-tight"),
             electrons_hlt_safe_wp_name = cms.untracked.string("cutBasedElectronHLTPreselection-Summer16-V1"),
@@ -77,11 +77,12 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
                     DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
                     DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
-                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
+                    # The following lines define efficiencies for combined trigger (e-mu and mu-e), not needed for HtoZA analysis
+                    #EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
+                    #MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
-                    IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
+                    #IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
+                    #IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
             )
         )
     )
@@ -120,13 +121,13 @@ else:
             #'/store/mc/RunIISummer16MiniAODv2/GluGluToHHTo2B2VTo2L2Nu_node_SM_13TeV-madgraph-v2/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/2E1015E2-71D9-E611-911E-02163E019E19.root'
 	    
             # Signal: H->ZA - mH=1000, mA=200
-	    #'/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-1000_MA-200_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/80000/12283330-9F3A-E611-9513-0025907B4F30.root'
+	        #'/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-1000_MA-200_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/80000/12283330-9F3A-E611-9513-0025907B4F30.root'
 
             # Signal: H->ZA - mH=500, mA=100
             '/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/20000/1287F415-023B-E611-A374-FA163E48F4D0.root'
 
             # TT
-            # '/store/mc/RunIISummer16MiniAODv2/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/00ED79D3-CFC1-E611-B748-3417EBE64483.root'
+            #'/store/mc/RunIISummer16MiniAODv2/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/00ED79D3-CFC1-E611-B748-3417EBE64483.root'
 
             # DY
             # '/store/mc/RunIISummer16MiniAODv2/DYToLL_2J_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/100000/00CEFB4F-C1D2-E611-BBF4-7845C4FC3C11.root<Paste>'
@@ -134,4 +135,4 @@ else:
 
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.source.skipEvents = cms.untracked.uint32(10)
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))

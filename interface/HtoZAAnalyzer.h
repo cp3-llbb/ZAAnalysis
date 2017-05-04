@@ -75,7 +75,7 @@ class HtoZAAnalyzer: public Framework::Analyzer {
         virtual void endJob(MetadataManager&) override;
 
         BRANCH(leptons, std::vector<HtoZA::Lepton>);
-        //BRANCH(met, std::vector<HtoZA::Met>);
+        BRANCH(met, std::vector<HtoZA::Met>);
         BRANCH(jets, std::vector<HtoZA::Jet>);
         //std::vector<HtoZA::Dilepton> ll;
         //std::vector<HtoZA::Dijet> jj;

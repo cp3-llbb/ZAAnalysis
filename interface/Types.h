@@ -84,7 +84,6 @@ namespace HtoZA {
         float trigger_efficiency_downVariated;
         float trigger_efficiency_upVariated;
     };
-    /*
     struct Met {
         LorentzVector p4;
         LorentzVector gen_p4;
@@ -94,7 +93,6 @@ namespace HtoZA {
         float gen_DPhi;
         float gen_DPtOverPt;
     };
-    */
     /*
     struct DileptonMet : public Dilepton, public Met {
         LorentzVector p4;

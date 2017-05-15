@@ -12,8 +12,7 @@
 
 static std::regex s_mumu_hlt_regex("^HLT_Mu.*_(Tk)?Mu");
 static std::regex s_elel_hlt_regex("^HLT_Ele.*_Ele");
-//static std::regex s_muel_elmu_hlt_regex("^HLT_Mu.*_Ele");
-static std::regex s_muel_elmu_hlt_regex("");
+static std::regex s_muel_elmu_hlt_regex("^HLT_Mu.*_Ele");
 
 const std::vector<HtoZA::Lepton>& DileptonCategory::getLeptons(const AnalyzersManager& analyzers) const {
     const HtoZAAnalyzer& hZA_analyzer = analyzers.get<HtoZAAnalyzer>(m_analyzer_name);
@@ -160,15 +159,14 @@ bool ElMuCategory::event_in_category_post_analyzers(const ProducersManager& prod
 };
 
 void ElMuCategory::register_cuts(CutManager& manager) {
-    //manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
-	manager.new_cut("no_trigger", "no_cut");
+    manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
 };
 
 void ElMuCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
     for (const std::string& path: hlt.paths) {
         if (std::regex_search(path, s_muel_elmu_hlt_regex)) {
-            manager.pass_cut("no_trigger");
+            manager.pass_cut("fire_trigger");
             break;
         }
     }
@@ -209,15 +207,14 @@ bool MuElCategory::event_in_category_post_analyzers(const ProducersManager& prod
 };
 
 void MuElCategory::register_cuts(CutManager& manager) {
-    //manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
-    manager.new_cut("no_trigger", "no_cut");
+    manager.new_cut("fire_trigger", "HLT_Mu*Ele*");
 };
 
 void MuElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
     for (const std::string& path: hlt.paths) {
         if (std::regex_search(path, s_muel_elmu_hlt_regex)) {
-            manager.pass_cut("no_trigger");
+            manager.pass_cut("fire_trigger");
             break;
         }
     }

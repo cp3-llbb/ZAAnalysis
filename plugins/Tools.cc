@@ -420,8 +420,8 @@ void HtoZAAnalyzer::fillTriggerEfficiencies(const Lepton & lep1, const Lepton & 
     // See https://cp3-llbb.slack.com/archives/hh/p1486482180001053
     constexpr float DZ_filter_eff_MuMu = 0.982;
     constexpr float DZ_filter_eff_ElEl = 0.983;
-    //constexpr float DZ_filter_eff_MuEl = 0.988;
-    //constexpr float DZ_filter_eff_ElMu = 0.982;
+    constexpr float DZ_filter_eff_MuEl = 0.988;
+    constexpr float DZ_filter_eff_ElMu = 0.982;
 
     // See https://cp3-llbb.slack.com/archives/hh/p1486566100001301
     constexpr float L1_EMTF_bug_eff_MuMu = 0.5265;
@@ -455,8 +455,22 @@ void HtoZAAnalyzer::fillTriggerEfficiencies(const Lepton & lep1, const Lepton & 
         eff_lep2_leg2 = m_hlt_efficiencies.at("DoubleEleLowPtleg")->get(p_hlt_lep2)[0];
         DZ_filter_eff = DZ_filter_eff_ElEl;
     }
-    //else 
-        //std::cout << "We have something else then el or mu !!" << std::endl;
+    else if (lep1.isMu && lep2.isEl) {
+        eff_lep1_leg1 = m_hlt_efficiencies.at("IsoMu23leg")->get(p_hlt_lep1)[0];
+        eff_lep1_leg2 = m_hlt_efficiencies.at("IsoMu8leg")->get(p_hlt_lep1)[0];
+        eff_lep2_leg1 = m_hlt_efficiencies.at("EleMuHighPtleg")->get(p_hlt_lep2)[0];
+        eff_lep2_leg2 = m_hlt_efficiencies.at("MuEleLowPtleg")->get(p_hlt_lep2)[0];
+        DZ_filter_eff = DZ_filter_eff_MuEl;
+    }
+    else if (lep1.isEl && lep2.isMu) {
+        eff_lep1_leg1 = m_hlt_efficiencies.at("EleMuHighPtleg")->get(p_hlt_lep1)[0];
+        eff_lep1_leg2 = m_hlt_efficiencies.at("MuEleLowPtleg")->get(p_hlt_lep1)[0];
+        eff_lep2_leg1 = m_hlt_efficiencies.at("IsoMu23leg")->get(p_hlt_lep2)[0];
+        eff_lep2_leg2 = m_hlt_efficiencies.at("IsoMu8leg")->get(p_hlt_lep2)[0];
+        DZ_filter_eff = DZ_filter_eff_ElMu;
+    }
+    else
+        std::cout << "We have something else then el or mu !!" << std::endl;
 
     float error_eff_lep1_leg1_up = 0.;
     float error_eff_lep1_leg2_up = 0.;
@@ -474,6 +488,18 @@ void HtoZAAnalyzer::fillTriggerEfficiencies(const Lepton & lep1, const Lepton & 
         error_eff_lep1_leg2_up = m_hlt_efficiencies.at("DoubleEleLowPtleg")->get(p_hlt_lep1)[2];
         error_eff_lep2_leg1_up = m_hlt_efficiencies.at("DoubleEleHighPtleg")->get(p_hlt_lep2)[2];
         error_eff_lep2_leg2_up = m_hlt_efficiencies.at("DoubleEleLowPtleg")->get(p_hlt_lep2)[2];
+    }
+    else if (lep1.isMu && lep2.isEl) {
+        error_eff_lep1_leg1_up = m_hlt_efficiencies.at("IsoMu23leg")->get(p_hlt_lep1)[2];
+        error_eff_lep1_leg2_up = m_hlt_efficiencies.at("IsoMu8leg")->get(p_hlt_lep1)[2];
+        error_eff_lep2_leg1_up = m_hlt_efficiencies.at("EleMuHighPtleg")->get(p_hlt_lep2)[2];
+        error_eff_lep2_leg2_up = m_hlt_efficiencies.at("MuEleLowPtleg")->get(p_hlt_lep2)[2];
+    }
+    else if (lep1.isEl && lep2.isMu) {
+        error_eff_lep1_leg1_up = m_hlt_efficiencies.at("EleMuHighPtleg")->get(p_hlt_lep1)[2];
+        error_eff_lep1_leg2_up = m_hlt_efficiencies.at("MuEleLowPtleg")->get(p_hlt_lep1)[2];
+        error_eff_lep2_leg1_up = m_hlt_efficiencies.at("IsoMu23leg")->get(p_hlt_lep2)[2];
+        error_eff_lep2_leg2_up = m_hlt_efficiencies.at("IsoMu8leg")->get(p_hlt_lep2)[2];
     }
 
     float error_eff_lep1_leg1_down = 0.;
@@ -493,7 +519,18 @@ void HtoZAAnalyzer::fillTriggerEfficiencies(const Lepton & lep1, const Lepton & 
         error_eff_lep2_leg1_down = m_hlt_efficiencies.at("DoubleEleHighPtleg")->get(p_hlt_lep2)[1];
         error_eff_lep2_leg2_down = m_hlt_efficiencies.at("DoubleEleLowPtleg")->get(p_hlt_lep2)[1];
     }
-
+    else if (lep1.isMu && lep2.isEl) {
+        error_eff_lep1_leg1_down = m_hlt_efficiencies.at("IsoMu23leg")->get(p_hlt_lep1)[1];
+        error_eff_lep1_leg2_down = m_hlt_efficiencies.at("IsoMu8leg")->get(p_hlt_lep1)[1];
+        error_eff_lep2_leg1_down = m_hlt_efficiencies.at("EleMuHighPtleg")->get(p_hlt_lep2)[1];
+        error_eff_lep2_leg2_down = m_hlt_efficiencies.at("MuEleLowPtleg")->get(p_hlt_lep2)[1];
+    }
+    else if (lep1.isEl && lep2.isMu) {
+        error_eff_lep1_leg1_down = m_hlt_efficiencies.at("EleMuHighPtleg")->get(p_hlt_lep1)[1];
+        error_eff_lep1_leg2_down = m_hlt_efficiencies.at("MuEleLowPtleg")->get(p_hlt_lep1)[1];
+        error_eff_lep2_leg1_down = m_hlt_efficiencies.at("IsoMu23leg")->get(p_hlt_lep2)[1];
+        error_eff_lep2_leg2_down = m_hlt_efficiencies.at("IsoMu8leg")->get(p_hlt_lep2)[1];
+	}
 
     float nominal = -(eff_lep1_leg1 * eff_lep2_leg1) +
         (1 - (1 - eff_lep1_leg2)) * eff_lep2_leg1 +

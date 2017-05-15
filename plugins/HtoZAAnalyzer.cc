@@ -38,7 +38,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     ll.clear();
     jj.clear();
     lljj.clear();
-	met.clear();
+    met.clear();
     
 
     const JetsProducer& alljets = producers.get<JetsProducer>(m_jets_producer);
@@ -51,8 +51,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
     if(!event.isRealData()){
     
-    //BR thing? Maybe in HH it applies to W;
-    //Does it have to be taken into account for Z as well?
     size_t n_taus = 0;
     const GenParticlesProducer& gp = producers.get<GenParticlesProducer>("gen_particles");
 
@@ -108,7 +106,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
 
     // Construct signal gen info
-    //std::cout << "New event" << std::endl;
     
     gen_iH = -1;
     gen_iA = -1;
@@ -135,23 +132,28 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
         //int8_t status = gp.pruned_status[ip];
 
 #if HtoZA_GEN_DEBUG
-        //std::cout << "[" << ip << "] pdg id: " << pdg_id << " flags: " << flags << " p = " << gp.pruned_p4[ip] << std::endl;
         std::cout << "[" << ip << "] pdg id: " << pdg_id << " flags: " << flags << " p = " << gp.pruned_p4[ip] << " status: " << (int) status << std::endl;
-        //std::cout << "gp.pruned_pdg_id.size(): " << gp.pruned_pdg_id.size() << std::endl;
-        //std::cout << "gp.pruned_p4.size(): " << gp.pruned_p4.size() << std::endl;
+        std::cout << "gp.pruned_pdg_id.size(): " << gp.pruned_pdg_id.size() << std::endl;
+        std::cout << "gp.pruned_p4.size(): " << gp.pruned_p4.size() << std::endl;
         print_mother_chain(ip);
 #endif
 
         auto p4 = gp.pruned_p4[ip];
-        //std::cout << "gen_iZ: " << (int) gen_iZ << ", gen_iZ_afterFSR: " << (int) gen_iZ_afterFSR << std::endl;
         if (std::abs(pdg_id) == 35) {
             ASSIGN_HtoZA_GEN_INFO_NO_FSR(H, "H");
-            //std::cout << "ONE H FOUND WITH gen_iH: " << (int) gen_iH << std::endl;
+#if HtoZA_GEN_DEBUG
+            std::cout << "ONE H FOUND WITH gen_iH: " << (int) gen_iH << std::endl;
+#endif
         } else if (pdg_id == 36) {
             ASSIGN_HtoZA_GEN_INFO(A, "A");
+#if HtoZA_GEN_DEBUG
+            std::cout << "ONE A FOUND WITH gen_iA: " << (int) gen_iA << std::endl;
+#endif
         } else if (pdg_id == 23) {
             ASSIGN_HtoZA_GEN_INFO(Z, "Z"); 
-            //std::cout << " AFTER ASSIGNEMENT: gen_iZ: " << (int) gen_iZ << std::endl;
+#if HtoZA_GEN_DEBUG
+            std::cout << "ONE Z FOUND WITH gen_iZ: " << (int) gen_iZ << std::endl;
+#endif
         } else if (pdg_id == 25) {
             ASSIGN_HtoZA_GEN_INFO(h, "SM Higgs");
         }
@@ -196,17 +198,14 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
           }
     } // End of loop
 
+#if HtoZA_GEN_DEBUG
     if (gen_iH == -1 ) {
         offshellH_counter++;
-        //std::cout << "NO H IN THE EVENT!!!!!!!!!!!" << std::endl;
     }
-        //std::cout << "offshellH_counter: " << offshellH_counter << std::endl;
-        events_counter++;
-        //std::cout << "events_counter: " << events_counter << std::endl;
-
-    //std::cout << "gen_iLminus: " << (int) gen_iLminus << std::endl;
-    //std::cout << "gen_iLplus: " << (int) gen_iLplus << std::endl;
-
+    std::cout << "offshellH_counter: " << offshellH_counter << std::endl;
+    events_counter++;
+    std::cout << "events_counter: " << events_counter << std::endl;
+#endif
 
       // Get the invariant mass of Z+A
       if ((gen_iZ != -1) && (gen_iA != -1)) {
@@ -407,8 +406,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             dilep.isMuEl = leptons[ilep1].isMu && leptons[ilep2].isEl;
             // if the two leptons have same flavour
             dilep.isSF = dilep.isMuMu || dilep.isElEl;
-            
-			dilep.DR_l_l = ROOT::Math::VectorUtil::DeltaR(leptons[ilep1].p4, leptons[ilep2].p4);
+
+            dilep.DR_l_l = ROOT::Math::VectorUtil::DeltaR(leptons[ilep1].p4, leptons[ilep2].p4);
             dilep.DPhi_l_l = fabs(ROOT::Math::VectorUtil::DeltaPhi(leptons[ilep1].p4, leptons[ilep2].p4));
             dilep.ht_l_l = leptons[ilep1].p4.Pt() + leptons[ilep2].p4.Pt();
             // We are selecting all the possible combinations of dileptons in an event. But which one is the
@@ -487,30 +486,29 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     // Adding MET(s) 
     // *****
     HtoZA::Met mymet;
-	mymet.p4 = pf_met.p4;
-	mymet.isNoHF = false;
-	mymet.gen_matched = false;
-	mymet.gen_p4 = null_p4;
-	mymet.gen_DR = -1.;
-	mymet.gen_DPhi = -1.;
-	mymet.gen_DPtOverPt = -10.;
-	if (!event.isRealData())
-	{ // genMet is not constructed in the framework, so construct it manually out of the neutrinos hanging around the mc particles
-	    const GenParticlesProducer& gp = producers.get<GenParticlesProducer>("gen_particles");
-		for (unsigned int ip = 0; ip < gp.pruned_p4.size(); ip++) {
-		    std::bitset<15> flags (gp.pruned_status_flags[ip]);
-			if (!flags.test(13)) continue; // take the last copies
-			if (abs(gp.pruned_pdg_id[ip]) == 12 || abs(gp.pruned_pdg_id[ip]) == 14 || abs(gp.pruned_pdg_id[ip]) == 16)
-			{
-			    mymet.gen_matched = true;
-				mymet.gen_p4 += gp.pruned_p4[ip];
-		    }
-		}
+    mymet.p4 = pf_met.p4;
+    mymet.gen_matched = false;
+    mymet.gen_p4 = null_p4;
+    mymet.gen_DR = -1.;
+    mymet.gen_DPhi = -1.;
+    mymet.gen_DPtOverPt = -10.;
+    if (!event.isRealData())
+    { // genMet is not constructed in the framework, so construct it manually out of the neutrinos hanging around the mc particles
+        const GenParticlesProducer& gp = producers.get<GenParticlesProducer>("gen_particles");
+        for (unsigned int ip = 0; ip < gp.pruned_p4.size(); ip++) {
+            std::bitset<15> flags (gp.pruned_status_flags[ip]);
+            if (!flags.test(13)) continue; // take the last copies
+            if (abs(gp.pruned_pdg_id[ip]) == 12 || abs(gp.pruned_pdg_id[ip]) == 14 || abs(gp.pruned_pdg_id[ip]) == 16)
+            {
+                mymet.gen_matched = true;
+                mymet.gen_p4 += gp.pruned_p4[ip];
+            }
+        }
         mymet.gen_DR = mymet.gen_matched ? ROOT::Math::VectorUtil::DeltaR(mymet.p4, mymet.gen_p4) : -1.;
-		mymet.gen_DPhi = mymet.gen_matched ? fabs(ROOT::Math::VectorUtil::DeltaPhi(mymet.p4, mymet.gen_p4)) : -1.;
-		mymet.gen_DPtOverPt = mymet.gen_matched ? (mymet.p4.Pt() - mymet.gen_p4.Pt()) / mymet.p4.Pt() : -10.;
+        mymet.gen_DPhi = mymet.gen_matched ? fabs(ROOT::Math::VectorUtil::DeltaPhi(mymet.p4, mymet.gen_p4)) : -1.;
+        mymet.gen_DPtOverPt = mymet.gen_matched ? (mymet.p4.Pt() - mymet.gen_p4.Pt()) / mymet.p4.Pt() : -10.;
     }
-	met.push_back(mymet);
+    met.push_back(mymet);
 
 
     // ***** 
@@ -562,7 +560,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
 
             jets.push_back(myjet);
-        } 
+        }
     } // end of loop over jets
 
     // Do NOT change the loop logic here: we expect [0] to be made out of the leading jets
@@ -724,7 +722,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     // ***** ***** *****
     // Event variables
     // ***** ***** *****
-
 
     // HT: the two selected leptons - if present - plus all selected jets
     HT = 0;

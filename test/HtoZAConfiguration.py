@@ -77,12 +77,11 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
                     DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
                     DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    # The following lines define efficiencies for combined trigger (e-mu and mu-e), not needed for HtoZA analysis
-                    #EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
-                    #MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
+                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
+                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    #IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
-                    #IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
+                    IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
+                    IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
             )
         )
     )
@@ -127,7 +126,7 @@ else:
             '/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/20000/1287F415-023B-E611-A374-FA163E48F4D0.root'
 
             # TT
-            #'/store/mc/RunIISummer16MiniAODv2/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/00ED79D3-CFC1-E611-B748-3417EBE64483.root'
+            # '/store/mc/RunIISummer16MiniAODv2/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/00ED79D3-CFC1-E611-B748-3417EBE64483.root'
 
             # DY
             # '/store/mc/RunIISummer16MiniAODv2/DYToLL_2J_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/100000/00CEFB4F-C1D2-E611-BBF4-7845C4FC3C11.root<Paste>'

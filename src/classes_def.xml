@@ -15,6 +15,10 @@
      <version ClassVersion="10" checksum="2433355583"/>
     </class>
     <class name="std::vector<HtoZA::Dilepton>"/>
+    <class name="HtoZA::Met" ClassVersion="11">
+	 <version ClassVersion="11" checksum="2006330757"/>
+	</class>
+	<class name="std::vector<HtoZA::Met>"/>
     <class name="std::vector< std::vector<int> >"/>
     <class name="HtoZA::Jet" ClassVersion="13">
      <version ClassVersion="13" checksum="1329421484"/>

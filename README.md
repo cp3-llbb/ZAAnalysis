@@ -1,4 +1,4 @@
-# H->ZA Analyzer
+# ZAAnalysis
 
    * Note: must be installed after the [Framework](https://github.com/cp3-llbb/Framework)
 

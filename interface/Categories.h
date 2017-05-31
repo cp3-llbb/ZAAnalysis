@@ -2,7 +2,7 @@
 #define HtoZA_CATEGORIES_H
 
 #include <cp3_llbb/Framework/interface/Category.h>
-#include <cp3_llbb/HtoZAAnalysis/interface/HtoZAAnalyzer.h>
+#include <cp3_llbb/ZAAnalysis/interface/HtoZAAnalyzer.h>
 
 class DileptonCategory: public Category {
     public:

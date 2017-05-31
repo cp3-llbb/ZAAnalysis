@@ -2,7 +2,7 @@
 #include <cp3_llbb/Framework/interface/ElectronsProducer.h>
 #include <cp3_llbb/Framework/interface/HLTProducer.h>
 
-#include <cp3_llbb/HtoZAAnalysis/interface/Categories.h>
+#include <cp3_llbb/ZAAnalysis/interface/Categories.h>
 
 #include <regex>
 
@@ -124,7 +124,6 @@ void ElElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
 }
 
 
-/*
 // ***** ***** *****
 // Dilepton El-Mu category
 // ***** ***** *****
@@ -145,12 +144,12 @@ bool ElMuCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool ElMuCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonMetDijet>& llmetjj = getDileptonMetDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (llmetjj.empty())
+    if (lljj.empty())
         return false;
 
     // Only look at the first dilepton pair
@@ -193,12 +192,12 @@ bool MuElCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool MuElCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonMetDijet>& llmetjj = getDileptonMetDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (llmetjj.empty())
+    if (lljj.empty())
         return false;
 
     // Only look at the first dilepton pair
@@ -220,4 +219,3 @@ void MuElCategory::evaluate_cuts_post_analyzers(CutManager& manager, const Produ
         }
     }
 }
-*/

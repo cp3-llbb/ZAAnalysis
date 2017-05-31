@@ -1,7 +1,7 @@
-#include <cp3_llbb/HtoZAAnalysis/interface/HtoZAAnalyzer.h>
+#include <cp3_llbb/ZAAnalysis/interface/HtoZAAnalyzer.h>
 #include <cp3_llbb/Framework/interface/BTagsAnalyzer.h>
-#include <cp3_llbb/HtoZAAnalysis/interface/Categories.h>
-#include <cp3_llbb/HtoZAAnalysis/interface/GenStatusFlags.h>
+#include <cp3_llbb/ZAAnalysis/interface/Categories.h>
+#include <cp3_llbb/ZAAnalysis/interface/GenStatusFlags.h>
 
 #include <cp3_llbb/Framework/interface/EventProducer.h>
 #include <cp3_llbb/Framework/interface/GenParticlesProducer.h>
@@ -17,13 +17,16 @@
 #include <TH1F.h>
 #include <TCanvas.h>
 
-#define HtoZA_GEN_DEBUG (true)
+#define HtoZA_GEN_DEBUG (false)
+#define TT_GEN_DEBUG (false)
 
 void HtoZAAnalyzer::registerCategories(CategoryManager& manager, const edm::ParameterSet& config) {
     edm::ParameterSet newconfig = edm::ParameterSet(config);
     newconfig.addUntrackedParameter("m_analyzer_name", this->m_name);
     manager.new_category<MuMuCategory>("mumu", "Category with leading leptons as two muons", newconfig);
     manager.new_category<ElElCategory>("elel", "Category with leading leptons as two electrons", newconfig);
+    manager.new_category<ElMuCategory>("elmu", "Category with leading leptons as electron, subleading as muon", newconfig);
+    manager.new_category<MuElCategory>("muel", "Category with leading leptons as muon, subleading as electron", newconfig);
 }
 
 
@@ -35,6 +38,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     ll.clear();
     jj.clear();
     lljj.clear();
+    met.clear();
     
 
     const JetsProducer& alljets = producers.get<JetsProducer>(m_jets_producer);
@@ -42,13 +46,11 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     const MuonsProducer& allmuons = producers.get<MuonsProducer>(m_muons_producer);
     const EventProducer& fwevent = producers.get<EventProducer>("event");
     const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
-    //const METProducer& pf_met = producers.get<METProducer>(m_met_producer);
+    const METProducer& pf_met = producers.get<METProducer>(m_met_producer);
 
 
     if(!event.isRealData()){
     
-    //BR thing? Maybe in HH it applies to W;
-    //Does it have to be taken into account for Z as well?
     size_t n_taus = 0;
     const GenParticlesProducer& gp = producers.get<GenParticlesProducer>("gen_particles");
 
@@ -104,7 +106,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
 
     // Construct signal gen info
-    std::cout << "New event" << std::endl;
     
     gen_iH = -1;
     gen_iA = -1;
@@ -128,26 +129,31 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             continue;
 
         int64_t pdg_id = gp.pruned_pdg_id[ip];
-        int8_t status = gp.pruned_status[ip];
+        //int8_t status = gp.pruned_status[ip];
 
 #if HtoZA_GEN_DEBUG
-        //std::cout << "[" << ip << "] pdg id: " << pdg_id << " flags: " << flags << " p = " << gp.pruned_p4[ip] << std::endl;
         std::cout << "[" << ip << "] pdg id: " << pdg_id << " flags: " << flags << " p = " << gp.pruned_p4[ip] << " status: " << (int) status << std::endl;
-        //std::cout << "gp.pruned_pdg_id.size(): " << gp.pruned_pdg_id.size() << std::endl;
-        //std::cout << "gp.pruned_p4.size(): " << gp.pruned_p4.size() << std::endl;
+        std::cout << "gp.pruned_pdg_id.size(): " << gp.pruned_pdg_id.size() << std::endl;
+        std::cout << "gp.pruned_p4.size(): " << gp.pruned_p4.size() << std::endl;
         print_mother_chain(ip);
 #endif
 
         auto p4 = gp.pruned_p4[ip];
-        //std::cout << "gen_iZ: " << (int) gen_iZ << ", gen_iZ_afterFSR: " << (int) gen_iZ_afterFSR << std::endl;
-        if (std::abs(pdg_id) == 35 || std::abs(pdg_id) == 39) {
+        if (std::abs(pdg_id) == 35) {
             ASSIGN_HtoZA_GEN_INFO_NO_FSR(H, "H");
-            //std::cout << "ONE H FOUND WITH gen_iH: " << (int) gen_iH << std::endl;
+#if HtoZA_GEN_DEBUG
+            std::cout << "ONE H FOUND WITH gen_iH: " << (int) gen_iH << std::endl;
+#endif
         } else if (pdg_id == 36) {
             ASSIGN_HtoZA_GEN_INFO(A, "A");
+#if HtoZA_GEN_DEBUG
+            std::cout << "ONE A FOUND WITH gen_iA: " << (int) gen_iA << std::endl;
+#endif
         } else if (pdg_id == 23) {
             ASSIGN_HtoZA_GEN_INFO(Z, "Z"); 
-            std::cout << " AFTER ASSIGNEMENT: gen_iZ: " << (int) gen_iZ << std::endl;
+#if HtoZA_GEN_DEBUG
+            std::cout << "ONE Z FOUND WITH gen_iZ: " << (int) gen_iZ << std::endl;
+#endif
         } else if (pdg_id == 25) {
             ASSIGN_HtoZA_GEN_INFO(h, "SM Higgs");
         }
@@ -170,7 +176,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             ASSIGN_HtoZA_GEN_INFO(Bbar, "Bbar");        
         }
 
-        // Ignore B decays: why false?????
         if (pruned_decays_from_pdg_id(ip, 5, false))
             continue;
 
@@ -193,17 +198,14 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
           }
     } // End of loop
 
+#if HtoZA_GEN_DEBUG
     if (gen_iH == -1 ) {
         offshellH_counter++;
-        std::cout << "NO H IN THE EVENT!!!!!!!!!!!" << std::endl;
     }
-        std::cout << "offshellH_counter: " << offshellH_counter << std::endl;
-        events_counter++;
-        std::cout << "events_counter: " << events_counter << std::endl;
-
-    std::cout << "gen_iLminus: " << (int) gen_iLminus << std::endl;
-    std::cout << "gen_iLplus: " << (int) gen_iLplus << std::endl;
-
+    std::cout << "offshellH_counter: " << offshellH_counter << std::endl;
+    events_counter++;
+    std::cout << "events_counter: " << events_counter << std::endl;
+#endif
 
       // Get the invariant mass of Z+A
       if ((gen_iZ != -1) && (gen_iA != -1)) {
@@ -395,6 +397,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             dilep.ilep2 = ilep2;
             // if the two leptons have opposite sign
             dilep.isOS = leptons[ilep1].charge * leptons[ilep2].charge < 0;
+
             dilep.isPlusMinus = leptons[ilep1].charge > 0 && leptons[ilep2].charge < 0;
             dilep.isMinusPlus = leptons[ilep1].charge < 0 && leptons[ilep2].charge > 0;
             dilep.isMuMu = leptons[ilep1].isMu && leptons[ilep2].isMu;
@@ -403,6 +406,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             dilep.isMuEl = leptons[ilep1].isMu && leptons[ilep2].isEl;
             // if the two leptons have same flavour
             dilep.isSF = dilep.isMuMu || dilep.isElEl;
+
             dilep.DR_l_l = ROOT::Math::VectorUtil::DeltaR(leptons[ilep1].p4, leptons[ilep2].p4);
             dilep.DPhi_l_l = fabs(ROOT::Math::VectorUtil::DeltaPhi(leptons[ilep1].p4, leptons[ilep2].p4));
             dilep.ht_l_l = leptons[ilep1].p4.Pt() + leptons[ilep2].p4.Pt();
@@ -423,14 +427,15 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
                 dilep.trigger_efficiency_downVariated = 1.;
                 dilep.trigger_efficiency_upVariated = 1.;
             } else {
-                fillTriggerEfficiencies(leptons[ilep1], leptons[ilep2], dilep); 
+                fillTriggerEfficiencies(leptons[ilep1], leptons[ilep2], dilep);
             }
             
             // Some selection
             // Note that ID and isolation criteria are in both electron and muon loops
+            // Require that the leptons have opposite sign and same flavor
+            //if (!dilep.isOS || !dilep.isSF)
             if (!dilep.isOS)
-                continue;
-            // Should I have also a "if (!dilep.isSF) continue;" ??
+			    continue;
 
             // FIXME L1 EMTF bug mitigation -- cut the overlap on data if it's a run affected by the bug
             // On MC, apply the fraction of lumi the bug was not present
@@ -475,7 +480,36 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     if (ll.size() > 1) {
         ll.resize(1); // discard all the elements beyond the first one
     }
-    
+
+
+    // ***** 
+    // Adding MET(s) 
+    // *****
+    HtoZA::Met mymet;
+    mymet.p4 = pf_met.p4;
+    mymet.gen_matched = false;
+    mymet.gen_p4 = null_p4;
+    mymet.gen_DR = -1.;
+    mymet.gen_DPhi = -1.;
+    mymet.gen_DPtOverPt = -10.;
+    if (!event.isRealData())
+    { // genMet is not constructed in the framework, so construct it manually out of the neutrinos hanging around the mc particles
+        const GenParticlesProducer& gp = producers.get<GenParticlesProducer>("gen_particles");
+        for (unsigned int ip = 0; ip < gp.pruned_p4.size(); ip++) {
+            std::bitset<15> flags (gp.pruned_status_flags[ip]);
+            if (!flags.test(13)) continue; // take the last copies
+            if (abs(gp.pruned_pdg_id[ip]) == 12 || abs(gp.pruned_pdg_id[ip]) == 14 || abs(gp.pruned_pdg_id[ip]) == 16)
+            {
+                mymet.gen_matched = true;
+                mymet.gen_p4 += gp.pruned_p4[ip];
+            }
+        }
+        mymet.gen_DR = mymet.gen_matched ? ROOT::Math::VectorUtil::DeltaR(mymet.p4, mymet.gen_p4) : -1.;
+        mymet.gen_DPhi = mymet.gen_matched ? fabs(ROOT::Math::VectorUtil::DeltaPhi(mymet.p4, mymet.gen_p4)) : -1.;
+        mymet.gen_DPtOverPt = mymet.gen_matched ? (mymet.p4.Pt() - mymet.gen_p4.Pt()) / mymet.p4.Pt() : -10.;
+    }
+    met.push_back(mymet);
+
 
     // ***** 
     // Jets and dijets 
@@ -497,7 +531,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
             myjet.CSV = alljets.getBTagDiscriminant(ijet, "pfCombinedInclusiveSecondaryVertexV2BJetTags");
             myjet.CMVAv2 = alljets.getBTagDiscriminant(ijet, "pfCombinedMVAV2BJetTags");
-            float mybtag = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName); // e.g. m_jet_bDiscrName = 'CSV'
+            float mybtag = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName);
             //myjet.btagL = mybtag > m_jet_bDiscrCut_loose;
             myjet.btag_M = mybtag > m_jet_bDiscrCut_medium;
             //myjet.btagT = mybtag > m_jet_bDiscrCut_tight;
@@ -512,7 +546,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             //light jets:
             myjet.gen_l = (alljets.hadronFlavor[ijet]) < 4;
 
-            // We don't want a lepton close to the jet, right??????
+            // We don't want a lepton close to the jet
             bool isThereACloseSelectedLepton = false;
             for (auto& mylepton: leptons) {
                 if (ROOT::Math::VectorUtil::DeltaR(myjet.p4, mylepton.p4) < m_minDR_l_j_Cut) {
@@ -526,8 +560,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
 
             jets.push_back(myjet);
-        } //end if 
-    }// end loop over jets
+        }
+    } // end of loop over jets
 
     // Do NOT change the loop logic here: we expect [0] to be made out of the leading jets
     for (unsigned int ijet1 = 0; ijet1 < jets.size(); ijet1++)
@@ -540,7 +574,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             myjj.ijet1 = ijet1;
             myjj.ijet2 = ijet2;
             // Commented things
-            // What's btag_M?????????????????????????????????
             myjj.btag_MM = jets[ijet1].btag_M && jets[ijet2].btag_M;
             // Commented things
             myjj.sumCSV = jets[ijet1].CSV + jets[ijet2].CSV;
@@ -561,8 +594,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             myjj.gen_cl = (jets[ijet1].gen_c && jets[ijet2].gen_l) || (jets[ijet1].gen_l && jets[ijet2].gen_c);
             myjj.gen_ll = (jets[ijet1].gen_l && jets[ijet2].gen_l);
             jj.push_back(myjj);
-        } //end loop wtih jet2
-    } //end loop with jet1
+        } //end of loop wtih jet2
+    } //end of loop with jet1
 
     // have the jj collection sorted by ht
     std::sort(jj.begin(), jj.end(), [&](HtoZA::Dijet& a, HtoZA::Dijet& b){return a.p4.Pt() > b.p4.Pt();});
@@ -645,7 +678,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             mylljj.DPhi_ll_jj = fabs(ROOT::Math::VectorUtil::DeltaPhi(ll[ill].p4, jj[ijj].p4));
             mylljj.MT_fullsystem = mylljj.p4.Mt();
             mylljj.melaAngles = getMELAAngles(ll[ill].p4, jj[ijj].p4, leptons[ilep1].p4, leptons[ilep2].p4, jets[ijet1].p4, jets[ijet2].p4);
-            mylljj.visMelaAngles = getMELAAngles(ll[ill].p4, jj[ijj].p4, leptons[ilep1].p4, leptons[ilep2].p4, jets[ijet1].p4, jets[ijet2].p4); // only take the visible part of the H(ww) candidate - WHAT??????????????
+            mylljj.visMelaAngles = getMELAAngles(ll[ill].p4, jj[ijj].p4, leptons[ilep1].p4, leptons[ilep2].p4, jets[ijet1].p4, jets[ijet2].p4);
             
             // Compute MT2. See https://arxiv.org/pdf/1309.6318v1.pdf and https://arxiv.org/pdf/1411.4312v5.pdf
             // No need to compute MT in this case, right? It uses invisible momenta that in this case we don't have
@@ -675,8 +708,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             }
             // Fill
             lljj.push_back(mylljj);
-        } //end loop over jj
-    } //end loop over ll
+        } //end of loop over jj
+    } //end of loop over ll
 
     std::sort(lljj.begin(), lljj.end(), [&](HtoZA::DileptonDijet& a, const HtoZA::DileptonDijet& b){ return a.sumCMVAv2 > b.sumCMVAv2; });
 
@@ -686,22 +719,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     }
 
 
-    /*
-    TH1F *mass_lljj = new TH1F("h1", "m_lljj", 1500, 0, 2000);
-
-    if(lljj.size() != 0) {
-        mass_lljj->Fill(lljj.at(0).p4.M());
-        std::cout << "lljj.at(0).p4.M(): " << lljj.at(0).p4.M() << std::endl;
-    } else { std::cout << "lljj is empty!" << std::endl;
-      }
-
-    
-    TCanvas c1("canvas", "canvas", 1024, 768);
-    c1.cd();
-    mass_lljj->Draw();
-    c1.SaveAs("m_lljj.pdf");
-    */
-
     // ***** ***** *****
     // Event variables
     // ***** ***** *****
@@ -709,13 +726,14 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     // HT: the two selected leptons - if present - plus all selected jets
     HT = 0;
     if (lljj.size() > 0)
-        // take the first lljj since it's been resized: it has only one entry! :-)
+        // take the first lljj since it's been resized: it has only one entry
         HT += lljj[0].lep1_p4.Pt() + lljj[0].lep2_p4.Pt();
     for (unsigned int ijet=0; ijet < jets.size(); ijet++) {
         HT += jets[ijet].p4.Pt();
     }
 
     nJetsL = jets.size();  //We selected the jets to be all loose
+	// Count the number of b-tagged jets
     if (! doingSystematics()) {
         nBJetsM = 0;
         for (unsigned int ijet = 0; ijet < jets.size(); ijet++) {
@@ -754,6 +772,372 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
         count_has2leptons_mumu_1lljj_2btagM += tmp_count_has2leptons_mumu_1lljj_2btagM;
     } //end if (! doingSystematics())
 
+
+
+
+    if (!event.isRealData() && !doingSystematics())
+	{
+// ***** ***** *****
+// Get the MC truth information on the hard process
+// ***** ***** *****
+// from https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/DataFormats/HepMCCandidate/interface/GenStatusFlags.h
+//    enum StatusBits {
+//0      kIsPrompt = 0,
+//1      kIsDecayedLeptonHadron,
+//2      kIsTauDecayProduct,
+//3      kIsPromptTauDecayProduct,
+//4      kIsDirectTauDecayProduct,
+//5      kIsDirectPromptTauDecayProduct,
+//6      kIsDirectHadronDecayProduct,
+//7      kIsHardProcess,
+//8      kFromHardProcess,
+//9      kIsHardProcessTauDecayProduct,
+//10      kIsDirectHardProcessTauDecayProduct,
+//11      kFromHardProcessBeforeFSR,
+//12      kIsFirstCopy,
+//13      kIsLastCopy,
+//14      kIsLastCopyBeforeFSR
+//    };
+
+
+    // TTBAR MC TRUTH
+    const GenParticlesProducer& gen_particles = producers.get<GenParticlesProducer>("gen_particles");
+		
+    // 'Pruned' particles are from the hard process
+    // 'Packed' particles are stable particles
+
+
+#if TT_GEN_DEBUG
+    std::function<void(size_t)> print_mother_chain = [&gen_particles, &print_mother_chain](size_t p) {
+
+	if (gen_particles.pruned_mothers_index[p].empty()) {
+	    std::cout << std::endl;
+		return;
+	}
+
+	size_t index = gen_particles.pruned_mothers_index[p][0];
+	    std::cout << " <- #" << index << "(" << gen_particles.pruned_pdg_id[index] << ")";
+		print_mother_chain(index);
+    };
+#endif
+
+    std::function<bool(size_t, size_t)> pruned_decays_from = [&pruned_decays_from, &gen_particles](size_t particle_index, size_t mother_index) -> bool {
+        // Iterator over all pruned particles to find if the particle `particle_index` has `mother_index` in its decay history
+        if (gen_particles.pruned_mothers_index[particle_index].empty())
+            return false;
+
+        size_t index = gen_particles.pruned_mothers_index[particle_index][0];
+
+        if (index == mother_index) {
+            return true;
+        }
+
+        if (pruned_decays_from(index, mother_index))
+            return true;
+
+        return false;
+    };
+
+#define ASSIGN_INDEX( X ) \
+    if (flags.isLastCopy()) { \
+	    gen_##X = i; \
+	}\
+	if (flags.isFirstCopy()) { \
+	    gen_##X##_beforeFSR = i; \
+	}
+
+// Assign index to X if it's empty, or Y if not
+#define ASSIGN_INDEX2(X, Y, ERROR) \
+    if (flags.isLastCopy()) { \
+	    if (gen_##X == 0) \
+		    gen_##X = i; \
+		else if (gen_##Y == 0)\
+		    gen_##Y = i; \
+		else \
+		    std::cout << ERROR << std::endl; \
+	} \
+	if (flags.isFirstCopy()) { \
+	    if (gen_##X##_beforeFSR == 0) \
+		    gen_##X##_beforeFSR = i; \
+		else if (gen_##Y##_beforeFSR == 0)\
+		    gen_##Y##_beforeFSR = i; \
+		else \
+		    std::cout << ERROR << std::endl; \
+	}
+
+    gen_t = 0; // Index of the top quark
+	gen_t_beforeFSR = 0; // Index of the top quark, before any FSR
+	gen_tbar = 0; // Index of the anti-top quark
+	gen_tbar_beforeFSR = 0; // Index of the anti-top quark, before any FSR
+
+	gen_b = 0; // Index of the b quark coming from the top decay
+	gen_b_beforeFSR = 0; // Index of the b quark coming from the top decay, before any FSR
+	gen_bbar = 0; // Index of the anti-b quark coming from the anti-top decay
+	gen_bbar_beforeFSR = 0; // Index of the anti-b quark coming from the anti-top decay, before any FSR
+
+	gen_jet1_t = 0; // Index of the first jet from the top decay chain
+	gen_jet1_t_beforeFSR = 0; // Index of the first jet from the top decay chain, before any FSR
+	gen_jet2_t = 0; // Index of the second jet from the top decay chain
+	gen_jet2_t_beforeFSR = 0; // Index of the second jet from the top decay chain, before any FSR
+
+	gen_jet1_tbar = 0; // Index of the first jet from the anti-top decay chain
+	gen_jet1_tbar_beforeFSR = 0; // Index of the first jet from the anti-top decay chain, before any FSR
+	gen_jet2_tbar = 0; // Index of the second jet from the anti-top decay chain
+	gen_jet2_tbar_beforeFSR = 0; // Index of the second jet from the anti-top decay chain, before any FSR
+
+	gen_lepton_t = 0; // Index of the lepton from the top decay chain
+	gen_lepton_t_beforeFSR = 0; // Index of the lepton from the top decay chain, before any FSR
+	gen_neutrino_t = 0; // Index of the neutrino from the top decay chain
+	gen_neutrino_t_beforeFSR = 0; // Index of the neutrino from the top decay chain, before any FSR
+
+	gen_lepton_tbar = 0; // Index of the lepton from the anti-top decay chain
+	gen_lepton_tbar_beforeFSR = 0; // Index of the lepton from the anti-top decay chain, before any FSR
+	gen_neutrino_tbar = 0; // Index of the neutrino from the anti-top decay chain
+	gen_neutrino_tbar_beforeFSR = 0; // Index of the neutrino from the anti-top decay chain, before any FSR
+	for (size_t i = 0; i < gen_particles.pruned_pdg_id.size(); i++) {
+
+	    int16_t pdg_id = gen_particles.pruned_pdg_id[i];
+		uint16_t a_pdg_id = std::abs(pdg_id);
+
+		// We only care of particles with PDG id <= 16 (16 is neutrino tau)
+		if (a_pdg_id > 16)
+		    continue;
+
+		GenStatusFlags flags(gen_particles.pruned_status_flags[i]);
+
+		if (! flags.isLastCopy() && ! flags.isFirstCopy())
+		    continue;
+
+		if (! flags.fromHardProcess())
+		    continue;
+
+#if TT_GEN_DEBUG
+        std::cout << "---" << std::endl;
+	    std::cout << "Gen particle #" << i << ": PDG id: " << gen_particles.pruned_pdg_id[i];
+	    print_mother_chain(i);
+	    flags.dump();
+#endif
+
+        if (pdg_id == 6) {
+		    ASSIGN_INDEX(t);
+			continue;
+		} else if (pdg_id == -6) {
+		    ASSIGN_INDEX(tbar);
+			continue;
+		}
+
+		if (gen_t == 0 || gen_tbar == 0) {
+		    // Don't bother if we don't have found the tops
+			continue;
+		}
+
+		bool from_t_decay = pruned_decays_from(i, gen_t);
+		bool from_tbar_decay = pruned_decays_from(i, gen_tbar);
+
+		// Only keep particles coming from the tops decay
+		if (! from_t_decay && ! from_tbar_decay)
+		    continue;
+
+		if (pdg_id == 5) {
+		    // Maybe it's a b coming from the W decay
+			if (!flags.isFirstCopy() && flags.isLastCopy() && gen_b == 0) {
+
+			    // This can be a B decaying from a W
+				// However, we can't rely on the presence of the W in the decay chain, as it may be generator specific
+				// Since it's the last copy (ie, after FSR), we can check if this B comes from the B assigned to the W decay (ie, gen_jet1_t_beforeFSR, gen_jet2_t_beforeFSR)
+				// If yes, then it's not the B coming directly from the top decay
+				if ((gen_jet1_t_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet1_t_beforeFSR]) == 5) ||
+				    (gen_jet2_t_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet2_t_beforeFSR]) == 5) ||
+					(gen_jet1_tbar_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet1_tbar_beforeFSR]) == 5) ||
+					(gen_jet2_tbar_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet2_tbar_beforeFSR]) == 5)) {
+
+
+#if TT_GEN_DEBUG
+                    std::cout << "A quark coming from W decay is a b" << std::endl;
+#endif
+
+                    if (! (gen_jet1_tbar_beforeFSR != 0 && pruned_decays_from(i, gen_jet1_tbar_beforeFSR)) &&
+					    ! (gen_jet2_tbar_beforeFSR != 0 && pruned_decays_from(i, gen_jet2_tbar_beforeFSR)) &&
+						! (gen_jet1_t_beforeFSR != 0 && pruned_decays_from(i, gen_jet1_t_beforeFSR)) &&
+						! (gen_jet2_t_beforeFSR != 0 && pruned_decays_from(i, gen_jet2_t_beforeFSR))) {
+#if TT_GEN_DEBUG
+                        std::cout << "This after-FSR b quark is not coming from a W decay" << std::endl;
+#endif
+                        gen_b = i;
+					    continue;
+				    }
+#if TT_GEN_DEBUG
+                    else {
+					    std::cout << "This after-FSR b quark comes from a W decay" << std::endl;
+					}
+#endif
+                } else {
+#if TT_GEN_DEBUG
+                    std::cout << "Assigning gen_b" << std::endl;
+#endif
+                    gen_b = i;
+					continue;
+				}
+			} else if (flags.isFirstCopy() && gen_b_beforeFSR == 0) {
+			    gen_b_beforeFSR = i;
+				continue;
+			} else {
+#if TT_GEN_DEBUG
+                std::cout << "This should not happen!" << std::endl;
+#endif
+            }
+		} else if (pdg_id == -5) {
+		    if (!flags.isFirstCopy() && flags.isLastCopy() && gen_bbar == 0) {
+
+			    // This can be a B decaying from a W
+				// However, we can't rely on the presence of the W in the decay chain, as it may be generator specific
+				// Since it's the last copy (ie, after FSR), we can check if this B comes from the B assigned to the W decay (ie, gen_jet1_t_beforeFSR, gen_jet2_t_beforeFSR)
+				// If yes, then it's not the B coming directly from the top decay
+				if ((gen_jet1_t_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet1_t_beforeFSR]) == 5) ||
+				    (gen_jet2_t_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet2_t_beforeFSR]) == 5) ||
+					(gen_jet1_tbar_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet1_tbar_beforeFSR]) == 5) ||
+					(gen_jet2_tbar_beforeFSR != 0 && std::abs(gen_particles.pruned_pdg_id[gen_jet2_tbar_beforeFSR]) == 5)) {
+
+#if TT_GEN_DEBUG
+                    std::cout << "A quark coming from W decay is a bbar" << std::endl;
+#endif
+
+                    if (! (gen_jet1_tbar_beforeFSR != 0 && pruned_decays_from(i, gen_jet1_tbar_beforeFSR)) &&
+					    ! (gen_jet2_tbar_beforeFSR != 0 && pruned_decays_from(i, gen_jet2_tbar_beforeFSR)) &&
+						! (gen_jet1_t_beforeFSR != 0 && pruned_decays_from(i, gen_jet1_t_beforeFSR)) &&
+						! (gen_jet2_t_beforeFSR != 0 && pruned_decays_from(i, gen_jet2_t_beforeFSR))) {
+#if TT_GEN_DEBUG
+                        std::cout << "This after-fsr b anti-quark is not coming from a W decay" << std::endl;
+#endif
+                        gen_bbar = i;
+						continue;
+					}
+#if TT_GEN_DEBUG
+                    else {
+					    std::cout << "This after-fsr b anti-quark comes from a W decay" << std::endl;
+					}
+#endif
+                } else {
+#if TT_GEN_DEBUG
+                    std::cout << "Assigning gen_bbar" << std::endl;
+#endif
+                    gen_bbar = i;
+					continue;
+				}
+			} else if (flags.isFirstCopy() && gen_bbar_beforeFSR == 0) {
+			    gen_bbar_beforeFSR = i;
+				continue;
+			}
+		}
+
+		if ((gen_tbar == 0) || (gen_t == 0))
+		    continue;
+
+		if (gen_t != 0 && from_t_decay) {
+#if TT_GEN_DEBUG
+        std::cout << "Coming from the top chain decay" << std::endl;
+#endif
+            if (a_pdg_id >= 1 && a_pdg_id <= 5) {
+			    ASSIGN_INDEX2(jet1_t, jet2_t, "Error: more than two quarks coming from top decay");
+			} else if (a_pdg_id == 11 || a_pdg_id == 13 || a_pdg_id == 15) {
+			    ASSIGN_INDEX(lepton_t);
+		    } else if (a_pdg_id == 12 || a_pdg_id == 14 || a_pdg_id == 16) {
+			    ASSIGN_INDEX(neutrino_t);
+			} else {
+			    std::cout << "Error: unknown particle coming from top decay - #" << i << " ; PDG Id: " << pdg_id << std::endl;
+			}
+		} else if (gen_tbar != 0 && from_tbar_decay) {
+#if TT_GEN_DEBUG
+        std::cout << "Coming from the anti-top chain decay" << std::endl;
+#endif
+            if (a_pdg_id >= 1 && a_pdg_id <= 5) {
+			    ASSIGN_INDEX2(jet1_tbar, jet2_tbar, "Error: more than two quarks coming from anti-top decay");
+		    } else if (a_pdg_id == 11 || a_pdg_id == 13 || a_pdg_id == 15) {
+			    ASSIGN_INDEX(lepton_tbar);
+			} else if (a_pdg_id == 12 || a_pdg_id == 14 || a_pdg_id == 16) {
+			    ASSIGN_INDEX(neutrino_tbar);
+		    } else {
+			    std::cout << "Error: unknown particle coming from anti-top decay - #" << i << " ; PDG Id: " << pdg_id << std::endl;
+			}
+		}
+	}
+
+	if (!gen_t || !gen_tbar) {
+#if TT_GEN_DEBUG
+        std::cout << "This is not a ttbar event" << std::endl;
+#endif
+        gen_ttbar_decay_type = NotTT;
+		return;
+	}
+
+	if ((gen_jet1_t != 0) && (gen_jet2_t != 0) && (gen_jet1_tbar != 0) && (gen_jet2_tbar != 0)) {
+#if TT_GEN_DEBUG
+        std::cout << "Hadronic ttbar decay" << std::endl;
+#endif
+        gen_ttbar_decay_type = Hadronic;
+	} else if (
+	        ((gen_lepton_t != 0) && (gen_lepton_tbar == 0)) ||
+			((gen_lepton_t == 0) && (gen_lepton_tbar != 0))
+			) {
+
+#if TT_GEN_DEBUG
+        std::cout << "Semileptonic ttbar decay" << std::endl;
+#endif
+
+        uint16_t lepton_pdg_id;
+		if (gen_lepton_t != 0)
+		    lepton_pdg_id = std::abs(gen_particles.pruned_pdg_id[gen_lepton_t]);
+		else
+		    lepton_pdg_id = std::abs(gen_particles.pruned_pdg_id[gen_lepton_tbar]);
+
+		if (lepton_pdg_id == 11)
+		    gen_ttbar_decay_type = Semileptonic_e;
+		else if (lepton_pdg_id == 13)
+		    gen_ttbar_decay_type = Semileptonic_mu;
+		else
+		    gen_ttbar_decay_type = Semileptonic_tau;
+	} else if (gen_lepton_t != 0 && gen_lepton_tbar != 0) {
+	    uint16_t lepton_t_pdg_id = std::abs(gen_particles.pruned_pdg_id[gen_lepton_t]);
+		uint16_t lepton_tbar_pdg_id = std::abs(gen_particles.pruned_pdg_id[gen_lepton_tbar]);
+
+#if TT_GEN_DEBUG
+        std::cout << "Dileptonic ttbar decay" << std::endl;
+#endif
+
+        if (lepton_t_pdg_id == 11 && lepton_tbar_pdg_id == 11)
+		    gen_ttbar_decay_type = Dileptonic_ee;
+	    else if (lepton_t_pdg_id == 13 && lepton_tbar_pdg_id == 13)
+		    gen_ttbar_decay_type = Dileptonic_mumu;
+	    else if (lepton_t_pdg_id == 15 && lepton_tbar_pdg_id == 15)
+		    gen_ttbar_decay_type = Dileptonic_tautau;
+		else if (
+		        (lepton_t_pdg_id == 11 && lepton_tbar_pdg_id == 13) ||
+				(lepton_t_pdg_id == 13 && lepton_tbar_pdg_id == 11)
+				) {
+			gen_ttbar_decay_type = Dileptonic_mue;
+		}
+		else if (
+		        (lepton_t_pdg_id == 11 && lepton_tbar_pdg_id == 15) ||
+				(lepton_t_pdg_id == 15 && lepton_tbar_pdg_id == 11)
+				) {
+			gen_ttbar_decay_type = Dileptonic_etau;
+		}
+		else if (
+		        (lepton_t_pdg_id == 13 && lepton_tbar_pdg_id == 15) ||
+				(lepton_t_pdg_id == 15 && lepton_tbar_pdg_id == 13)
+				) {
+			gen_ttbar_decay_type = Dileptonic_mutau;
+		} else {
+		    std::cout << "Error: unknown dileptonic ttbar decay." << std::endl;
+			gen_ttbar_decay_type = NotTT;
+			return;
+		}
+	} else {
+	    std::cout << "Error: unknown ttbar decay." << std::endl;
+		gen_ttbar_decay_type = UnknownTT;
+	}
+	} // end of if !event.isRealData()
+
 }
 
 void HtoZAAnalyzer::endJob(MetadataManager& metadata) {
@@ -775,8 +1159,3 @@ void HtoZAAnalyzer::endJob(MetadataManager& metadata) {
         metadata.add(this->m_name + "_count_has2leptons_mumu_1lljj_2btagM", count_has2leptons_mumu_1lljj_2btagM);
     }
 }
-
-
-
-
-

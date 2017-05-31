@@ -50,7 +50,7 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
             muonLooseIsoCut = cms.untracked.double(.25), # https://twiki.cern.ch/twiki/bin/view/CMS/TopMUO 
             muonTightIsoCut = cms.untracked.double(.15), # https://twiki.cern.ch/twiki/bin/view/CMS/TopMUO 
             muonEtaCut = cms.untracked.double(2.4),
-            electrons_loose_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-loose"),
+            electrons_loose_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-loose"), # https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#HLT_safe_selection_for_2016_data
             electrons_medium_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-medium"),
             electrons_tight_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-tight"),
             electrons_hlt_safe_wp_name = cms.untracked.string("cutBasedElectronHLTPreselection-Summer16-V1"),
@@ -71,17 +71,17 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
 
             hlt_efficiencies = cms.untracked.PSet(
 
-                    IsoMu17leg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17Mu8_IsoMu17leg.json'),
-                    IsoMu8orIsoTkMu8leg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17TkMu8_IsoMu8legORTkMu8leg.json'),
+                    IsoMu17leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17Mu8_IsoMu17leg.json'),
+                    IsoMu8orIsoTkMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17TkMu8_IsoMu8legORTkMu8leg.json'),
 
-                    DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
-                    DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
+                    DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
+                    DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
-                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
+                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
+                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
-                    IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
+                    IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
+                    IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
             )
         )
     )
@@ -90,7 +90,7 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
 # Remove fat jets
 framework.removeProducer('fat_jets')
 
-framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3_llbb/HtoZAAnalysis/data/triggers.xml')
+framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/triggers.xml')
 # framework.getProducer('jets').parameters.cut = cms.untracked.string("pt > 20")
 #framework.getProducer('jets').parameters.computeRegression = cms.untracked.bool(True)
 
@@ -104,7 +104,7 @@ framework.applyElectronSmearing()
 
 # if not runOnData:
 #     framework.smearJets(resolutionFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt', scaleFactorFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_SF_AK4PFchs.txt')
-#     framework.doSystematics(['jec', 'jer'], jec={'uncertaintiesFile': 'cp3_llbb/HtoZAAnalysis/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt', 'splitBySources': True})
+#     framework.doSystematics(['jec', 'jer'], jec={'uncertaintiesFile': 'cp3_llbb/ZAAnalysis/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt', 'splitBySources': True})
 
 process = framework.create()
 
@@ -120,7 +120,7 @@ else:
             #'/store/mc/RunIISummer16MiniAODv2/GluGluToHHTo2B2VTo2L2Nu_node_SM_13TeV-madgraph-v2/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/2E1015E2-71D9-E611-911E-02163E019E19.root'
 	    
             # Signal: H->ZA - mH=1000, mA=200
-	    #'/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-1000_MA-200_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/80000/12283330-9F3A-E611-9513-0025907B4F30.root'
+	        #'/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-1000_MA-200_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/80000/12283330-9F3A-E611-9513-0025907B4F30.root'
 
             # Signal: H->ZA - mH=500, mA=100
             '/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/20000/1287F415-023B-E611-A374-FA163E48F4D0.root'

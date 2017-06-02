@@ -15,7 +15,10 @@ if runOnData :
     globalTag_ = '80X_dataRun2_2016SeptRepro_v7'
     processName_ = 'RECO'
 
-framework = Framework.Framework(runOnData, eras.Run2_25ns, globalTag=globalTag_, processName=processName_)
+options = CmdLine(defaults=dict(runOnData=0, era="25ns", globalTag='80X_dataRun2_2016SeptRepro_v7'))
+
+framework = Framework.Framework(options)
+
 
 framework.addAnalyzer('hZA_analyzer', cms.PSet(
         type = cms.string('hZA_analyzer'),
@@ -93,6 +96,8 @@ framework.removeProducer('fat_jets')
 framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/triggers.xml')
 # framework.getProducer('jets').parameters.cut = cms.untracked.string("pt > 20")
 #framework.getProducer('jets').parameters.computeRegression = cms.untracked.bool(True)
+
+framework.getProducer('electrons').parameters.scale_factors.id_mediumplushltsafe_ZA = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/ScaleFactors/Electron_MediumPlusHLTSafeID_moriond17.json')
 
 if runOnData:
     framework.redoJEC()

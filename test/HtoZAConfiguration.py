@@ -97,7 +97,7 @@ framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3
 # framework.getProducer('jets').parameters.cut = cms.untracked.string("pt > 20")
 #framework.getProducer('jets').parameters.computeRegression = cms.untracked.bool(True)
 
-framework.getProducer('electrons').parameters.scale_factors.id_mediumplushltsafe_ZA = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/ScaleFactors/Electron_MediumPlusHLTSafeID_moriond17.json')
+framework.getProducer('electrons').parameters.scale_factors.id_mediumplushltsafe_hh = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/ScaleFactors/Electron_MediumPlusHLTSafeID_moriond17.json')
 
 if runOnData:
     framework.redoJEC()

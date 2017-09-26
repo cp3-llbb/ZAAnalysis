@@ -19,6 +19,8 @@ options = CmdLine(defaults=dict(runOnData=0, era="25ns", globalTag='80X_dataRun2
 
 framework = Framework.Framework(options)
 
+from cp3_llbb.Framework.JetsProducer import discriminators_deepFlavour
+framework.redoJEC(addBtagDiscriminators=discriminators_deepFlavour)
 
 framework.addAnalyzer('hZA_analyzer', cms.PSet(
         type = cms.string('hZA_analyzer'),
@@ -66,7 +68,8 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
 
             # BTAG INFO
             # Working points from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
-            discr_name = cms.untracked.string("pfCombinedMVAV2BJetTags"),
+            #discr_name = cms.untracked.string("pfCombinedMVAV2BJetTags"),
+            discr_name = cms.untracked.string("pfDeepCSVJetTags:probb"),
             discr_cut_loose =  cms.untracked.double(-0.5884),
             discr_cut_medium =  cms.untracked.double(0.4432),
             discr_cut_tight =  cms.untracked.double(0.9432),
@@ -139,4 +142,4 @@ else:
 
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.source.skipEvents = cms.untracked.uint32(10)
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(200))

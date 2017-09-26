@@ -129,7 +129,6 @@ else:
 
             # Signal: H->ZA - mH=500, mA=100
             '/store/mc/RunIISummer16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/9475A8FB-25DF-E611-AFA8-20CF3019DF02.root'
-            # '/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/20000/1287F415-023B-E611-A374-FA163E48F4D0.root'
 
             # Background: TT
             # '/store/mc/RunIISummer16MiniAODv2/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/00ED79D3-CFC1-E611-B748-3417EBE64483.root'

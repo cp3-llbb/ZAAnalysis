@@ -57,12 +57,16 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
             electrons_medium_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-medium"),
             electrons_tight_wp_name = cms.untracked.string("cutBasedElectronID-Summer16-80X-V1-tight"),
             electrons_hlt_safe_wp_name = cms.untracked.string("cutBasedElectronHLTPreselection-Summer16-V1"),
+            electrons_mva_wp80_name = cms.untracked.string("mvaEleID-Spring16-GeneralPurpose-V1-wp80"),
+            electrons_mva_wp90_name = cms.untracked.string("mvaEleID-Spring16-GeneralPurpose-V1-wp90"),
+            electrons_mva_HZZ_loose_wp_name = cms.untracked.string("mvaEleID-Spring16-HZZ-V1-wpLoose"),
+            
             jetEtaCut = cms.untracked.double(2.4),
             jetPtCut = cms.untracked.double(20),
 
             # BTAG INFO
             # Working points from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
-            discr_name =  cms.untracked.string("pfCombinedMVAV2BJetTags"),
+            discr_name = cms.untracked.string("pfCombinedMVAV2BJetTags"),
             discr_cut_loose =  cms.untracked.double(-0.5884),
             discr_cut_medium =  cms.untracked.double(0.4432),
             discr_cut_tight =  cms.untracked.double(0.9432),
@@ -97,8 +101,6 @@ framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3
 # framework.getProducer('jets').parameters.cut = cms.untracked.string("pt > 20")
 #framework.getProducer('jets').parameters.computeRegression = cms.untracked.bool(True)
 
-framework.getProducer('electrons').parameters.scale_factors.id_mediumplushltsafe_hh = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/ScaleFactors/Electron_MediumPlusHLTSafeID_moriond17.json')
-
 if runOnData:
     framework.redoJEC()
 
@@ -121,19 +123,17 @@ else:
     process.framework.treeFlushSize = cms.untracked.uint64(5 * 1024 * 1024)
 
     process.source.fileNames = cms.untracked.vstring(
-            # Signal
-            #'/store/mc/RunIISummer16MiniAODv2/GluGluToHHTo2B2VTo2L2Nu_node_SM_13TeV-madgraph-v2/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/2E1015E2-71D9-E611-911E-02163E019E19.root'
 	    
             # Signal: H->ZA - mH=1000, mA=200
-	        #'/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-1000_MA-200_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/80000/12283330-9F3A-E611-9513-0025907B4F30.root'
+            # '/store/mc/RunIISummer16MiniAODv2/HToZATo2L2B_MH-1000_MA-200_13TeV-madgraph-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/100000/A2BC660D-17DD-E611-9B31-001517F7F950.root'
 
             # Signal: H->ZA - mH=500, mA=100
-            '/store/mc/RunIISpring16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/20000/1287F415-023B-E611-A374-FA163E48F4D0.root'
+            '/store/mc/RunIISummer16MiniAODv2/HToZATo2L2B_MH-500_MA-100_13TeV-madgraph-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/9475A8FB-25DF-E611-AFA8-20CF3019DF02.root'
 
-            # TT
+            # Background: TT
             # '/store/mc/RunIISummer16MiniAODv2/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/00ED79D3-CFC1-E611-B748-3417EBE64483.root'
 
-            # DY
+            # Background: DY
             # '/store/mc/RunIISummer16MiniAODv2/DYToLL_2J_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/100000/00CEFB4F-C1D2-E611-BBF4-7845C4FC3C11.root<Paste>'
         )
 

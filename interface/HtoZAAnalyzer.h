@@ -42,6 +42,9 @@ class HtoZAAnalyzer: public Framework::Analyzer {
             m_electron_medium_wp_name = config.getUntrackedParameter<std::string>("electrons_medium_wp_name");
             m_electron_tight_wp_name = config.getUntrackedParameter<std::string>("electrons_tight_wp_name");
             m_electron_hlt_safe_wp_name = config.getUntrackedParameter<std::string>("electrons_hlt_safe_wp_name");
+            m_electron_mva_wp80_name = config.getUntrackedParameter<std::string>("electrons_mva_wp80_name");
+            m_electron_mva_wp90_name = config.getUntrackedParameter<std::string>("electrons_mva_wp80_name");
+            m_electron_mva_HZZ_loose_wp_name = config.getUntrackedParameter<std::string>("electrons_mva_HZZ_loose_wp_name");
 
             m_jetEtaCut = config.getUntrackedParameter<double>("jetEtaCut", 2.4);
             m_jetPtCut = config.getUntrackedParameter<double>("jetPtCut", 20);
@@ -259,6 +262,9 @@ class HtoZAAnalyzer: public Framework::Analyzer {
         std::string m_electron_medium_wp_name;
         std::string m_electron_tight_wp_name;
         std::string m_electron_hlt_safe_wp_name;
+        std::string m_electron_mva_wp80_name;
+        std::string m_electron_mva_wp90_name;
+        std::string m_electron_mva_HZZ_loose_wp_name;
         bool m_applyBJetRegression;
         std::unordered_map<std::string, std::unique_ptr<BinnedValues>> m_hlt_efficiencies;
 

@@ -307,13 +307,15 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
         
         bool result = allelectrons.ids[index][m_electron_hlt_safe_wp_name];
 
-        // Add dxy and dz cuts described at https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Offline_selection_criteria
+        // Add dxy and dz cuts described at https://github.com/latinos/LatinoAnalysis/blob/master/Gardener/python/variables/LeptonSel_cfg.py 
         if (electron->isEB()) {
             result &= std::abs(allelectrons.dz[index]) < 0.1;
             result &= std::abs(allelectrons.dxy[index]) < 0.05;
+            result &= std::abs(allelectrons.relativeIsoR04_withEA[index]) < 0.05880;
         } else {
             result &= std::abs(allelectrons.dz[index]) < 0.2;
             result &= std::abs(allelectrons.dxy[index]) < 0.1;
+            result &= std::abs(allelectrons.relativeIsoR04_withEA[index]) < 0.0571;
         }
 
         return result;
@@ -328,7 +330,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
         {
             // some selection
             // Ask for medium ID
-            if (!allelectrons.ids[ielectron][m_electron_medium_wp_name])
+            if (!allelectrons.ids[ielectron][m_electron_mva_wp90_name])
                 continue;
 
             HtoZA::Lepton ele;

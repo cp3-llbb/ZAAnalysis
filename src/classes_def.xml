@@ -20,14 +20,19 @@
 	</class>
 	<class name="std::vector<HtoZA::Met>"/>
     <class name="std::vector< std::vector<int> >"/>
-    <class name="HtoZA::Jet" ClassVersion="13">
+    <class name="HtoZA::Jet" ClassVersion="16">
+     <version ClassVersion="16" checksum="3020710553"/>
+     <version ClassVersion="15" checksum="3132017525"/>
+     <version ClassVersion="14" checksum="968223798"/>
      <version ClassVersion="13" checksum="1329421484"/>
      <version ClassVersion="12" checksum="700635934"/>
      <version ClassVersion="11" checksum="1040758844"/>
      <version ClassVersion="10" checksum="194867656"/>
     </class>
     <class name="std::vector<HtoZA::Jet>"/>
-    <class name="HtoZA::Dijet" ClassVersion="12">
+    <class name="HtoZA::Dijet" ClassVersion="14">
+     <version ClassVersion="14" checksum="488957021"/>
+     <version ClassVersion="13" checksum="3802370017"/>
      <version ClassVersion="12" checksum="1627821830"/>
      <version ClassVersion="11" checksum="667858264"/>
      <version ClassVersion="10" checksum="2119876344"/>
@@ -38,7 +43,9 @@
      <version ClassVersion="11" checksum="1424325551"/>
      <version ClassVersion="10" checksum="2939888277"/>
     </class>
-    <class name="HtoZA::DileptonDijet" ClassVersion="10">
+    <class name="HtoZA::DileptonDijet" ClassVersion="12">
+     <version ClassVersion="12" checksum="2135499334"/>
+     <version ClassVersion="11" checksum="2458780906"/>
      <version ClassVersion="10" checksum="1447913207"/>
      <version ClassVersion="12" checksum="2284378963"/>
      <field name="ill" transient="true"/>

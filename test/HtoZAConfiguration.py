@@ -19,6 +19,8 @@ options = CmdLine(defaults=dict(runOnData=0, era="25ns", globalTag='80X_dataRun2
 
 framework = Framework.Framework(options)
 
+from cp3_llbb.Framework.JetsProducer import discriminators_deepFlavour
+framework.redoJEC(addBtagDiscriminators=discriminators_deepFlavour)
 
 framework.addAnalyzer('hZA_analyzer', cms.PSet(
         type = cms.string('hZA_analyzer'),
@@ -66,10 +68,17 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
 
             # BTAG INFO
             # Working points from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
-            discr_name = cms.untracked.string("pfCombinedMVAV2BJetTags"),
-            discr_cut_loose =  cms.untracked.double(-0.5884),
-            discr_cut_medium =  cms.untracked.double(0.4432),
-            discr_cut_tight =  cms.untracked.double(0.9432),
+            discr_name_cMVAv2 = cms.untracked.string("pfCombinedMVAV2BJetTags"),
+            discr_cut_cMVAv2_loose =  cms.untracked.double(-0.5884),
+            discr_cut_cMVAv2_medium =  cms.untracked.double(0.4432),
+            discr_cut_cMVAv2_tight =  cms.untracked.double(0.9432),
+
+            discr_name_deepcsv_probb = cms.untracked.string("pfDeepCSVJetTags:probb"),
+            discr_name_deepcsv_probbb = cms.untracked.string("pfDeepCSVJetTags:probbb"),
+            discr_cut_deepCSV_loose = cms.untracked.double(0.2219),
+            discr_cut_deepCSV_medium = cms.untracked.double(0.6324),
+            discr_cut_deepCSV_tight = cms.untracked.double(0.8958),
+            
 
             minDR_l_j_Cut = cms.untracked.double(0.3),
             hltDRCut = cms.untracked.double(0.1),

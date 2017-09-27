@@ -68,11 +68,17 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
 
             # BTAG INFO
             # Working points from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
-            #discr_name = cms.untracked.string("pfCombinedMVAV2BJetTags"),
-            discr_name = cms.untracked.string("pfDeepCSVJetTags:probb"),
-            discr_cut_loose =  cms.untracked.double(-0.5884),
-            discr_cut_medium =  cms.untracked.double(0.4432),
-            discr_cut_tight =  cms.untracked.double(0.9432),
+            discr_name_cMVAv2 = cms.untracked.string("pfCombinedMVAV2BJetTags"),
+            discr_cut_cMVAv2_loose =  cms.untracked.double(-0.5884),
+            discr_cut_cMVAv2_medium =  cms.untracked.double(0.4432),
+            discr_cut_cMVAv2_tight =  cms.untracked.double(0.9432),
+
+            discr_name_deepcsv_probb = cms.untracked.string("pfDeepCSVJetTags:probb"),
+            discr_name_deepcsv_probbb = cms.untracked.string("pfDeepCSVJetTags:probbb"),
+            discr_cut_deepCSV_loose = cms.untracked.double(0.2219),
+            discr_cut_deepCSV_medium = cms.untracked.double(0.6324),
+            discr_cut_deepCSV_tight = cms.untracked.double(0.8958),
+            
 
             minDR_l_j_Cut = cms.untracked.double(0.3),
             hltDRCut = cms.untracked.double(0.1),
@@ -142,4 +148,4 @@ else:
 
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.source.skipEvents = cms.untracked.uint32(10)
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(200))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))

@@ -48,10 +48,15 @@ class HtoZAAnalyzer: public Framework::Analyzer {
 
             m_jetEtaCut = config.getUntrackedParameter<double>("jetEtaCut", 2.4);
             m_jetPtCut = config.getUntrackedParameter<double>("jetPtCut", 20);
-            m_jet_bDiscrName = config.getUntrackedParameter<std::string>("discr_name", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
-            m_jet_bDiscrCut_loose = config.getUntrackedParameter<double>("discr_cut_loose");
-            m_jet_bDiscrCut_medium = config.getUntrackedParameter<double>("discr_cut_medium");
-            m_jet_bDiscrCut_tight = config.getUntrackedParameter<double>("discr_cut_tight");
+            m_jet_bDiscrName_cMVAv2 = config.getUntrackedParameter<std::string>("discr_name_cmva", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
+            m_jet_bDiscrName_deepCSV_probb = config.getUntrackedParameter<std::string>("discr_name_deepcsv_probb", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
+            m_jet_bDiscrName_deepCSV_probbb = config.getUntrackedParameter<std::string>("discr_name_deepcsv_probbb", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
+            m_jet_bDiscrCut_cMVAv2_loose = config.getUntrackedParameter<double>("discr_cut_cMVAv2_loose");
+            m_jet_bDiscrCut_cMVAv2_medium = config.getUntrackedParameter<double>("discr_cut_cMVAv2_medium");
+            m_jet_bDiscrCut_cMVAv2_tight = config.getUntrackedParameter<double>("discr_cut_cMVAv2_tight");
+            m_jet_bDiscrCut_deepCSV_loose = config.getUntrackedParameter<double>("discr_cut_deepCSV_loose");
+            m_jet_bDiscrCut_deepCSV_medium = config.getUntrackedParameter<double>("discr_cut_deepCSV_medium");
+            m_jet_bDiscrCut_deepCSV_tight = config.getUntrackedParameter<double>("discr_cut_deepCSV_tight");
             m_minDR_l_j_Cut = config.getUntrackedParameter<double>("minDR_l_j_Cut", 0.3);
             m_applyBJetRegression = config.getUntrackedParameter<bool>("applyBJetRegression", false);
 
@@ -254,10 +259,12 @@ class HtoZAAnalyzer: public Framework::Analyzer {
         std::string m_nohf_met_producer;
         float m_electronIsoCut_EB_Loose, m_electronIsoCut_EE_Loose, m_electronIsoCut_EB_Tight, m_electronIsoCut_EE_Tight, m_electronEtaCut, m_leadingElectronPtCut, m_subleadingElectronPtCut;
         float m_muonLooseIsoCut, m_muonTightIsoCut, m_muonEtaCut, m_leadingMuonPtCut, m_subleadingMuonPtCut;
-        float m_jetEtaCut, m_jetPtCut, m_jet_bDiscrCut_loose, m_jet_bDiscrCut_medium, m_jet_bDiscrCut_tight;
+        float m_jetEtaCut, m_jetPtCut, m_jet_bDiscrCut_cMVAv2_loose, m_jet_bDiscrCut_cMVAv2_medium, m_jet_bDiscrCut_cMVAv2_tight, m_jet_bDiscrCut_deepCSV_loose, m_jet_bDiscrCut_deepCSV_medium, m_jet_bDiscrCut_deepCSV_tight;
         float m_minDR_l_j_Cut;
         float m_hltDRCut, m_hltDPtCut;
-        std::string m_jet_bDiscrName;
+        std::string m_jet_bDiscrName_cMVAv2;
+        std::string m_jet_bDiscrName_deepCSV_probb;
+        std::string m_jet_bDiscrName_deepCSV_probbb;
         std::string m_electron_loose_wp_name;
         std::string m_electron_medium_wp_name;
         std::string m_electron_tight_wp_name;

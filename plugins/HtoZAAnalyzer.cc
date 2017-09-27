@@ -533,10 +533,12 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
 
             myjet.CSV = alljets.getBTagDiscriminant(ijet, "pfCombinedInclusiveSecondaryVertexV2BJetTags");
             myjet.CMVAv2 = alljets.getBTagDiscriminant(ijet, "pfCombinedMVAV2BJetTags");
-            float mybtag = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName);
-            //myjet.btagL = mybtag > m_jet_bDiscrCut_loose;
-            myjet.btag_M = mybtag > m_jet_bDiscrCut_medium;
-            //myjet.btagT = mybtag > m_jet_bDiscrCut_tight;
+            myjet.deepCSV = alljets.getBTagDiscriminant(ijet, "pfDeepCSVJetTags:probb") + alljets.getBTagDiscriminant(ijet, "pfDeepCSVJetTags:probbb");
+            float mybtag_cMVAv2 = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_cMVAv2);
+            float mybtag_deepCSV = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_deepCSV_probb) + alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_deepCSV_probbb);
+            // Ask for medium WP discr. cut for both cMVAv2 and deepCSV
+            myjet.btag_cMVAv2_M = mybtag_cMVAv2 > m_jet_bDiscrCut_cMVAv2_medium;
+            myjet.btag_deepCSV_M = mybtag_deepCSV > m_jet_bDiscrCut_deepCSV_medium;
             myjet.gen_matched_bParton = (std::abs(alljets.partonFlavor[ijet]) == 5);
             myjet.gen_matched_bHadron = (alljets.hadronFlavor[ijet]) == 5;
             myjet.gen_matched = alljets.matched[ijet];
@@ -576,10 +578,12 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             myjj.ijet1 = ijet1;
             myjj.ijet2 = ijet2;
             // Commented things
-            myjj.btag_MM = jets[ijet1].btag_M && jets[ijet2].btag_M;
+            myjj.btag_cMVAv2_MM = jets[ijet1].btag_cMVAv2_M && jets[ijet2].btag_cMVAv2_M;
+            myjj.btag_deepCSV_MM = jets[ijet1].btag_deepCSV_M && jets[ijet2].btag_deepCSV_M;
             // Commented things
             myjj.sumCSV = jets[ijet1].CSV + jets[ijet2].CSV;
             myjj.sumCMVAv2 = jets[ijet1].CMVAv2 + jets[ijet2].CMVAv2;
+            myjj.sumDeepCSV = jets[ijet1].deepCSV + jets[ijet2].deepCSV;
             myjj.DR_j_j = ROOT::Math::VectorUtil::DeltaR(jets[ijet1].p4, jets[ijet2].p4);
             myjj.DPhi_j_j = fabs(ROOT::Math::VectorUtil::DeltaPhi(jets[ijet1].p4, jets[ijet2].p4));
             myjj.ht_j_j = jets[ijet1].p4.Pt() + jets[ijet2].p4.Pt();
@@ -637,7 +641,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             // blind copy of the jj content
             mylljj.ijet1 = jj[ijj].ijet1;
             mylljj.ijet2 = jj[ijj].ijet2;
-            mylljj.btag_MM = jj[ijj].btag_MM;
+            mylljj.btag_cMVAv2_MM = jj[ijj].btag_cMVAv2_MM;
+            mylljj.btag_deepCSV_MM = jj[ijj].btag_deepCSV_MM;
             mylljj.sumCSV = jj[ijj].sumCSV;
             mylljj.sumCMVAv2 = jj[ijj].sumCMVAv2;
             mylljj.DR_j_j = jj[ijj].DR_j_j;
@@ -696,7 +701,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
                 tmp_count_has2leptons_muel_1lljj = event_weight;
             if (mylljj.isMuMu)
                 tmp_count_has2leptons_mumu_1lljj = event_weight;
-            if (mylljj.btag_MM)
+            if (mylljj.btag_deepCSV_MM)
             {
                 tmp_count_has2leptons_1lljj_2btagM = event_weight;
                 if (mylljj.isElEl)
@@ -739,7 +744,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     if (! doingSystematics()) {
         nBJetsM = 0;
         for (unsigned int ijet = 0; ijet < jets.size(); ijet++) {
-            if (jets[ijet].btag_M)
+            if (jets[ijet].btag_deepCSV_M)
                 nBJetsM++;
         }
 

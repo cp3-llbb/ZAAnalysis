@@ -19,9 +19,6 @@ options = CmdLine(defaults=dict(runOnData=0, era="25ns", globalTag='80X_dataRun2
 
 framework = Framework.Framework(options)
 
-from cp3_llbb.Framework.JetsProducer import discriminators_deepFlavour
-framework.redoJEC(addBtagDiscriminators=discriminators_deepFlavour)
-
 framework.addAnalyzer('hZA_analyzer', cms.PSet(
         type = cms.string('hZA_analyzer'),
         prefix = cms.string('hZA_'),
@@ -110,16 +107,16 @@ framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3
 # framework.getProducer('jets').parameters.cut = cms.untracked.string("pt > 20")
 #framework.getProducer('jets').parameters.computeRegression = cms.untracked.bool(True)
 
-if runOnData:
-    framework.redoJEC()
+from cp3_llbb.Framework.JetsProducer import discriminators_deepFlavour
+framework.redoJEC(addBtagDiscriminators=discriminators_deepFlavour)
 
 framework.applyMuonCorrection('rochester')
 
 framework.applyElectronRegression()
 framework.applyElectronSmearing()
 
-# if not runOnData:
-#     framework.smearJets(resolutionFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt', scaleFactorFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_SF_AK4PFchs.txt')
+if not runOnData:
+    framework.smearJets(resolutionFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt', scaleFactorFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_SF_AK4PFchs.txt')
 #     framework.doSystematics(['jec', 'jer'], jec={'uncertaintiesFile': 'cp3_llbb/ZAAnalysis/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt', 'splitBySources': True})
 
 process = framework.create()

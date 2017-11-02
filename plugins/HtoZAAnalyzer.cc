@@ -645,6 +645,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             mylljj.btag_deepCSV_MM = jj[ijj].btag_deepCSV_MM;
             mylljj.sumCSV = jj[ijj].sumCSV;
             mylljj.sumCMVAv2 = jj[ijj].sumCMVAv2;
+            mylljj.sumDeepCSV = jj[ijj].sumDeepCSV;
             mylljj.DR_j_j = jj[ijj].DR_j_j;
             mylljj.DPhi_j_j = jj[ijj].DPhi_j_j;
             mylljj.ht_j_j = jj[ijj].ht_j_j;

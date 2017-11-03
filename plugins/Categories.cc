@@ -24,9 +24,14 @@ const std::vector<HtoZA::Dilepton>& DileptonCategory::getDileptons(const Analyze
     return hZA_analyzer.ll;
 }
 
-const std::vector<HtoZA::DileptonDijet>& DileptonCategory::getDileptonDijets(const AnalyzersManager& analyzers) const {
+const std::vector<HtoZA::DileptonDijet>& DileptonCategory::getDileptonDijets_cmva(const AnalyzersManager& analyzers) const {
     const HtoZAAnalyzer& hZA_analyzer = analyzers.get<HtoZAAnalyzer>(m_analyzer_name);
-    return hZA_analyzer.lljj;
+    return hZA_analyzer.lljj_cmva;
+}
+
+const std::vector<HtoZA::DileptonDijet>& DileptonCategory::getDileptonDijets_deepCSV(const AnalyzersManager& analyzers) const {
+    const HtoZAAnalyzer& hZA_analyzer = analyzers.get<HtoZAAnalyzer>(m_analyzer_name);
+    return hZA_analyzer.lljj_deepCSV;
 }
 
 // ***** ***** *****
@@ -48,12 +53,16 @@ bool MuMuCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool MuMuCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_cmva = getDileptonDijets_cmva(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_deepCSV = getDileptonDijets_deepCSV(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (lljj.empty())
+    if (lljj_cmva.empty())
+        return false;
+    
+    if (lljj_deepCSV.empty())
         return false;
 
     // Only look at the first dilepton pair
@@ -95,14 +104,18 @@ bool ElElCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool ElElCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_cmva = getDileptonDijets_cmva(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_deepCSV = getDileptonDijets_deepCSV(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (lljj.empty())
+    if (lljj_cmva.empty())
         return false;
 
+    if (lljj_deepCSV.empty())
+        return false;
+    
     // Only look at the first dilepton pair
     return ll[0].isElEl &&
         (leptons[ll[0].ilep1].p4.Pt() > m_leadingLeptonPtCut) &&
@@ -144,12 +157,16 @@ bool ElMuCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool ElMuCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_cmva = getDileptonDijets_cmva(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_deepCSV = getDileptonDijets_deepCSV(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (lljj.empty())
+    if (lljj_cmva.empty())
+        return false;
+    
+    if (lljj_deepCSV.empty())
         return false;
 
     // Only look at the first dilepton pair
@@ -192,12 +209,16 @@ bool MuElCategory::event_in_category_pre_analyzers(const ProducersManager& produ
 bool MuElCategory::event_in_category_post_analyzers(const ProducersManager& producers, const AnalyzersManager& analyzers) const {
     const std::vector<HtoZA::Lepton>& leptons = getLeptons(analyzers);
     const std::vector<HtoZA::Dilepton>& ll = getDileptons(analyzers);
-    const std::vector<HtoZA::DileptonDijet>& lljj = getDileptonDijets(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_cmva = getDileptonDijets_cmva(analyzers);
+    const std::vector<HtoZA::DileptonDijet>& lljj_deepCSV = getDileptonDijets_deepCSV(analyzers);
 
     if (ll.empty())
         return false;
 
-    if (lljj.empty())
+    if (lljj_cmva.empty())
+        return false;
+    
+    if (lljj_deepCSV.empty())
         return false;
 
     // Only look at the first dilepton pair

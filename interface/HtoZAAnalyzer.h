@@ -104,7 +104,8 @@ class HtoZAAnalyzer: public Framework::Analyzer {
 
         BRANCH(ll, std::vector<HtoZA::Dilepton>);
         BRANCH(jj, std::vector<HtoZA::Dijet>);
-        BRANCH(lljj, std::vector<HtoZA::DileptonDijet>);
+        BRANCH(lljj_cmva, std::vector<HtoZA::DileptonDijet>);
+        BRANCH(lljj_deepCSV, std::vector<HtoZA::DileptonDijet>);
 
         virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&, const AnalyzersManager&, const CategoryManager&) override;
         virtual void registerCategories(CategoryManager& manager, const edm::ParameterSet& config) override;

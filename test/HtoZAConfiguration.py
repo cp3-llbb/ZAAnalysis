@@ -65,7 +65,7 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
 
             # BTAG INFO
             # Working points from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
-            discr_name_cMVAv2 = cms.untracked.string("pfCombinedMVAV2BJetTags"),
+            discr_name_cmva = cms.untracked.string("pfCombinedMVAV2BJetTags"),
             discr_cut_cMVAv2_loose =  cms.untracked.double(-0.5884),
             discr_cut_cMVAv2_medium =  cms.untracked.double(0.4432),
             discr_cut_cMVAv2_tight =  cms.untracked.double(0.9432),

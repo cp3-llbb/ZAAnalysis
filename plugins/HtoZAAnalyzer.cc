@@ -532,13 +532,11 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             myjet.idx = ijet;
 
             myjet.CSV = alljets.getBTagDiscriminant(ijet, "pfCombinedInclusiveSecondaryVertexV2BJetTags");
-            myjet.CMVAv2 = alljets.getBTagDiscriminant(ijet, "pfCombinedMVAV2BJetTags");
-            myjet.deepCSV = alljets.getBTagDiscriminant(ijet, "pfDeepCSVJetTags:probb") + alljets.getBTagDiscriminant(ijet, "pfDeepCSVJetTags:probbb");
-            float mybtag_cMVAv2 = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_cMVAv2);
-            float mybtag_deepCSV = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_deepCSV_probb) + alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_deepCSV_probbb);
+            myjet.CMVAv2 = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_cMVAv2);
+            myjet.deepCSV = alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_deepCSV_probb) + alljets.getBTagDiscriminant(ijet, m_jet_bDiscrName_deepCSV_probbb);
             // Ask for medium WP discr. cut for both cMVAv2 and deepCSV
-            myjet.btag_cMVAv2_M = mybtag_cMVAv2 > m_jet_bDiscrCut_cMVAv2_medium;
-            myjet.btag_deepCSV_M = mybtag_deepCSV > m_jet_bDiscrCut_deepCSV_medium;
+            myjet.btag_cMVAv2_M = myjet.CMVAv2 > m_jet_bDiscrCut_cMVAv2_medium;
+            myjet.btag_deepCSV_M = myjet.deepCSV > m_jet_bDiscrCut_deepCSV_medium;
             myjet.gen_matched_bParton = (std::abs(alljets.partonFlavor[ijet]) == 5);
             myjet.gen_matched_bHadron = (alljets.hadronFlavor[ijet]) == 5;
             myjet.gen_matched = alljets.matched[ijet];
@@ -645,6 +643,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             mylljj.btag_deepCSV_MM = jj[ijj].btag_deepCSV_MM;
             mylljj.sumCSV = jj[ijj].sumCSV;
             mylljj.sumCMVAv2 = jj[ijj].sumCMVAv2;
+            mylljj.sumDeepCSV = jj[ijj].sumDeepCSV;
             mylljj.DR_j_j = jj[ijj].DR_j_j;
             mylljj.DPhi_j_j = jj[ijj].DPhi_j_j;
             mylljj.ht_j_j = jj[ijj].ht_j_j;

@@ -48,9 +48,9 @@ class HtoZAAnalyzer: public Framework::Analyzer {
 
             m_jetEtaCut = config.getUntrackedParameter<double>("jetEtaCut", 2.4);
             m_jetPtCut = config.getUntrackedParameter<double>("jetPtCut", 20);
-            m_jet_bDiscrName_cMVAv2 = config.getUntrackedParameter<std::string>("discr_name_cmva", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
-            m_jet_bDiscrName_deepCSV_probb = config.getUntrackedParameter<std::string>("discr_name_deepcsv_probb", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
-            m_jet_bDiscrName_deepCSV_probbb = config.getUntrackedParameter<std::string>("discr_name_deepcsv_probbb", "pfCombinedInclusiveSecondaryVertexV2BJetTags");
+            m_jet_bDiscrName_cMVAv2 = config.getUntrackedParameter<std::string>("discr_name_cmva", "pfCombinedMVAV2BJetTags");
+            m_jet_bDiscrName_deepCSV_probb = config.getUntrackedParameter<std::string>("discr_name_deepcsv_probb", "pfDeepCSVJetTags:probb");
+            m_jet_bDiscrName_deepCSV_probbb = config.getUntrackedParameter<std::string>("discr_name_deepcsv_probbb", "pfDeepCSVJetTags:probbb");
             m_jet_bDiscrCut_cMVAv2_loose = config.getUntrackedParameter<double>("discr_cut_cMVAv2_loose");
             m_jet_bDiscrCut_cMVAv2_medium = config.getUntrackedParameter<double>("discr_cut_cMVAv2_medium");
             m_jet_bDiscrCut_cMVAv2_tight = config.getUntrackedParameter<double>("discr_cut_cMVAv2_tight");

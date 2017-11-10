@@ -738,19 +738,20 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     // ***** ***** *****
 
     // HT: the two selected leptons - if present - plus all selected jets
-    HT = 0;
+    HT_cmva = 0;
     if (lljj_cmva.size() > 0)
         // take the first lljj_cmva since it's been resized: it has only one entry
-        HT += lljj_cmva[0].lep1_p4.Pt() + lljj_cmva[0].lep2_p4.Pt();
+        HT_cmva += lljj_cmva[0].lep1_p4.Pt() + lljj_cmva[0].lep2_p4.Pt();
     for (unsigned int ijet=0; ijet < jets.size(); ijet++) {
-        HT += jets[ijet].p4.Pt();
+        HT_cmva += jets[ijet].p4.Pt();
     }
-    
+
+    HT_deepCSV = 0;
     if (lljj_deepCSV.size() > 0)
-        // take the first lljj_cmva since it's been resized: it has only one entry
-        HT += lljj_deepCSV[0].lep1_p4.Pt() + lljj_deepCSV[0].lep2_p4.Pt();
+        // take the first lljj_deepCSV since it's been resized: it has only one entry
+        HT_deepCSV += lljj_deepCSV[0].lep1_p4.Pt() + lljj_deepCSV[0].lep2_p4.Pt();
     for (unsigned int ijet=0; ijet < jets.size(); ijet++) {
-        HT += jets[ijet].p4.Pt();
+        HT_deepCSV += jets[ijet].p4.Pt();
     }
 
     nJetsL = jets.size();  //We selected the jets to be all loose

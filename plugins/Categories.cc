@@ -59,10 +59,7 @@ bool MuMuCategory::event_in_category_post_analyzers(const ProducersManager& prod
     if (ll.empty())
         return false;
 
-    if (lljj_cmva.empty())
-        return false;
-    
-    if (lljj_deepCSV.empty())
+    if (lljj_cmva.empty() && lljj_deepCSV.empty())
         return false;
 
     // Only look at the first dilepton pair

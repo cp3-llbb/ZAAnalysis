@@ -130,7 +130,8 @@ class HtoZAAnalyzer: public Framework::Analyzer {
         bool isCSCWithOverlap(const Lepton& lep1, const Lepton& lep2);
 
         // global event stuff (selected objects multiplicity)
-        BRANCH(HT, float);
+        BRANCH(HT_cmva, float);
+        BRANCH(HT_deepCSV, float);
         BRANCH(nJetsL, unsigned int);
         ONLY_NOMINAL_BRANCH(nBJetsM, unsigned int);
         ONLY_NOMINAL_BRANCH(nMuonsT, unsigned int);

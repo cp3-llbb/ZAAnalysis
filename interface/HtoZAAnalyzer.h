@@ -104,7 +104,8 @@ class HtoZAAnalyzer: public Framework::Analyzer {
 
         BRANCH(ll, std::vector<HtoZA::Dilepton>);
         BRANCH(jj, std::vector<HtoZA::Dijet>);
-        BRANCH(lljj, std::vector<HtoZA::DileptonDijet>);
+        BRANCH(lljj_cmva, std::vector<HtoZA::DileptonDijet>);
+        BRANCH(lljj_deepCSV, std::vector<HtoZA::DileptonDijet>);
 
         virtual void analyze(const edm::Event&, const edm::EventSetup&, const ProducersManager&, const AnalyzersManager&, const CategoryManager&) override;
         virtual void registerCategories(CategoryManager& manager, const edm::ParameterSet& config) override;
@@ -129,7 +130,8 @@ class HtoZAAnalyzer: public Framework::Analyzer {
         bool isCSCWithOverlap(const Lepton& lep1, const Lepton& lep2);
 
         // global event stuff (selected objects multiplicity)
-        BRANCH(HT, float);
+        BRANCH(HT_cmva, float);
+        BRANCH(HT_deepCSV, float);
         BRANCH(nJetsL, unsigned int);
         ONLY_NOMINAL_BRANCH(nBJetsM, unsigned int);
         ONLY_NOMINAL_BRANCH(nMuonsT, unsigned int);

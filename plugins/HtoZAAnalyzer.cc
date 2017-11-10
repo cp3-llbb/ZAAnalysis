@@ -37,7 +37,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     leptons.clear();
     ll.clear();
     jj.clear();
-    lljj.clear();
+    lljj_cmva.clear();
+    lljj_deepCSV.clear();
     met.clear();
     
 
@@ -713,15 +714,21 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
                     tmp_count_has2leptons_mumu_1lljj_2btagM = event_weight;
             }
             // Fill
-            lljj.push_back(mylljj);
+            lljj_cmva.push_back(mylljj);
+            lljj_deepCSV.push_back(mylljj);
         } //end of loop over jj
     } //end of loop over ll
 
-    std::sort(lljj.begin(), lljj.end(), [&](HtoZA::DileptonDijet& a, const HtoZA::DileptonDijet& b){ return a.sumCMVAv2 > b.sumCMVAv2; });
+    std::sort(lljj_cmva.begin(), lljj_cmva.end(), [&](HtoZA::DileptonDijet& a, const HtoZA::DileptonDijet& b){ return a.sumCMVAv2 > b.sumCMVAv2; });
+    std::sort(lljj_deepCSV.begin(), lljj_deepCSV.end(), [&](HtoZA::DileptonDijet& a, const HtoZA::DileptonDijet& b){ return a.sumDeepCSV > b.sumDeepCSV; });
 
     // Keep only the first candidate
-    if (lljj.size() > 1){
-        lljj.resize(1);
+    if (lljj_cmva.size() > 1){
+        lljj_cmva.resize(1);
+    }
+    
+    if (lljj_deepCSV.size() > 1){
+        lljj_deepCSV.resize(1);
     }
 
 
@@ -730,12 +737,20 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     // ***** ***** *****
 
     // HT: the two selected leptons - if present - plus all selected jets
-    HT = 0;
-    if (lljj.size() > 0)
-        // take the first lljj since it's been resized: it has only one entry
-        HT += lljj[0].lep1_p4.Pt() + lljj[0].lep2_p4.Pt();
+    HT_cmva = 0;
+    if (lljj_cmva.size() > 0)
+        // take the first lljj_cmva since it's been resized: it has only one entry
+        HT_cmva += lljj_cmva[0].lep1_p4.Pt() + lljj_cmva[0].lep2_p4.Pt();
     for (unsigned int ijet=0; ijet < jets.size(); ijet++) {
-        HT += jets[ijet].p4.Pt();
+        HT_cmva += jets[ijet].p4.Pt();
+    }
+
+    HT_deepCSV = 0;
+    if (lljj_deepCSV.size() > 0)
+        // take the first lljj_deepCSV since it's been resized: it has only one entry
+        HT_deepCSV += lljj_deepCSV[0].lep1_p4.Pt() + lljj_deepCSV[0].lep2_p4.Pt();
+    for (unsigned int ijet=0; ijet < jets.size(); ijet++) {
+        HT_deepCSV += jets[ijet].p4.Pt();
     }
 
     nJetsL = jets.size();  //We selected the jets to be all loose

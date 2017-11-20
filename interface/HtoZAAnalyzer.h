@@ -43,7 +43,7 @@ class HtoZAAnalyzer: public Framework::Analyzer {
             m_electron_tight_wp_name = config.getUntrackedParameter<std::string>("electrons_tight_wp_name");
             m_electron_hlt_safe_wp_name = config.getUntrackedParameter<std::string>("electrons_hlt_safe_wp_name");
             m_electron_mva_wp80_name = config.getUntrackedParameter<std::string>("electrons_mva_wp80_name");
-            m_electron_mva_wp90_name = config.getUntrackedParameter<std::string>("electrons_mva_wp80_name");
+            m_electron_mva_wp90_name = config.getUntrackedParameter<std::string>("electrons_mva_wp90_name");
             m_electron_mva_HZZ_loose_wp_name = config.getUntrackedParameter<std::string>("electrons_mva_HZZ_loose_wp_name");
 
             m_jetEtaCut = config.getUntrackedParameter<double>("jetEtaCut", 2.4);

@@ -87,11 +87,11 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
                     IsoMu17leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17Mu8_IsoMu17leg.json'),
                     IsoMu8orIsoTkMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17TkMu8_IsoMu8legORTkMu8leg.json'),
 
-                    DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
-                    DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
+                    DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegHigPt_2016_cut_WP_Tight80X_full2016.json'),
+                    DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegLowPt_2016_cut_WP_Tight80X_full2016.json'),
 
-                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
-                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
+                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegHigPt_2016_cut_WP_Tight80X_full2016.json'),
+                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegLowPt_2016_cut_WP_Tight80X_full2016.json'),
 
                     IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
                     IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
@@ -145,4 +145,4 @@ else:
 
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.source.skipEvents = cms.untracked.uint32(10)
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))

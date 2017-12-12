@@ -419,9 +419,9 @@ void HtoZAAnalyzer::fillTriggerEfficiencies(const Lepton & lep1, const Lepton & 
     // See https://cp3-llbb.slack.com/archives/hh/p1486479524001043
     // See https://cp3-llbb.slack.com/archives/hh/p1486482180001053
     constexpr float DZ_filter_eff_MuMu = 0.982;
-    constexpr float DZ_filter_eff_ElEl = 0.983;
-    constexpr float DZ_filter_eff_MuEl = 0.988;
-    constexpr float DZ_filter_eff_ElMu = 0.982;
+    constexpr float DZ_filter_eff_ElEl = 0.991;
+    constexpr float DZ_filter_eff_MuEl = 0.978;
+    constexpr float DZ_filter_eff_ElMu = 0.978;
 
     // See https://cp3-llbb.slack.com/archives/hh/p1486566100001301
     constexpr float L1_EMTF_bug_eff_MuMu = 0.5265;

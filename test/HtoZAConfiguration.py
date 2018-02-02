@@ -15,6 +15,7 @@ if runOnData :
     globalTag_ = '80X_dataRun2_2016SeptRepro_v7'
     processName_ = 'RECO'
 
+# WARNING: prescale factor for data should be set to -1
 options = CmdLine(defaults=dict(runOnData=0, era="25ns", globalTag='80X_dataRun2_2016SeptRepro_v7'))
 
 framework = Framework.Framework(options)
@@ -35,6 +36,7 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
             elmu_subleadingLeptonPtCut = cms.untracked.double(10), # muon
         ),
         parameters = cms.PSet(
+            prescaleFactor = cms.untracked.int32(-1),
             # Producers
             electronsProducer = cms.string('electrons'),
             muonsProducer = cms.string('muons'),

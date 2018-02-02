@@ -49,6 +49,11 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
     const HLTProducer& hlt = producers.get<HLTProducer>("hlt");
     const METProducer& pf_met = producers.get<METProducer>(m_met_producer);
 
+    // Throw one event in prescaleFactor if activated, only in real data
+    if(m_prescaleFactor > 0 && event.isRealData() && fwevent.event % m_prescaleFactor != 0) {
+        return;
+    }
+
 
     if(!event.isRealData()){
     

@@ -59,6 +59,7 @@ class HtoZAAnalyzer: public Framework::Analyzer {
             m_jet_bDiscrCut_deepCSV_tight = config.getUntrackedParameter<double>("discr_cut_deepCSV_tight");
             m_minDR_l_j_Cut = config.getUntrackedParameter<double>("minDR_l_j_Cut", 0.3);
             m_applyBJetRegression = config.getUntrackedParameter<bool>("applyBJetRegression", false);
+            m_prescaleFactor = config.getUntrackedParameter<int32_t>("prescaleFactor", -1);
 
             m_hltDRCut = config.getUntrackedParameter<double>("hltDRCut", std::numeric_limits<float>::max());
             m_hltDPtCut = config.getUntrackedParameter<double>("hltDPtCut", std::numeric_limits<float>::max());
@@ -275,6 +276,7 @@ class HtoZAAnalyzer: public Framework::Analyzer {
         std::string m_electron_mva_wp90_name;
         std::string m_electron_mva_HZZ_loose_wp_name;
         bool m_applyBJetRegression;
+        int32_t m_prescaleFactor;
         std::unordered_map<std::string, std::unique_ptr<BinnedValues>> m_hlt_efficiencies;
 
         std::mt19937 random_generator;

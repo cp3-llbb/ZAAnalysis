@@ -317,11 +317,11 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
         if (electron->isEB()) {
             result &= std::abs(allelectrons.dz[index]) < 0.1;
             result &= std::abs(allelectrons.dxy[index]) < 0.05;
-            result &= std::abs(allelectrons.relativeIsoR04_withEA[index]) < 0.05880;
+            //result &= std::abs(allelectrons.relativeIsoR04_withEA[index]) < 0.05880;
         } else {
             result &= std::abs(allelectrons.dz[index]) < 0.2;
             result &= std::abs(allelectrons.dxy[index]) < 0.1;
-            result &= std::abs(allelectrons.relativeIsoR04_withEA[index]) < 0.0571;
+            //result &= std::abs(allelectrons.relativeIsoR04_withEA[index]) < 0.0571;
         }
 
         return result;

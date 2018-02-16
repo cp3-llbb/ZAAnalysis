@@ -380,7 +380,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             mu.gen_DPtOverPt = mu.gen_matched ? (mu.p4.Pt() - mu.gen_p4.Pt()) / mu.p4.Pt() : -10.;
             mu.hlt_leg1 = false;
             mu.hlt_leg2 = false;
-        
+
             leptons.push_back(mu);
         }
     } // end of loop over muons
@@ -429,7 +429,6 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             dilep.gen_DR = dilep.gen_matched ? ROOT::Math::VectorUtil::DeltaR(dilep.p4, dilep.gen_p4) : -1.;
             dilep.gen_DPtOverPt = dilep.gen_matched ? (dilep.p4.Pt() - dilep.gen_p4.Pt()) / dilep.p4.Pt() : -10.;
 
-
             if (event.isRealData()) {
                 dilep.trigger_efficiency = 1.;
                 dilep.trigger_efficiency_downVariated = 1.;
@@ -441,9 +440,8 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             // Some selection
             // Note that ID and isolation criteria are in both electron and muon loops
             // Require that the leptons have opposite sign and same flavor
-            //if (!dilep.isOS || !dilep.isSF)
             if (!dilep.isOS)
-			    continue;
+                continue;
 
             // FIXME L1 EMTF bug mitigation -- cut the overlap on data if it's a run affected by the bug
             // On MC, apply the fraction of lumi the bug was not present
@@ -462,6 +460,18 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             if (event.isRealData() && !((leptons[dilep.ilep1].hlt_leg1 && leptons[dilep.ilep2].hlt_leg2)
                                   || (leptons[dilep.ilep1].hlt_leg2 && leptons[dilep.ilep2].hlt_leg1))) {
                 continue;
+            }
+
+            // Store Z peak NNLL reweighting for LO and NLO -->
+            // https://github.com/latinos/PlotsConfigurations/blob/a7f853e7badc8be2c84c4830ed410ec82025cf57/Configurations/ggH/Full2016/samples.py#L173
+            float gen_ptll = dilep.gen_p4.Pt();
+            if (gen_ptll < 140.) {
+                dilep.ptllDYW_LO = (8.61313e-01+gen_ptll*4.46807e-03-1.52324e-05*gen_ptll*gen_ptll)*(1.08683 * (0.95 - 0.0657370*std::erf((gen_ptll-11.)/5.51582)));
+                dilep.ptllDYW_NLO = (0.876979+gen_ptll*0.00411598-0.0000235520*gen_ptll*gen_ptll)*(1.10211 * (0.958512 - 0.131835*std::erf((gen_ptll-14.1972)/10.1525)));
+            }
+            else {
+                dilep.ptllDYW_LO = 1.141996;
+                dilep.ptllDYW_NLO = 0.891188;
             }
 
             // Counters

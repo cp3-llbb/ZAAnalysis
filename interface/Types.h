@@ -83,7 +83,8 @@ namespace HtoZA {
         float trigger_efficiency;
         float trigger_efficiency_downVariated;
         float trigger_efficiency_upVariated;
-        float ptllDYW_NNLL;
+        float ptllDYW_LO;
+        float ptllDYW_NLO;
     };
     struct Met {
         LorentzVector p4;

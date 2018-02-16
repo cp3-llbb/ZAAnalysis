@@ -8,7 +8,8 @@
      <field name="sc_eta" transient="true"/>
     </class>
     <class name="std::vector<HtoZA::Lepton>"/>
-    <class name="HtoZA::Dilepton" ClassVersion="15">
+    <class name="HtoZA::Dilepton" ClassVersion="16">
+     <version ClassVersion="16" checksum="2174957960"/>
      <version ClassVersion="15" checksum="2019656383"/>
      <version ClassVersion="14" checksum="2104876064"/>
      <version ClassVersion="13" checksum="2451819920"/>
@@ -45,7 +46,8 @@
      <version ClassVersion="11" checksum="1424325551"/>
      <version ClassVersion="10" checksum="2939888277"/>
     </class>
-    <class name="HtoZA::DileptonDijet" ClassVersion="14">
+    <class name="HtoZA::DileptonDijet" ClassVersion="15">
+     <version ClassVersion="15" checksum="313094382"/>
      <version ClassVersion="14" checksum="1055485611"/>
      <version ClassVersion="13" checksum="104561782"/>
      <version ClassVersion="12" checksum="2135499334"/>

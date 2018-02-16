@@ -466,7 +466,7 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
             // https://github.com/latinos/PlotsConfigurations/blob/a7f853e7badc8be2c84c4830ed410ec82025cf57/Configurations/ggH/Full2016/samples.py#L173
             float gen_ptll = dilep.gen_p4.Pt();
             if (gen_ptll < 140.) {
-                dilep.ptllDYW_LO = (8.61313e-01+gen_ptll*4.46807e-03-1.52324e-05*gen_ptll*gen_ptll)*(1.08683 * (0.95 - 0.0657370*TMath::Erf((gen_ptll-11.)/5.51582)));
+                dilep.ptllDYW_LO = (8.61313e-01+gen_ptll*4.46807e-03-1.52324e-05*gen_ptll*gen_ptll)*(1.08683 * (0.95 - 0.0657370*std::erf((gen_ptll-11.)/5.51582)));
                 dilep.ptllDYW_NLO = (0.876979+gen_ptll*0.00411598-0.0000235520*gen_ptll*gen_ptll)*(1.10211 * (0.958512 - 0.131835*std::erf((gen_ptll-14.1972)/10.1525)));
             }
             else {

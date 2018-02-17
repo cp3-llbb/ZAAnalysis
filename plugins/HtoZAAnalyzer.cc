@@ -335,8 +335,11 @@ void HtoZAAnalyzer::analyze(const edm::Event& event, const edm::EventSetup&, con
         if (allelectrons.p4[ielectron].Pt() > m_subleadingElectronPtCut && fabs(allelectrons.p4[ielectron].Eta()) < m_electronEtaCut)
         {
             // some selection
-            // Ask for loose ID
-            if (!allelectrons.ids[ielectron][m_electron_mva_wp90_name])
+            // Ask for tight ID
+            if (!allelectrons.ids[ielectron][m_electron_mva_wp80_name])
+                continue;
+
+            if (allelectrons.expectedMissingInnerHits[ielectron] >= 1)
                 continue;
 
             HtoZA::Lepton ele;

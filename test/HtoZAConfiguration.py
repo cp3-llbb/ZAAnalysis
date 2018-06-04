@@ -77,7 +77,7 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
             discr_cut_deepCSV_loose = cms.untracked.double(0.2219),
             discr_cut_deepCSV_medium = cms.untracked.double(0.6324),
             discr_cut_deepCSV_tight = cms.untracked.double(0.8958),
-            
+
 
             minDR_l_j_Cut = cms.untracked.double(0.3),
             hltDRCut = cms.untracked.double(0.1),
@@ -89,11 +89,11 @@ framework.addAnalyzer('hZA_analyzer', cms.PSet(
                     IsoMu17leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17Mu8_IsoMu17leg.json'),
                     IsoMu8orIsoTkMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_DoubleIsoMu17TkMu8_IsoMu8legORTkMu8leg.json'),
 
-                    DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegHigPt_2016_cut_WP_Tight80X_full2016.json'),
-                    DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegLowPt_2016_cut_WP_Tight80X_full2016.json'),
+                    DoubleEleHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
+                    DoubleEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
-                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegHigPt_2016_cut_WP_Tight80X_full2016.json'),
-                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_HLT_DoubleEleLegLowPt_2016_cut_WP_Tight80X_full2016.json'),
+                    EleMuHighPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle23Leg.json'),
+                    MuEleLowPtleg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Electron_IsoEle12Leg.json'),
 
                     IsoMu8leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu8leg.json'),
                     IsoMu23leg = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/Efficiencies/Muon_XPathIsoMu23leg.json'),
@@ -109,6 +109,8 @@ framework.getProducer('hlt').parameters.triggers = cms.untracked.FileInPath('cp3
 # framework.getProducer('jets').parameters.cut = cms.untracked.string("pt > 20")
 #framework.getProducer('jets').parameters.computeRegression = cms.untracked.bool(True)
 
+framework.getProducer('electrons').parameters.scale_factors.id_mediumplushltsafe_hh = cms.untracked.FileInPath('cp3_llbb/ZAAnalysis/data/ScaleFactors/Electron_MediumPlusHLTSafeID_moriond17.json')
+
 from cp3_llbb.Framework.JetsProducer import discriminators_deepFlavour
 framework.redoJEC(addBtagDiscriminators=discriminators_deepFlavour)
 
@@ -119,7 +121,7 @@ framework.applyElectronSmearing()
 
 if not runOnData:
     framework.smearJets(resolutionFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt', scaleFactorFile='cp3_llbb/Framework/data/Spring16_25nsV10_MC_SF_AK4PFchs.txt')
-    framework.doSystematics(['jec', 'jer'], jec={'uncertaintiesFile': 'cp3_llbb/ZAAnalysis/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt', 'splitBySources': False})
+    framework.doSystematics(['jec', 'jer'], jec={'uncertaintiesFile': 'cp3_llbb/ZAAnalysis/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt', 'splitBySources': True})
 
 process = framework.create()
 
